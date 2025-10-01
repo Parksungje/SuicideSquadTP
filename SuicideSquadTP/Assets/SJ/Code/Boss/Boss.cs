@@ -1,16 +1,10 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Boss : MonoBehaviour
+namespace SJ.Code.Boss
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public abstract class Boss : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [SerializeField] private BossDataSO bossDataSO;
     }
 }
