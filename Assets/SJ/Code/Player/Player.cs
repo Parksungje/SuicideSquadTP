@@ -1,6 +1,7 @@
 using Code.Agents;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Code.Player
@@ -10,6 +11,9 @@ namespace Code.Player
         [field: SerializeField] public PlayerInputSO PlayerInput { get; private set; }
 
         private IMovement _movement;
+
+        public UnityEvent<Vector2> OnMoveInput;
+
 
         public override void Awake()
         {
@@ -36,6 +40,7 @@ namespace Code.Player
 
         private void Update()
         {
+            OnMoveInput?.Invoke(PlayerInput.Movement);
             _movement.SetMovementInput(PlayerInput.Movement);
         }
     }
