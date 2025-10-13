@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour, IComponent
 {
-    [SerializeField] private ParamSO fireParam;
+    //[SerializeField] private ParamSO fireParam;
     private Agent _agent;
     private IAgentAnimator _agentAnimator;
 
@@ -16,7 +16,7 @@ public class WeaponController : MonoBehaviour, IComponent
         _agent = agent;
     }
 
-    private void SetAttacking(bool isAttacking) => _isAttacking = isAttacking;
+    public void SetAttacking(bool isAttacking) => _isAttacking = isAttacking;
 
     private void Update()
     {
@@ -29,6 +29,6 @@ public class WeaponController : MonoBehaviour, IComponent
     private void Attack()
     {
         Debug.Log("Attack");
-        _agentAnimator.SetTrigger(fireParam);
+        //_agentAnimator.SetTrigger(fireParam);
     }
 }
