@@ -57,7 +57,8 @@ namespace Code.Player
         {
             Camera camera = Camera.main;
             Ray ray = camera.ScreenPointToRay(MousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, camera.farClipPlane, whatIsGround))
+
+            if (Physics.Raycast(ray, out RaycastHit hit, camera.farClipPlane - camera.nearClipPlane, whatIsGround))
             {
                 _prevMousePosition = hit.point;
                 return hit.point;
@@ -70,8 +71,9 @@ namespace Code.Player
         {
             Camera camera = Camera.main;
             Ray ray = camera.ScreenPointToRay(MousePosition);
-            return Physics.Raycast(ray, out hit, camera.farClipPlane, whatIsGround);
+            return Physics.Raycast(ray, out hit, camera.farClipPlane - camera.nearClipPlane, whatIsGround);
         }
+
 
     }
 }
