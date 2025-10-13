@@ -11,6 +11,7 @@ namespace Code.Player
         public Vector2 MousePosition { get; private set; }
 
         [SerializeField] private LayerMask whatIsGround;
+        [SerializeField] private LayerMask whatIsInteraction;
 
         public Action<bool> OnAttackKeyPressed;
         public Action<bool> OnJumpKeyPressed;
@@ -50,6 +51,26 @@ namespace Code.Player
                 OnJumpKeyPressed?.Invoke(true);
             if (context.canceled)
                 OnJumpKeyPressed?.Invoke(false);
+        }
+
+        public Vector3 GetWorldMousePosition()
+        {
+            Camera camera = Camera.main;
+            Ray ray = camera.ScreenPointToRay(MousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, camera.farClipPlane, whatIsGround))
+            {
+                _prevMousePosition = hit.point;
+                return hit.point;
+            }
+
+            return _prevMousePosition;
+        }
+
+        public bool GetMouseHitInfo(out RaycastHit hit)
+        {
+            Camera camera = Camera.main;
+            Ray ray = camera.ScreenPointToRay(MousePosition);
+            return Physics.Raycast(ray, out hit, camera.farClipPlane, whatIsGround);
         }
 
     }

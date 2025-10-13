@@ -1,26 +1,31 @@
 using Code.Agents;
+using Code.Player;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
-namespace Code.Player
+namespace Code.Players
 {
     public class Player : Agent
     {
         [field: SerializeField] public PlayerInputSO PlayerInput { get; private set; }
 
         private IMovement _movement;
-
-        public UnityEvent<Vector2> OnMoveInput;
-
+        private AimComponent _aimComponent;
+        private WeaponController _weaponController;
 
         public override void Awake()
         {
             base.Awake();
             _movement = GetCompo<IMovement>();
-            PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
+            _aimComponent = GetCompo<AimComponent>();
+            _weaponController = GetCompo<WeaponController>();
             PlayerInput.OnJumpKeyPressed += HandleJumpKeyPressed;
+            PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
+        }
+
+        private void HandleAttackKeyPressed(bool isPressed)
+        {
+            _weaponController.SetAttacking(isPressed);
         }
 
         protected override void OnDestroy()
@@ -28,20 +33,14 @@ namespace Code.Player
             base.OnDestroy();
         }
 
-        private void HandleJumpKeyPressed(bool isPressed)
+        private void HandleJumpKeyPressed(bool isRunning)
         {
-            throw new NotImplementedException();
-        }
-
-        private void HandleAttackKeyPressed(bool isPressed)
-        {
-            throw new NotImplementedException();
         }
 
         private void Update()
         {
-            OnMoveInput?.Invoke(PlayerInput.Movement);
             _movement.SetMovementInput(PlayerInput.Movement);
+            _aimComponent.SetAimPosition(PlayerInput.GetWorldMousePosition());
         }
     }
 }
