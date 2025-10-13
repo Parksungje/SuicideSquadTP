@@ -58,21 +58,22 @@ namespace Code.Player
             Camera camera = Camera.main;
             Ray ray = camera.ScreenPointToRay(MousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, camera.farClipPlane - camera.nearClipPlane, whatIsGround))
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000f, whatIsGround))
             {
                 _prevMousePosition = hit.point;
-                return hit.point;
             }
 
             return _prevMousePosition;
         }
 
-        public bool GetMouseHitInfo(out RaycastHit hit)
+        public Vector3 GetShootDirection(Transform playerTransform)
         {
-            Camera camera = Camera.main;
-            Ray ray = camera.ScreenPointToRay(MousePosition);
-            return Physics.Raycast(ray, out hit, camera.farClipPlane - camera.nearClipPlane, whatIsGround);
+            Vector3 mouseWorldPos = GetWorldMousePosition();
+
+            Vector3 direction = (mouseWorldPos - playerTransform.position).normalized;
+            return direction;
         }
+
 
 
     }

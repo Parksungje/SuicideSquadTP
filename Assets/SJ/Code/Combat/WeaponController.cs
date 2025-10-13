@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour, IComponent
 {
-    [SerializeField] private ParamSO fireParam;
+    //[SerializeField] private ParamSO fireParam;
     private Agent _agent;
     private IAgentAnimator _agentAnimator;
 
