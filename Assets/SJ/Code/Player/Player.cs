@@ -11,11 +11,13 @@ namespace Code.Players
 
         private IMovement _movement;
         private WeaponController _weaponController;
+        private CharacterMovement _characterMovement;
 
         public override void Awake()
         {
             base.Awake();
             _movement = GetCompo<IMovement>();
+            _characterMovement = GetCompo<CharacterMovement>();
             _weaponController = GetCompo<WeaponController>();
             PlayerInput.OnJumpKeyPressed += HandleJumpKeyPressed;
             PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
@@ -33,6 +35,7 @@ namespace Code.Players
 
         private void HandleJumpKeyPressed(bool isRunning)
         {
+            _characterMovement.Jump();
         }
 
         private void Update()

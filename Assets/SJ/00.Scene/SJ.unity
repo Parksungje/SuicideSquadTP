@@ -301,7 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 99
-  moveParam: {fileID: 11400000, guid: 61a8c0ddc9bf2da44a7771ccb28646fd, type: 2}
+  animator: {fileID: 1978065415}
 --- !u!1 &825283246
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,6 +467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4c551b06ed6d046822323209c53efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1978065415}
 --- !u!1 &1135606453
 GameObject:
   m_ObjectHideFlags: 0

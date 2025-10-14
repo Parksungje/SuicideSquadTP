@@ -1,7 +1,8 @@
 using UnityEngine;
 using Tild.Chest;
-using Code.Player;
 using System;
+using Code.Players;
+using Code.Player;
 
 public class SampleGun : Weapon
 {
