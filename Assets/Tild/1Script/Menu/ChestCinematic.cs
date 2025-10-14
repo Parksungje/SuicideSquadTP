@@ -11,7 +11,7 @@ namespace Tild.Menu
         #region Cinematic Players
 
         [SerializeField] PlayableDirector c1,c2,c3,c4;
-
+        
         #endregion
         
         
@@ -22,7 +22,7 @@ namespace Tild.Menu
 
         IEnumerator CommonCinematicCoroutine()
         {
-            
+            yield return new WaitForSeconds(1f);
         }
     }
 }
