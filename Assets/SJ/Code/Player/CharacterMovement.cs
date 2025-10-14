@@ -1,5 +1,6 @@
-﻿using System;
-using Code.Agents;
+﻿using Code.Agents;
+using System;
+using Tild.Chest;
 using UnityEngine;
 
 namespace Code.Players
@@ -9,17 +10,20 @@ namespace Code.Players
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float jumpHeight = 2f;
-        [SerializeField] private float gravity = -9.81f;
+        [SerializeField] private float gravity = -2;
         [SerializeField] private Animator animator;
 
         private Agent _agent;
         private Vector3 _inputMovement;
-        private Vector3 _velocity;
         private Quaternion _targetRotation;
+        private Vector3 _velocity;
         private CharacterController _characterController;
+        private bool _isMoving;
 
-        private readonly int IsRunningHash = Animator.StringToHash("isRunning");
+        private readonly int IsMovingHash = Animator.StringToHash("isRunning");
         private readonly int IsJumpingHash = Animator.StringToHash("isJumping");
+
+        public bool IsMoving => _isMoving;
 
         public void Initialize(Agent agent)
         {
@@ -47,6 +51,7 @@ namespace Code.Players
             CalculateMovement();
             ApplyRotation();
             MoveCharacter();
+            Jump();
         }
 
         private void CalculateMovement()
@@ -75,12 +80,13 @@ namespace Code.Players
 
         private void MoveCharacter()
         {
-            Vector3 move = _inputMovement * moveSpeed;
-            _characterController.Move(move * Time.fixedDeltaTime);
+            Vector3 move = _inputMovement * moveSpeed * Time.fixedDeltaTime;
+            _characterController.Move(move);
 
             Vector3 pos = _agent.transform.position;
-            pos.y = _characterController.transform.position.y;
+            pos.y = 0f;
             _agent.transform.position = pos;
+
         }
 
         public void Jump()
@@ -90,13 +96,19 @@ namespace Code.Players
                 if (_velocity.y < 0f)
                     _velocity.y = -2f;
 
-                _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                animator.SetBool(IsJumpingHash, true);
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    animator.SetBool(IsJumpingHash, true);
+                }
+                else
+                {
+                    animator.SetBool(IsJumpingHash, false);
+                }
             }
             else
             {
                 _velocity.y += gravity * Time.fixedDeltaTime;
-                animator.SetBool(IsJumpingHash, false);
             }
 
             _characterController.Move(_velocity * Time.fixedDeltaTime);
@@ -109,8 +121,9 @@ namespace Code.Players
 
         private void UpdateMovementMotion()
         {
-            bool isMoving = _inputMovement.sqrMagnitude > 0.001f;
-            animator.SetBool(IsRunningHash, isMoving);
+            _isMoving = _inputMovement.sqrMagnitude > 0.001f;
+
+            animator.SetBool(IsMovingHash, _isMoving);
         }
     }
 }
