@@ -18,16 +18,16 @@ MonoBehaviour:
     m_Value: 15
   contrast:
     m_OverrideState: 1
-    m_Value: -15
+    m_Value: 100
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 0.4665165, g: 0.37370172, b: 0, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
     m_OverrideState: 1
     m_Value: 0
   saturation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 3
 --- !u!114 &-6756797016387606907
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -43,17 +43,36 @@ MonoBehaviour:
   active: 1
   color:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.68114394, b: 0, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   center:
     m_OverrideState: 1
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.39
+    m_Value: 0.45
   smoothness:
     m_OverrideState: 1
     m_Value: 0.55
   rounded:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &-1035148285396982448
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 221518ef91623a7438a71fef23660601, type: 3}
+  m_Name: WhiteBalance
+  m_EditorClassIdentifier: 
+  active: 1
+  temperature:
+    m_OverrideState: 1
+    m_Value: 100
+  tint:
     m_OverrideState: 1
     m_Value: 0
 --- !u!114 &-79131473486835421
@@ -99,6 +118,7 @@ MonoBehaviour:
   - {fileID: -6756797016387606907}
   - {fileID: 1205568650552426161}
   - {fileID: -6807854888022296896}
+  - {fileID: -1035148285396982448}
 --- !u!114 &1205568650552426161
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -114,13 +134,13 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.71871793, b: 0.043396115, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.59155375, b: 0, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 14
 --- !u!114 &2627655129124982946
 MonoBehaviour:
   m_ObjectHideFlags: 3
