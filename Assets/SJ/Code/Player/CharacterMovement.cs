@@ -1,4 +1,4 @@
-using System;
+癤퓎sing System;
 using Code.Agents;
 using Code.Animations;
 using UnityEngine;
@@ -7,30 +7,37 @@ namespace Code.Players
 {
     public class CharacterMovement : MonoBehaviour, IComponent, IMovement
     {
-        [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float rotationSpeed = 10f;
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private float rotationSpeed;
+        [SerializeField] private ParamSO moveParam;
 
         private Agent _agent;
         private Vector3 _inputMovement;
+        private Vector3 _movement;
         private Quaternion _targetRotation;
 
         private CharacterController _characterController;
-        private AgentAnimator _agentAnimtor;
+        private AgentAnimator _agentAnimator;
+
+        public bool IsGround => _characterController.isGrounded;
+        public bool IsRunning { get; private set; }
 
         public void Initialize(Agent agent)
         {
             _characterController = agent.GetComponent<CharacterController>();
-            _agentAnimtor = agent.GetCompo<AgentAnimator>();
+            _agentAnimator = agent.GetCompo<AgentAnimator>();
             _agent = agent;
         }
 
         public void SetMovementInput(Vector2 movementInput)
         {
-            // Z축을 위/아래로, X축을 좌/우로만 사용
             _inputMovement = new Vector3(movementInput.x, 0f, movementInput.y);
         }
 
-        public void SetRunningStatus(bool isRunning) { }
+        public void SetRunningStatus(bool isRunning)
+        {
+            IsRunning = isRunning;
+        }
 
         public void SetRunningRotation(Quaternion targetRotation)
         {
@@ -46,7 +53,8 @@ namespace Code.Players
 
         private void CalculateMovement()
         {
-            _inputMovement = _inputMovement.normalized;
+            float speed = moveSpeed;
+            _movement = _inputMovement.normalized * (moveSpeed * Time.deltaTime);
         }
 
         private void ApplyRotation()
@@ -73,12 +81,7 @@ namespace Code.Players
 
         private void MoveCharacter()
         {
-            Vector3 move = _inputMovement * moveSpeed * Time.fixedDeltaTime;
-            _characterController.Move(move);
-
-            Vector3 pos = _agent.transform.position;
-            pos.y = 0f;
-            _agent.transform.position = pos;
+            _characterController.Move(_movement);
         }
 
         private void Update()
@@ -88,10 +91,11 @@ namespace Code.Players
 
         private void UpdateMovementMotion()
         {
-            float x = _inputMovement.x;
-            float z = _inputMovement.z;
-            // _agentAnimtor.SetParameter(xVelocityParam, x);
-            // _agentAnimtor.SetParameter(zVelocityParam, z);
+            //float x = _inputMovement.x;
+            //float z = _inputMovement.z;
+            //_agentAnimator.SetParameter(moveParam, IsRunning
+            //        && !Mathf.Approximately(_inputMovement.magnitude, 0f));
         }
+
     }
 }

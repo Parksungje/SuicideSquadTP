@@ -10,14 +10,12 @@ namespace Code.Players
         [field: SerializeField] public PlayerInputSO PlayerInput { get; private set; }
 
         private IMovement _movement;
-        private AimComponent _aimComponent;
         private WeaponController _weaponController;
 
         public override void Awake()
         {
             base.Awake();
             _movement = GetCompo<IMovement>();
-            _aimComponent = GetCompo<AimComponent>();
             _weaponController = GetCompo<WeaponController>();
             PlayerInput.OnJumpKeyPressed += HandleJumpKeyPressed;
             PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
@@ -40,7 +38,6 @@ namespace Code.Players
         private void Update()
         {
             _movement.SetMovementInput(PlayerInput.Movement);
-            _aimComponent.SetAimPosition(PlayerInput.GetWorldMousePosition());
         }
     }
 }

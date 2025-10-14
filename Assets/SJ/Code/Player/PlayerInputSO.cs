@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +11,6 @@ namespace Code.Player
         public Vector2 MousePosition { get; private set; }
 
         [SerializeField] private LayerMask whatIsGround;
-        [SerializeField] private LayerMask whatIsInteraction;
 
         public Action<bool> OnAttackKeyPressed;
         public Action<bool> OnJumpKeyPressed;
@@ -52,29 +51,6 @@ namespace Code.Player
             if (context.canceled)
                 OnJumpKeyPressed?.Invoke(false);
         }
-
-        public Vector3 GetWorldMousePosition()
-        {
-            Camera camera = Camera.main;
-            Ray ray = camera.ScreenPointToRay(MousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000f, whatIsGround))
-            {
-                _prevMousePosition = hit.point;
-            }
-
-            return _prevMousePosition;
-        }
-
-        public Vector3 GetShootDirection(Transform playerTransform)
-        {
-            Vector3 mouseWorldPos = GetWorldMousePosition();
-
-            Vector3 direction = (mouseWorldPos - playerTransform.position).normalized;
-            return direction;
-        }
-
-
 
     }
 }
