@@ -19,8 +19,6 @@ namespace Code.Players
             _movement = GetCompo<IMovement>();
             _characterMovement = GetCompo<CharacterMovement>();
             _weaponController = GetCompo<WeaponController>();
-            PlayerInput.OnJumpKeyPressed += HandleJumpKeyPressed;
-            PlayerInput.OnAttackKeyPressed += HandleAttackKeyPressed;
         }
 
         private void HandleAttackKeyPressed(bool isPressed)
@@ -35,7 +33,6 @@ namespace Code.Players
 
         private void HandleJumpKeyPressed(bool isRunning)
         {
-            _characterMovement.Jump();
         }
 
         private void Update()
