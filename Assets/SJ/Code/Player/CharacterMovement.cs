@@ -1,6 +1,6 @@
+ï»¿using Code.Agents;
 using System;
-using Code.Agents;
-using Code.Animations;
+using Tild.Chest;
 using UnityEngine;
 
 namespace Code.Players
@@ -8,25 +8,31 @@ namespace Code.Players
     public class CharacterMovement : MonoBehaviour, IComponent, IMovement
     {
         [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float rotationSpeed = 10f;
+        [SerializeField] private Animator animator;
 
         private Agent _agent;
         private Vector3 _inputMovement;
         private Quaternion _targetRotation;
-
+        private Vector3 _velocity;
         private CharacterController _characterController;
-        private AgentAnimator _agentAnimtor;
+        private bool _isMoving;
+
+        private readonly int IsMovingHash = Animator.StringToHash("isRunning");
+        private readonly int IsJumpingHash = Animator.StringToHash("isJumping");
+
+        public bool IsMoving => _isMoving;
 
         public void Initialize(Agent agent)
         {
             _characterController = agent.GetComponent<CharacterController>();
-            _agentAnimtor = agent.GetCompo<AgentAnimator>();
             _agent = agent;
+
+            if (animator == null)
+                animator = agent.GetComponentInChildren<Animator>();
         }
 
         public void SetMovementInput(Vector2 movementInput)
         {
-            // ZÃàÀ» À§/¾Æ·¡·Î, XÃàÀ» ÁÂ/¿ì·Î¸¸ »ç¿ë
             _inputMovement = new Vector3(movementInput.x, 0f, movementInput.y);
         }
 
@@ -40,7 +46,6 @@ namespace Code.Players
         private void FixedUpdate()
         {
             CalculateMovement();
-            ApplyRotation();
             MoveCharacter();
         }
 
@@ -48,28 +53,6 @@ namespace Code.Players
         {
             _inputMovement = _inputMovement.normalized;
         }
-
-        private void ApplyRotation()
-        {
-            if (_inputMovement.sqrMagnitude > 0.001f)
-            {
-                Vector3 direction = new Vector3(_inputMovement.x, 0f, _inputMovement.z);
-
-                Quaternion targetRot = Quaternion.LookRotation(direction);
-                Vector3 euler = targetRot.eulerAngles;
-                euler.x = 0f;
-                euler.z = 0f;
-
-                targetRot = Quaternion.Euler(euler);
-
-                _agent.transform.rotation = Quaternion.Slerp(
-                    _agent.transform.rotation,
-                    targetRot,
-                    rotationSpeed * Time.fixedDeltaTime
-                );
-            }
-        }
-
 
         private void MoveCharacter()
         {
@@ -79,8 +62,8 @@ namespace Code.Players
             Vector3 pos = _agent.transform.position;
             pos.y = 0f;
             _agent.transform.position = pos;
-        }
 
+        }
         private void Update()
         {
             UpdateMovementMotion();
@@ -88,10 +71,9 @@ namespace Code.Players
 
         private void UpdateMovementMotion()
         {
-            float x = _inputMovement.x;
-            float z = _inputMovement.z;
-            // _agentAnimtor.SetParameter(xVelocityParam, x);
-            // _agentAnimtor.SetParameter(zVelocityParam, z);
+            _isMoving = _inputMovement.sqrMagnitude > 0.001f;
+
+            animator.SetBool(IsMovingHash, _isMoving);
         }
     }
 }

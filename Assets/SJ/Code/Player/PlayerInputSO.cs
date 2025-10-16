@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,13 +10,7 @@ namespace Code.Player
         public Vector2 Movement { get; private set; }
         public Vector2 MousePosition { get; private set; }
 
-        [SerializeField] private LayerMask whatIsGround;
-        [SerializeField] private LayerMask whatIsInteraction;
 
-        public Action<bool> OnAttackKeyPressed;
-        public Action<bool> OnJumpKeyPressed;
-
-        private Vector3 _prevMousePosition;
         private Controls _controls;
 
         private void OnEnable()
@@ -30,51 +24,52 @@ namespace Code.Player
         }
 
         private void OnDisable()
-        {
+        {   
             _controls.Player.Disable();
         }
         public void OnMove(InputAction.CallbackContext context)
         {
             Movement = context.ReadValue<Vector2>();
         }
-        public void OnAttack(InputAction.CallbackContext context)
+
+        public void OnW(InputAction.CallbackContext context)
         {
-            if (context.performed)
-                OnAttackKeyPressed?.Invoke(true);
-            if (context.canceled)
-                OnAttackKeyPressed?.Invoke(false);
+            throw new NotImplementedException();
         }
 
-        public void OnJump(InputAction.CallbackContext context)
+        public void OnS(InputAction.CallbackContext context)
         {
-            if (context.performed)
-                OnJumpKeyPressed?.Invoke(true);
-            if (context.canceled)
-                OnJumpKeyPressed?.Invoke(false);
+            throw new NotImplementedException();
         }
 
-        public Vector3 GetWorldMousePosition()
+        public void OnA(InputAction.CallbackContext context)
         {
-            Camera camera = Camera.main;
-            Ray ray = camera.ScreenPointToRay(MousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000f, whatIsGround))
-            {
-                _prevMousePosition = hit.point;
-            }
-
-            return _prevMousePosition;
+            throw new NotImplementedException();
         }
 
-        public Vector3 GetShootDirection(Transform playerTransform)
+        public void OnD(InputAction.CallbackContext context)
         {
-            Vector3 mouseWorldPos = GetWorldMousePosition();
-
-            Vector3 direction = (mouseWorldPos - playerTransform.position).normalized;
-            return direction;
+            throw new NotImplementedException();
         }
 
+        public void OnLArrow(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void OnRArrow(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void OnDArrow(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnUArrow(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
