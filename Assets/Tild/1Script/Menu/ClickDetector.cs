@@ -9,7 +9,7 @@ namespace Tild.Menu
     public class ClickDetector : MonoBehaviour
     {
         [SerializeField] private LayerMask clickableLayer;
-        [SerializeField] private PlayerInputSO playerInputSO;
+        [SerializeField] private BaseInputSO playerInputSO;
         [SerializeField] private float holdTime = 2f;
         [SerializeField] private float shakeDuration = 0.2f;
         [SerializeField] private float shakeStrength = 2f;

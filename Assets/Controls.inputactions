@@ -16,7 +16,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "W",
+                    "name": "WKey",
                     "type": "Button",
                     "id": "0d5fd159-6e15-4c86-b6ce-053667a28c74",
                     "expectedControlType": "",
@@ -25,7 +25,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "S",
+                    "name": "SKey",
                     "type": "Button",
                     "id": "2a3163ff-74c0-49fe-9128-d910368395a7",
                     "expectedControlType": "",
@@ -34,7 +34,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "A",
+                    "name": "AKey",
                     "type": "Button",
                     "id": "de9a29c0-5341-4d08-b9fb-66535a8f2dbe",
                     "expectedControlType": "",
@@ -43,7 +43,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "D",
+                    "name": "Dkey",
                     "type": "Button",
                     "id": "34a69791-ab2c-44ca-aeba-264eb72a9c22",
                     "expectedControlType": "",
@@ -82,6 +82,15 @@
                     "name": "UArrow",
                     "type": "Button",
                     "id": "fcc4ecc6-00e8-4cb1-9b26-b395c3a37757",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Space",
+                    "type": "Button",
+                    "id": "bafd06bf-8c9e-456a-b153-6bad05d443ac",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -184,7 +193,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "W",
+                    "action": "WKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -195,7 +204,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "S",
+                    "action": "SKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -206,7 +215,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "A",
+                    "action": "AKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -217,7 +226,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "D",
+                    "action": "Dkey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -262,6 +271,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UArrow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f0a3b2d1-c6d2-4fb2-b768-9cb4539cb2f1",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Space",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

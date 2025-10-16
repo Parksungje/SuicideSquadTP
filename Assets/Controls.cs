@@ -102,7 +102,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""W"",
+                    ""name"": ""WKey"",
                     ""type"": ""Button"",
                     ""id"": ""0d5fd159-6e15-4c86-b6ce-053667a28c74"",
                     ""expectedControlType"": """",
@@ -111,7 +111,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""S"",
+                    ""name"": ""SKey"",
                     ""type"": ""Button"",
                     ""id"": ""2a3163ff-74c0-49fe-9128-d910368395a7"",
                     ""expectedControlType"": """",
@@ -120,7 +120,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""A"",
+                    ""name"": ""AKey"",
                     ""type"": ""Button"",
                     ""id"": ""de9a29c0-5341-4d08-b9fb-66535a8f2dbe"",
                     ""expectedControlType"": """",
@@ -129,7 +129,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""D"",
+                    ""name"": ""Dkey"",
                     ""type"": ""Button"",
                     ""id"": ""34a69791-ab2c-44ca-aeba-264eb72a9c22"",
                     ""expectedControlType"": """",
@@ -168,6 +168,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": ""UArrow"",
                     ""type"": ""Button"",
                     ""id"": ""fcc4ecc6-00e8-4cb1-9b26-b395c3a37757"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Space"",
+                    ""type"": ""Button"",
+                    ""id"": ""bafd06bf-8c9e-456a-b153-6bad05d443ac"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -270,7 +279,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""W"",
+                    ""action"": ""WKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -281,7 +290,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""S"",
+                    ""action"": ""SKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -292,7 +301,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""A"",
+                    ""action"": ""AKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -303,7 +312,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""D"",
+                    ""action"": ""Dkey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -348,6 +357,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""UArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f0a3b2d1-c6d2-4fb2-b768-9cb4539cb2f1"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Space"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -936,14 +956,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_W = m_Player.FindAction("W", throwIfNotFound: true);
-        m_Player_S = m_Player.FindAction("S", throwIfNotFound: true);
-        m_Player_A = m_Player.FindAction("A", throwIfNotFound: true);
-        m_Player_D = m_Player.FindAction("D", throwIfNotFound: true);
+        m_Player_WKey = m_Player.FindAction("WKey", throwIfNotFound: true);
+        m_Player_SKey = m_Player.FindAction("SKey", throwIfNotFound: true);
+        m_Player_AKey = m_Player.FindAction("AKey", throwIfNotFound: true);
+        m_Player_Dkey = m_Player.FindAction("Dkey", throwIfNotFound: true);
         m_Player_LArrow = m_Player.FindAction("LArrow", throwIfNotFound: true);
         m_Player_RArrow = m_Player.FindAction("RArrow", throwIfNotFound: true);
         m_Player_DArrow = m_Player.FindAction("DArrow", throwIfNotFound: true);
         m_Player_UArrow = m_Player.FindAction("UArrow", throwIfNotFound: true);
+        m_Player_Space = m_Player.FindAction("Space", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1038,14 +1059,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_W;
-    private readonly InputAction m_Player_S;
-    private readonly InputAction m_Player_A;
-    private readonly InputAction m_Player_D;
+    private readonly InputAction m_Player_WKey;
+    private readonly InputAction m_Player_SKey;
+    private readonly InputAction m_Player_AKey;
+    private readonly InputAction m_Player_Dkey;
     private readonly InputAction m_Player_LArrow;
     private readonly InputAction m_Player_RArrow;
     private readonly InputAction m_Player_DArrow;
     private readonly InputAction m_Player_UArrow;
+    private readonly InputAction m_Player_Space;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1062,21 +1084,21 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
         /// <summary>
-        /// Provides access to the underlying input action "Player/W".
+        /// Provides access to the underlying input action "Player/WKey".
         /// </summary>
-        public InputAction @W => m_Wrapper.m_Player_W;
+        public InputAction @WKey => m_Wrapper.m_Player_WKey;
         /// <summary>
-        /// Provides access to the underlying input action "Player/S".
+        /// Provides access to the underlying input action "Player/SKey".
         /// </summary>
-        public InputAction @S => m_Wrapper.m_Player_S;
+        public InputAction @SKey => m_Wrapper.m_Player_SKey;
         /// <summary>
-        /// Provides access to the underlying input action "Player/A".
+        /// Provides access to the underlying input action "Player/AKey".
         /// </summary>
-        public InputAction @A => m_Wrapper.m_Player_A;
+        public InputAction @AKey => m_Wrapper.m_Player_AKey;
         /// <summary>
-        /// Provides access to the underlying input action "Player/D".
+        /// Provides access to the underlying input action "Player/Dkey".
         /// </summary>
-        public InputAction @D => m_Wrapper.m_Player_D;
+        public InputAction @Dkey => m_Wrapper.m_Player_Dkey;
         /// <summary>
         /// Provides access to the underlying input action "Player/LArrow".
         /// </summary>
@@ -1093,6 +1115,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/UArrow".
         /// </summary>
         public InputAction @UArrow => m_Wrapper.m_Player_UArrow;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Space".
+        /// </summary>
+        public InputAction @Space => m_Wrapper.m_Player_Space;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1122,18 +1148,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @W.started += instance.OnW;
-            @W.performed += instance.OnW;
-            @W.canceled += instance.OnW;
-            @S.started += instance.OnS;
-            @S.performed += instance.OnS;
-            @S.canceled += instance.OnS;
-            @A.started += instance.OnA;
-            @A.performed += instance.OnA;
-            @A.canceled += instance.OnA;
-            @D.started += instance.OnD;
-            @D.performed += instance.OnD;
-            @D.canceled += instance.OnD;
+            @WKey.started += instance.OnWKey;
+            @WKey.performed += instance.OnWKey;
+            @WKey.canceled += instance.OnWKey;
+            @SKey.started += instance.OnSKey;
+            @SKey.performed += instance.OnSKey;
+            @SKey.canceled += instance.OnSKey;
+            @AKey.started += instance.OnAKey;
+            @AKey.performed += instance.OnAKey;
+            @AKey.canceled += instance.OnAKey;
+            @Dkey.started += instance.OnDkey;
+            @Dkey.performed += instance.OnDkey;
+            @Dkey.canceled += instance.OnDkey;
             @LArrow.started += instance.OnLArrow;
             @LArrow.performed += instance.OnLArrow;
             @LArrow.canceled += instance.OnLArrow;
@@ -1146,6 +1172,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @UArrow.started += instance.OnUArrow;
             @UArrow.performed += instance.OnUArrow;
             @UArrow.canceled += instance.OnUArrow;
+            @Space.started += instance.OnSpace;
+            @Space.performed += instance.OnSpace;
+            @Space.canceled += instance.OnSpace;
         }
 
         /// <summary>
@@ -1160,18 +1189,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @W.started -= instance.OnW;
-            @W.performed -= instance.OnW;
-            @W.canceled -= instance.OnW;
-            @S.started -= instance.OnS;
-            @S.performed -= instance.OnS;
-            @S.canceled -= instance.OnS;
-            @A.started -= instance.OnA;
-            @A.performed -= instance.OnA;
-            @A.canceled -= instance.OnA;
-            @D.started -= instance.OnD;
-            @D.performed -= instance.OnD;
-            @D.canceled -= instance.OnD;
+            @WKey.started -= instance.OnWKey;
+            @WKey.performed -= instance.OnWKey;
+            @WKey.canceled -= instance.OnWKey;
+            @SKey.started -= instance.OnSKey;
+            @SKey.performed -= instance.OnSKey;
+            @SKey.canceled -= instance.OnSKey;
+            @AKey.started -= instance.OnAKey;
+            @AKey.performed -= instance.OnAKey;
+            @AKey.canceled -= instance.OnAKey;
+            @Dkey.started -= instance.OnDkey;
+            @Dkey.performed -= instance.OnDkey;
+            @Dkey.canceled -= instance.OnDkey;
             @LArrow.started -= instance.OnLArrow;
             @LArrow.performed -= instance.OnLArrow;
             @LArrow.canceled -= instance.OnLArrow;
@@ -1184,6 +1213,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @UArrow.started -= instance.OnUArrow;
             @UArrow.performed -= instance.OnUArrow;
             @UArrow.canceled -= instance.OnUArrow;
+            @Space.started -= instance.OnSpace;
+            @Space.performed -= instance.OnSpace;
+            @Space.canceled -= instance.OnSpace;
         }
 
         /// <summary>
@@ -1492,33 +1524,33 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "W" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "WKey" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnW(InputAction.CallbackContext context);
+        void OnWKey(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "S" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "SKey" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnS(InputAction.CallbackContext context);
+        void OnSKey(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "A" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "AKey" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnA(InputAction.CallbackContext context);
+        void OnAKey(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "D" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Dkey" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnD(InputAction.CallbackContext context);
+        void OnDkey(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "LArrow" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1547,6 +1579,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUArrow(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Space" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpace(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
