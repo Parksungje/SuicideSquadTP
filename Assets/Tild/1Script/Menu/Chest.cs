@@ -64,10 +64,10 @@ namespace Tild.Menu
                 () => volume2.weight,
                 x => volume2.weight = x,
                 1,
-                0.7f
+                0.2f
             ).SetEase(Ease.InOutSine);
             
-            yield return new WaitForSeconds(0.9f);
+            yield return new WaitForSeconds(0.3f);
             
             DOTween.To(
                 () => volume2.weight,
@@ -78,7 +78,7 @@ namespace Tild.Menu
         
            
             
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(0.2f);
             WeaponData weaponData = GetItem();
             itemParticles.Play();
             weaponsGroup.DOFade(1f, 0.5f);
