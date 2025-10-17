@@ -8,9 +8,6 @@ namespace Code.Players
     public class CharacterMovement : MonoBehaviour, IComponent, IMovement
     {
         [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float rotationSpeed = 10f;
-        [SerializeField] private float jumpHeight = 2f;
-        [SerializeField] private float gravity = -2;
         [SerializeField] private Animator animator;
 
         private Agent _agent;
@@ -49,33 +46,12 @@ namespace Code.Players
         private void FixedUpdate()
         {
             CalculateMovement();
-            ApplyRotation();
             MoveCharacter();
-            Jump();
         }
 
         private void CalculateMovement()
         {
             _inputMovement = _inputMovement.normalized;
-        }
-
-        private void ApplyRotation()
-        {
-            if (_inputMovement.sqrMagnitude > 0.001f)
-            {
-                Vector3 direction = new Vector3(_inputMovement.x, 0f, _inputMovement.z);
-                Quaternion targetRot = Quaternion.LookRotation(direction);
-                Vector3 euler = targetRot.eulerAngles;
-                euler.x = 0f;
-                euler.z = 0f;
-                targetRot = Quaternion.Euler(euler);
-
-                _agent.transform.rotation = Quaternion.Slerp(
-                    _agent.transform.rotation,
-                    targetRot,
-                    rotationSpeed * Time.fixedDeltaTime
-                );
-            }
         }
 
         private void MoveCharacter()
@@ -88,32 +64,6 @@ namespace Code.Players
             _agent.transform.position = pos;
 
         }
-
-        public void Jump()
-        {
-            if (_characterController.isGrounded)
-            {
-                if (_velocity.y < 0f)
-                    _velocity.y = -2f;
-
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                    animator.SetBool(IsJumpingHash, true);
-                }
-                else
-                {
-                    animator.SetBool(IsJumpingHash, false);
-                }
-            }
-            else
-            {
-                _velocity.y += gravity * Time.fixedDeltaTime;
-            }
-
-            _characterController.Move(_velocity * Time.fixedDeltaTime);
-        }
-
         private void Update()
         {
             UpdateMovementMotion();
