@@ -4,6 +4,6 @@ namespace Tild.Minigames.BalanceGame
 {
     public class BalanceGameManager : MonoBehaviour
     {
-        [SerializeField]
+        //[SerializeField]
     }
 }
