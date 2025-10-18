@@ -7,37 +7,45 @@ namespace Code.Players
 {
     public class Player : Agent
     {
-        [field: SerializeField] public PlayerInputSO PlayerInput { get; private set; }
+        [field: SerializeField] public BaseInputSO PlayerInput { get; private set; }
 
-        private IMovement _movement;
-        private WeaponController _weaponController;
-        private CharacterMovement _characterMovement;
 
         public override void Awake()
         {
             base.Awake();
-            _movement = GetCompo<IMovement>();
-            _characterMovement = GetCompo<CharacterMovement>();
-            _weaponController = GetCompo<WeaponController>();
+            PlayerInput.OnWKeyPressed += HandleWKeyPressed;
+            PlayerInput.OnSKeyPressed += HandleSKeyPressed;
+            PlayerInput.OnAKeyPressed += HandleAKeyPressed;
+            PlayerInput.OnDKeyPressed += HandleDKeyPressed;
         }
 
-        private void HandleAttackKeyPressed(bool isPressed)
+        private void HandleWKeyPressed(bool isPressed)
         {
-            _weaponController.SetAttacking(isPressed);
+            throw new NotImplementedException();
         }
 
+        private void HandleSKeyPressed(bool isPressed)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleAKeyPressed(bool isPressed)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleDKeyPressed(bool isPressed)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Update()
+        {
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
         }
 
-        private void HandleJumpKeyPressed(bool isRunning)
-        {
-        }
-
-        private void Update()
-        {
-            _movement.SetMovementInput(PlayerInput.Movement);
-        }
     }
 }
