@@ -118,13 +118,13 @@ namespace Code.PK
         private void HandleKLeftDir()
         {
             _keeperDirType = Direction.Left;
-            _keeperDir = _originPos + Vector3.left * 3f;
+            _keeperDir = _originPos + Vector3.left * 6f;
         }
 
         private void HandleKRightDir()
         {
             _keeperDirType = Direction.Right;
-            _keeperDir = _originPos + Vector3.right * 3f;
+            _keeperDir = _originPos + Vector3.right * 6f;
         }
 
         private void HandleKMiddleDir()

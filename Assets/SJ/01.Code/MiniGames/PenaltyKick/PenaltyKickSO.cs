@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Code.Player
 {
-    [CreateAssetMenu(fileName = "PenaltyKick Input", menuName = "SJ/PenaltyKick", order = 1)]
+    [CreateAssetMenu(fileName = "PenaltyKick Input", menuName = "SJ/GameSO/PenaltyKick", order = 1)]
     public class PenaltyKickSO : BaseInputSO
     {
         public Action OnSConfrim;
