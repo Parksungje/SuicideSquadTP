@@ -9,6 +9,8 @@ public class PlayerController_Tag : MonoBehaviour
     [Header("PlayerSetting")]
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float jumpPower = 8f;
+    [SerializeField] private float inertia = .05f;
+    [SerializeField] private float gravityMultiplier = 2f;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float groundRayDistance = 1.1f;
 
@@ -49,10 +51,11 @@ public class PlayerController_Tag : MonoBehaviour
 
     private void HandleL_Jump()
     {
-        print(IsGrounded(rigidbody_P1));
         if (IsGrounded(rigidbody_P1))
         {
-            rigidbody_P1.linearVelocity = Vector3.zero;
+            Vector3 v = rigidbody_P1.linearVelocity;
+            v.y = 0f;
+            rigidbody_P1.linearVelocity = v;
             rigidbody_P1.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         }
     }
@@ -70,38 +73,37 @@ public class PlayerController_Tag : MonoBehaviour
     private void HandleR_Jump()
     {
         if (IsGrounded(rigidbody_P2))
-
+        {
+            Vector3 v = rigidbody_P2.linearVelocity;
+            v.y = 0f;
+            rigidbody_P2.linearVelocity = v;
             rigidbody_P2.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        }
     }
 
     private void FixedUpdate()
     {
         MovePlayer(rigidbody_P1, dirP1);
-        //MovePlayer(rigidbody_P2, dirP2);
+        ApplyExtraGravity(rigidbody_P1);
+        MovePlayer(rigidbody_P2, dirP2);
+        ApplyExtraGravity(rigidbody_P2);
     }
 
     private void MovePlayer(Rigidbody rb, int dir)
     {
         Vector3 velocity = rb.linearVelocity;
-        velocity.x = dir * walkSpeed;
+        float targetX = dir * walkSpeed;
+        velocity.x = Mathf.Lerp(velocity.x, targetX, inertia);
         rb.linearVelocity = velocity;
+    }
+
+    private void ApplyExtraGravity(Rigidbody rb)
+    {
+        rb.AddForce(Physics.gravity * (gravityMultiplier - 1f), ForceMode.Acceleration);
     }
 
     private bool IsGrounded(Rigidbody rb)
     {
-        return Physics.Raycast(rb.position, Vector3.down, groundRayDistance, groundMask);
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (rigidbody_P1 != null)
-        {
-            Gizmos.DrawLine(rigidbody_P1.position, rigidbody_P1.position + Vector3.down * groundRayDistance);
-        }
-
-        if (rigidbody_P2 != null)
-        {
-            Gizmos.DrawLine(rigidbody_P2.position, rigidbody_P2.position + Vector3.down * groundRayDistance);
-        }
+        return Physics.Raycast(rb.position + Vector3.up, Vector3.down, groundRayDistance, groundMask);
     }
 }
