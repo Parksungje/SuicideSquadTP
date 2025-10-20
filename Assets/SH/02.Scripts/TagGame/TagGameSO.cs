@@ -29,7 +29,7 @@ public class TagGameSO : BaseInputSO
     public override void OnSKey(InputAction.CallbackContext context)
     {
         base.OnSKey(context);
-        if (context.performed) OnL_Dash.Invoke();
+        
     }
     public override void OnDkey(InputAction.CallbackContext context)
     {
