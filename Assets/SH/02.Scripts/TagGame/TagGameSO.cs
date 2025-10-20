@@ -6,13 +6,13 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(fileName = "TagGame Input", menuName = "8S/GameSO/TagGame")]
 public class TagGameSO : BaseInputSO
 {
-    public Action OnL_LeftDir;
-    public Action OnL_RightDir;
+    public Action<bool> OnL_LeftDir;
+    public Action<bool> OnL_RightDir;
     public Action OnL_Jump;
     public Action OnL_Dash;
 
-    public Action OnR_LeftDir;
-    public Action OnR_RightDir;
+    public Action <bool> OnR_LeftDir;
+    public Action<bool> OnR_RightDir;
     public Action OnR_Jump;
     public Action OnR_Dash;
 
@@ -24,8 +24,7 @@ public class TagGameSO : BaseInputSO
 
     public override void OnAKey(InputAction.CallbackContext context)
     {
-        base.OnAKey(context);
-        if (context.performed) OnL_LeftDir.Invoke();
+        OnL_LeftDir.Invoke(context.performed);
     }
     public override void OnSKey(InputAction.CallbackContext context)
     {
@@ -34,8 +33,7 @@ public class TagGameSO : BaseInputSO
     }
     public override void OnDkey(InputAction.CallbackContext context)
     {
-        base.OnDkey(context);
-        if (context.performed) OnL_RightDir.Invoke();
+        OnL_RightDir.Invoke(context.performed);
     }
 
 
@@ -47,8 +45,7 @@ public class TagGameSO : BaseInputSO
 
     public override void OnLArrow(InputAction.CallbackContext context)
     {
-        base.OnLArrow(context);
-        if (context.performed) OnR_LeftDir.Invoke();
+        OnR_LeftDir.Invoke(context.performed);
     }
     public override void OnDArrow(InputAction.CallbackContext context)
     {
@@ -57,7 +54,6 @@ public class TagGameSO : BaseInputSO
     }
     public override void OnRArrow(InputAction.CallbackContext context)
     {
-        base.OnRArrow(context);
-        if (context.performed) OnR_RightDir.Invoke();
+        OnR_RightDir.Invoke(context.performed);
     }
 }

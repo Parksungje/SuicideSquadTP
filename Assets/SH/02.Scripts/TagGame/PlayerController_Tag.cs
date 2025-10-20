@@ -8,34 +8,100 @@ public class PlayerController_Tag : MonoBehaviour
 
     [Header("PlayerSetting")]
     [SerializeField] private float walkSpeed = 5f;
-    [SerializeField] private float maxWalkSpeed = 6f;
     [SerializeField] private float jumpPower = 8f;
-    [SerializeField] private float dashForce = 5f;
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float groundRayDistance = 1.1f;
+
+    private int dirP1;
+    private int dirP2;
 
     private void OnEnable()
     {
         tagGameInput.OnL_LeftDir += HandleL_LeftDir;
         tagGameInput.OnL_RightDir += HandleL_RightDir;
+        tagGameInput.OnR_LeftDir += HandleR_LeftDir;
+        tagGameInput.OnR_RightDir += HandleR_RightDir;
+
+        tagGameInput.OnL_Jump += HandleL_Jump;
+        tagGameInput.OnR_Jump += HandleR_Jump;
     }
 
-    private void HandleL_LeftDir()
+    private void OnDisable()
     {
-        MovePlayer(rigidbody_P1, -1f);
+        tagGameInput.OnL_LeftDir -= HandleL_LeftDir;
+        tagGameInput.OnL_RightDir -= HandleL_RightDir;
+        tagGameInput.OnR_LeftDir -= HandleR_LeftDir;
+        tagGameInput.OnR_RightDir -= HandleR_RightDir;
+
+        tagGameInput.OnL_Jump -= HandleL_Jump;
+        tagGameInput.OnR_Jump -= HandleR_Jump;
     }
 
-    private void HandleL_RightDir()
+    private void HandleL_LeftDir(bool isHolding)
     {
-        MovePlayer(rigidbody_P1, 1f);
+        dirP1 = isHolding ? -1 : (dirP1 == -1 ? 0 : dirP1);
     }
 
-    private void MovePlayer(Rigidbody rb, float dir)
+    private void HandleL_RightDir(bool isHolding)
     {
-        if (rb == null) return;
+        dirP1 = isHolding ? 1 : (dirP1 == 1 ? 0 : dirP1);
+    }
 
-        rb.AddForce(Vector3.right * dir * walkSpeed, ForceMode.Force);
+    private void HandleL_Jump()
+    {
+        print(IsGrounded(rigidbody_P1));
+        if (IsGrounded(rigidbody_P1))
+        {
+            rigidbody_P1.linearVelocity = Vector3.zero;
+            rigidbody_P1.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        }
+    }
 
-        Vector3 v = rb.linearVelocity;
-        v.x = Mathf.Clamp(v.x, -maxWalkSpeed, maxWalkSpeed);
-        rb.linearVelocity = v;
+    private void HandleR_LeftDir(bool isHolding)
+    {
+        dirP2 = isHolding ? -1 : (dirP2 == -1 ? 0 : dirP2);
+    }
+
+    private void HandleR_RightDir(bool isHolding)
+    {
+        dirP2 = isHolding ? 1 : (dirP2 == 1 ? 0 : dirP2);
+    }
+
+    private void HandleR_Jump()
+    {
+        if (IsGrounded(rigidbody_P2))
+
+            rigidbody_P2.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+    }
+
+    private void FixedUpdate()
+    {
+        MovePlayer(rigidbody_P1, dirP1);
+        //MovePlayer(rigidbody_P2, dirP2);
+    }
+
+    private void MovePlayer(Rigidbody rb, int dir)
+    {
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = dir * walkSpeed;
+        rb.linearVelocity = velocity;
+    }
+
+    private bool IsGrounded(Rigidbody rb)
+    {
+        return Physics.Raycast(rb.position, Vector3.down, groundRayDistance, groundMask);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (rigidbody_P1 != null)
+        {
+            Gizmos.DrawLine(rigidbody_P1.position, rigidbody_P1.position + Vector3.down * groundRayDistance);
+        }
+
+        if (rigidbody_P2 != null)
+        {
+            Gizmos.DrawLine(rigidbody_P2.position, rigidbody_P2.position + Vector3.down * groundRayDistance);
+        }
     }
 }
