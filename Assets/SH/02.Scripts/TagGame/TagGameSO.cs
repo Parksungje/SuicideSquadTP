@@ -18,8 +18,7 @@ public class TagGameSO : BaseInputSO
 
     public override void OnWKey(InputAction.CallbackContext context)
     {
-        base.OnWKey(context);
-        if (context.performed) OnL_Jump.Invoke();
+        OnL_Jump.Invoke();
     }
 
     public override void OnAKey(InputAction.CallbackContext context)
@@ -29,7 +28,6 @@ public class TagGameSO : BaseInputSO
     public override void OnSKey(InputAction.CallbackContext context)
     {
         base.OnSKey(context);
-        
     }
     public override void OnDkey(InputAction.CallbackContext context)
     {
@@ -39,8 +37,7 @@ public class TagGameSO : BaseInputSO
 
     public override void OnUArrow(InputAction.CallbackContext context)
     {
-        base.OnUArrow(context);
-        if (context.performed) OnR_Jump.Invoke();
+        OnR_Jump.Invoke();
     }
 
     public override void OnLArrow(InputAction.CallbackContext context)
@@ -50,7 +47,6 @@ public class TagGameSO : BaseInputSO
     public override void OnDArrow(InputAction.CallbackContext context)
     {
         base.OnDArrow(context);
-        if (context.performed) OnR_Dash.Invoke();
     }
     public override void OnRArrow(InputAction.CallbackContext context)
     {
