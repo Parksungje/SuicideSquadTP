@@ -1,4 +1,6 @@
 ﻿using Code.Player;
+using DG.Tweening;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -8,157 +10,198 @@ namespace Code.PK
     {
         [SerializeField] private PenaltyKickSO PKInput;
         [SerializeField] private GameObject ballPrefab;
+        [SerializeField] private GameObject keeperPrefab;
+        [SerializeField] private GameObject startBall;
         [SerializeField] private Transform shootPoint;
-        [SerializeField] private float shootForce = 100f;
-        [SerializeField] private GameObject _keeperPrefab;
-        [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private float shootPower = 20f;
+        [SerializeField] private float keeperJumpPower = 10f;
+        [SerializeField] private Animator keeperAnimator;
 
-        private Rigidbody _rbCompo;
+        private readonly int IsKeepingHash = Animator.StringToHash("isKeeping");
+
+        private Rigidbody keeperRb;
         private GameObject currentBall;
-        private Vector3 _originPos;
+        private Vector3 keeperOriginPos;
 
-        private bool _sConfirm = false;
-        private bool _kConfirm = false;
+        private bool shooterConfirmed;
+        private bool keeperConfirmed;
+        private bool isShoot;
 
-        private int _sScore = 0;
-        private int _kScore = 0;
+        private int shooterScore;
+        private int keeperScore;
 
-        private enum Direction
+        private enum Direction { Left, Middle, Right }
+        private Direction shooterDirType = Direction.Middle;
+        private Direction keeperDirType = Direction.Middle;
+
+        private Vector3 shooterDir = Vector3.forward;
+        private Vector3 keeperDir = Vector3.zero;
+
+        private void Awake()
         {
-            Left,
-            Middle,
-            Right
+            keeperRb = keeperPrefab.GetComponent<Rigidbody>();
         }
-
-        private Direction _shooterDirType = Direction.Middle;
-        private Direction _keeperDirType = Direction.Middle;
-
-        private Vector3 _shooterDir = Vector3.forward;
-        private Vector3 _keeperDir = Vector3.zero;
 
         private void OnEnable()
         {
-            PKInput.OnSConfrim += HandleSConfrim;
-            PKInput.OnSLeftDir += HandleSLeftDir;
-            PKInput.OnSRightDir += HandleSRightDir;
-            PKInput.OnSMiddleDir += HandleSMiddleDir;
+            PKInput.OnSConfrim += () => shooterConfirmed = true;
+            PKInput.OnSLeftDir += () => SetShooterDir(Direction.Left, new Vector3(-0.35f, 0.3f, 1f));
+            PKInput.OnSRightDir += () => SetShooterDir(Direction.Right, new Vector3(0.35f, 0.3f, 1f));
+            PKInput.OnSMiddleDir += () => SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f));
 
-            PKInput.OnKConfrim += HandleKConfrim;
-            PKInput.OnKLeftDir += HandleKLeftDir;
-            PKInput.OnKRightDir += HandleKRightDir;
-            PKInput.OnKMiddleDir += HandleKMiddleDir;
+            PKInput.OnKConfrim += () => keeperConfirmed = true;
+            PKInput.OnKLeftDir += () => SetKeeperDir(Direction.Left, Vector3.left);
+            PKInput.OnKRightDir += () => SetKeeperDir(Direction.Right, Vector3.right);
+            PKInput.OnKMiddleDir += () => SetKeeperDir(Direction.Middle, Vector3.zero);
 
-            PKInput.OnConfirm += HandleComfirm;
+            PKInput.OnConfirm += HandleConfirm;
         }
 
         private void OnDisable()
         {
-            PKInput.OnSConfrim -= HandleSConfrim;
-            PKInput.OnSLeftDir -= HandleSLeftDir;
-            PKInput.OnSRightDir -= HandleSRightDir;
-            PKInput.OnSMiddleDir -= HandleSMiddleDir;
+            PKInput.OnSConfrim -= () => shooterConfirmed = true;
+            PKInput.OnSLeftDir -= () => SetShooterDir(Direction.Left, new Vector3(-0.5f, 0.3f, 1f));
+            PKInput.OnSRightDir -= () => SetShooterDir(Direction.Right, new Vector3(0.5f, 0.3f, 1f));
+            PKInput.OnSMiddleDir -= () => SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f));
 
-            PKInput.OnKConfrim -= HandleKConfrim;
-            PKInput.OnKLeftDir -= HandleKLeftDir;
-            PKInput.OnKRightDir -= HandleKRightDir;
-            PKInput.OnKMiddleDir -= HandleKMiddleDir;
+            PKInput.OnKConfrim -= () => keeperConfirmed = true;
+            PKInput.OnKLeftDir -= () => SetKeeperDir(Direction.Left, Vector3.left);
+            PKInput.OnKRightDir -= () => SetKeeperDir(Direction.Right, Vector3.right);
+            PKInput.OnKMiddleDir -= () => SetKeeperDir(Direction.Middle, Vector3.zero);
 
-            PKInput.OnConfirm -= HandleComfirm;
+            PKInput.OnConfirm -= HandleConfirm;
         }
 
         private void Start()
         {
-            _originPos = _keeperPrefab.transform.position;
-            ScoreUpdate();
-            StatusInit();
+            keeperOriginPos = keeperPrefab.transform.position;
+            startBall.SetActive(true);
+            ResetScores();
+            ResetStatus();
         }
 
-        private void StatusInit()
+        private void HandleConfirm()
         {
-            _sConfirm = false;
-            _kConfirm = false;
-        }
-
-        private void ScoreUpdate()
-        {
-            _sScore = 0;
-            _kScore = 0;
-            _scoreText.text = $"{_sScore} : {_kScore}";
-        }
-
-        private void ScoreUpdate(bool isShooterWin)
-        {
-            if (isShooterWin) _sScore++;
-            else _kScore++;
-            _scoreText.text = $"{_sScore} : {_kScore}";
-        }
-
-        private void HandleSConfrim() => _sConfirm = true;
-
-        private void HandleSLeftDir()
-        {
-            _shooterDirType = Direction.Left;
-            _shooterDir = new Vector3(-0.5f, 0f, 1f);
-        }
-
-        private void HandleSRightDir()
-        {
-            _shooterDirType = Direction.Right;
-            _shooterDir = new Vector3(0.5f, 0f, 1f);
-        }
-
-        private void HandleSMiddleDir()
-        {
-            _shooterDirType = Direction.Middle;
-            _shooterDir = Vector3.forward;
-        }
-
-        private void HandleKConfrim() => _kConfirm = true;
-
-        private void HandleKLeftDir()
-        {
-            _keeperDirType = Direction.Left;
-            _keeperDir = _originPos + Vector3.left * 6f;
-        }
-
-        private void HandleKRightDir()
-        {
-            _keeperDirType = Direction.Right;
-            _keeperDir = _originPos + Vector3.right * 6f;
-        }
-
-        private void HandleKMiddleDir()
-        {
-            _keeperDirType = Direction.Middle;
-            _keeperDir = _originPos;
-        }
-
-        private void HandleComfirm()
-        {
-            if (!_sConfirm || !_kConfirm)
+            if (!shooterConfirmed || !keeperConfirmed)
                 return;
 
+            isShoot = true;
+            keeperAnimator.SetBool(IsKeepingHash, isShoot);
+            startBall.SetActive(false);
+
+            SpawnAndShootBall();
+            KeeperJump();
+            RotateKeeper();
+            DetermineWinner();
+
+            StartCoroutine(ResetKeeper());
+            ResetStatus();
+        }
+
+        private void SpawnAndShootBall()
+        {
             if (currentBall != null)
                 Destroy(currentBall);
 
             currentBall = Instantiate(ballPrefab, shootPoint.position, Quaternion.identity);
-            _rbCompo = currentBall.GetComponent<Rigidbody>();
+            var rb = currentBall.GetComponent<Rigidbody>();
 
-            var dir = _shooterDir.normalized;
-            _rbCompo.linearVelocity = Vector3.zero;
-            _rbCompo.angularVelocity = Vector3.zero;
-            _rbCompo.AddForce(dir * shootForce, ForceMode.VelocityChange);
-
-            _keeperPrefab.transform.position = _keeperDir;
-
-            WhoIsWinner();
-            StatusInit();
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.AddForce(shooterDir.normalized * shootPower, ForceMode.VelocityChange);
         }
 
-        private void WhoIsWinner()
+        private void KeeperJump()
         {
-            bool shooterWin = _shooterDirType != _keeperDirType;
-            ScoreUpdate(shooterWin);
+            keeperRb.linearVelocity = Vector3.zero;
+            Vector3 jumpDir = keeperDir + Vector3.up * 1.2f;
+            keeperRb.AddForce(jumpDir.normalized * keeperJumpPower, ForceMode.VelocityChange);
+        }
+
+        private void RotateKeeper()
+        {
+            float zRot = keeperDirType switch
+            {
+                Direction.Left => 25f,
+                Direction.Right => -25f,
+                _ => 0f
+            };
+
+            keeperPrefab.transform.DORotate(new Vector3(0, 0, zRot), 0.3f, RotateMode.Fast);
+        }
+
+        private void DetermineWinner()
+        {
+            bool shooterWin = shooterDirType != keeperDirType;
+            UpdateScore(shooterWin);
+        }
+
+        private IEnumerator ResetKeeper()
+        {
+            yield return new WaitForSeconds(2.5f);
+
+            keeperRb.linearVelocity = Vector3.zero;
+            keeperPrefab.transform.position = keeperOriginPos;
+            keeperPrefab.transform.rotation = Quaternion.identity;
+
+            if (currentBall != null)
+            {
+                currentBall.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                currentBall.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+                currentBall.transform.DOMove(shootPoint.position, 0.5f).OnComplete(() =>
+                {
+                    startBall.SetActive(true);
+                    Destroy(currentBall);
+                    currentBall = null;
+                });
+            }
+            else
+            {
+                startBall.SetActive(true);
+            }
+
+            isShoot = false;
+            keeperAnimator.SetBool(IsKeepingHash, isShoot);
+        }
+
+
+        private void SetShooterDir(Direction type, Vector3 dir)
+        {
+            shooterDirType = type;
+            shooterDir = dir;
+        }
+
+        private void SetKeeperDir(Direction type, Vector3 dir)
+        {
+            keeperDirType = type;
+            keeperDir = dir;
+        }
+
+        private void ResetStatus()
+        {
+            shooterConfirmed = false;
+            keeperConfirmed = false;
+        }
+
+        private void ResetScores()
+        {
+            shooterScore = 0;
+            keeperScore = 0;
+            UpdateScoreText();
+        }
+
+        private void UpdateScore(bool shooterWin)
+        {
+            if (shooterWin) shooterScore++;
+            else keeperScore++;
+            UpdateScoreText();
+        }
+
+        private void UpdateScoreText()
+        {
+            scoreText.text = $"{shooterScore} : {keeperScore}";
         }
     }
 }
