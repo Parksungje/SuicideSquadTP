@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
+  m_Name: BalanceGame
+  m_EditorClassIdentifier: 
+  gameName: "\uBC38\uB7F0\uC2A4 \uAC8C\uC784"
+  description: "\uCE5C\uAD6C\uC640 \uAC19\uC740 \uB2F5\uC744 \uB0B4\uACE0 \uC810\uC218\uB97C
+    \uBC1B\uC73C\uC138\uC694!  \uC9C8\uBB38\uACFC \uC815\uB2F5 \uD0A4\uAC00 \uD31D\uC5C5\uB429\uB2C8\uB2E4.  "
+  playScreen: {fileID: 21300000, guid: 59dea5f14caeaa7428f32afa65e0f16f, type: 3}
+  scene: BalanceGame
+  backgroundColor: {r: 1, g: 0.5882353, b: 0.8666667, a: 1}

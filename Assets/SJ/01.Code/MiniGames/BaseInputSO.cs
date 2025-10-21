@@ -85,5 +85,10 @@ namespace Code.Player
         {
             OnConfirmPressed?.Invoke(context.performed);
         }
+
+        public bool IsAnyKeyPressed()
+        {
+            return Input.anyKey;
+        }
     }
 }
