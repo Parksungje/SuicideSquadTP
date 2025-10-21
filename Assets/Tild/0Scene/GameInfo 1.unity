@@ -11426,6 +11426,7 @@ MonoBehaviour:
   amountDropdown: {fileID: 1272508502}
   amountTitle: {fileID: 415660771}
   inputSO: {fileID: 11400000, guid: bf6862916257b4d4294ed63944599ae8, type: 2}
+  cameras: {fileID: 1489488406}
 --- !u!1 &1559898521
 GameObject:
   m_ObjectHideFlags: 0
@@ -13811,6 +13812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed35ee24ff0b4bc7bc93de3e80a7460e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minigamePlayed: []
 --- !u!4 &1838556828
 Transform:
   m_ObjectHideFlags: 0
