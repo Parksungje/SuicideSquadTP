@@ -9,7 +9,10 @@ namespace Tild._1Script.Menu
         public static MinigameManager instance = null;
         
         private GameType gameType;
+        private int amount;
         private bool isRandomMode = false;
+        
+        public List<MinigameSO> minigamePlayed;
         void Awake()
         {
           
@@ -25,11 +28,17 @@ namespace Tild._1Script.Menu
             
         }
 
-        public void Initialize(GameType gameType, bool isRandom)
+        public void Initialize(GameType gameType, bool isRandom, int amount)
         {
             this.gameType = gameType;
             this.isRandomMode = isRandom;
+            this.amount = amount;
             SceneManager.LoadScene("GameChoice");
+        }
+
+        public void NextMinigame(string scene)
+        {
+            SceneManager.LoadScene(scene);
         }
     }
 

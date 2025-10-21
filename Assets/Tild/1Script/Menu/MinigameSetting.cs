@@ -12,11 +12,18 @@ namespace Tild._1Script.Menu
         [SerializeField] private TMP_Dropdown amountDropdown;
         [SerializeField] private TMP_Text amountTitle;
         [SerializeField] private InputSO inputSO;
+        [SerializeField] private GameObject cameras;
 
         private void Awake()
         {
             gameTypeDropdown.onValueChanged.AddListener(ChangeAmountTitle);
             inputSO.OnConfirmPressed += OnConfirmPressed;
+            cameras.SetActive(false);
+        }
+
+        private void Start()
+        {
+            cameras.SetActive(true);
         }
 
         private void ChangeAmountTitle(int index)
@@ -39,8 +46,24 @@ namespace Tild._1Script.Menu
         {
             GameType gameType = (GameType)gameTypeDropdown.value;
             bool isRandomMode = (isRandomModeDropdown.value == 0);
+            int amount = 3;
+            switch (amountDropdown.value)
+            {
+                case 0:
+                    amount = 3;
+                    break;
+                case 1:
+                    amount = 5;
+                    break;
+                case 2:
+                    amount = 7;
+                    break;
+                case 3:
+                    amount = 9;
+                    break;  
+            }
             
-            MinigameManager.instance.Initialize(gameType, isRandomMode);
+            MinigameManager.instance.Initialize(gameType, isRandomMode, amount);
         }
         
         

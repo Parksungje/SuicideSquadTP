@@ -6,9 +6,10 @@ namespace Tild._1Script.Menu
     [CreateAssetMenu(fileName = "Minigame", menuName = "SO/Tild/Minigame", order = 0)]
     public class MinigameSO : ScriptableObject
     {
-        public string Name;
-        public string Description;
-        public Sprite PlayScreen;
-        public Scene scene;
+        public string gameName;
+        public string description;
+        public Sprite playScreen;
+        public string scene;
+        public Color backgroundColor;
     }
 }

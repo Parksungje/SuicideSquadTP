@@ -8,6 +8,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Tild/0Scene/GameInfo 1.unity
+    guid: d56fd5965f47c1d4da1605c919d739f4
+  - enabled: 1
+    path: Assets/Tild/0Scene/GameChoice.unity
+    guid: 36c45066974215b42b7955abc626a957
+  - enabled: 1
+    path: Assets/Tild/0Scene/Minigames/BalanceGame.unity
+    guid: 0eeba98408f8aa74c99d561ac99b44a2
+  - enabled: 1
+    path: Assets/Tild/0Scene/Minigames/RopeGame.unity
+    guid: a17b4d099b6b2ad43970600e070dedb0
+  - enabled: 1
+    path: Assets/SJ/00.Scene/PenaltyKick.unity
+    guid: 6a5a52811e942d24388ecc95df47cec0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

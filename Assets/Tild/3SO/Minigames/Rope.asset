@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
+  m_Name: Rope
+  m_EditorClassIdentifier: 
+  gameName: "\uC904\uB2E4\uB9AC\uAE30"
+  description: "\uD654\uBA74\uC5D0 \uB098\uC624\uB294 \uD0A4\uC5D0 \uB9DE\uCDB0 \uC904\uC744
+    \uB2F9\uAE30\uC138\uC694!"
+  playScreen: {fileID: 21300000, guid: e47f99b1effc809418e121e932577f89, type: 3}
+  scene: RopeGame
+  backgroundColor: {r: 0.81886786, g: 0.5303125, b: 0.31982192, a: 1}
