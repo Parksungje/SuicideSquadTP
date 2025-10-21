@@ -9,7 +9,6 @@ namespace Code.PK
     public class PenaltyKickController : MonoBehaviour
     {
         [SerializeField] private PenaltyKickSO PKInput;
-        [SerializeField] private GameObject ballPrefab;
         [SerializeField] private GameObject keeperPrefab;
         [SerializeField] private GameObject startBall;
         [SerializeField] private Transform shootPoint;
@@ -17,8 +16,13 @@ namespace Code.PK
         [SerializeField] private float shootPower = 20f;
         [SerializeField] private float keeperJumpPower = 10f;
         [SerializeField] private Animator keeperAnimator;
+        [SerializeField] private Animator shooterAnimator;
+        [SerializeField] private Transform orignPos;
+        [SerializeField] private GameObject shooterObj;
 
         private readonly int IsKeepingHash = Animator.StringToHash("isKeeping");
+        private readonly int IsShootingHash = Animator.StringToHash("isShooting");
+        private readonly int IsRunningHash = Animator.StringToHash("isRunning");
 
         private Rigidbody keeperRb;
         private GameObject currentBall;
@@ -60,16 +64,6 @@ namespace Code.PK
 
         private void OnDisable()
         {
-            PKInput.OnSConfrim -= () => shooterConfirmed = true;
-            PKInput.OnSLeftDir -= () => SetShooterDir(Direction.Left, new Vector3(-0.5f, 0.3f, 1f));
-            PKInput.OnSRightDir -= () => SetShooterDir(Direction.Right, new Vector3(0.5f, 0.3f, 1f));
-            PKInput.OnSMiddleDir -= () => SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f));
-
-            PKInput.OnKConfrim -= () => keeperConfirmed = true;
-            PKInput.OnKLeftDir -= () => SetKeeperDir(Direction.Left, Vector3.left);
-            PKInput.OnKRightDir -= () => SetKeeperDir(Direction.Right, Vector3.right);
-            PKInput.OnKMiddleDir -= () => SetKeeperDir(Direction.Middle, Vector3.zero);
-
             PKInput.OnConfirm -= HandleConfirm;
         }
 
@@ -77,6 +71,7 @@ namespace Code.PK
         {
             keeperOriginPos = keeperPrefab.transform.position;
             startBall.SetActive(true);
+            currentBall = startBall;
             ResetScores();
             ResetStatus();
         }
@@ -88,28 +83,47 @@ namespace Code.PK
 
             isShoot = true;
             keeperAnimator.SetBool(IsKeepingHash, isShoot);
-            startBall.SetActive(false);
 
-            SpawnAndShootBall();
-            KeeperJump();
-            RotateKeeper();
-            DetermineWinner();
-
+            StartCoroutine(ShooterRunAndShoot());
+            StartCoroutine(DelayedKeeperAction(0.25f));
             StartCoroutine(ResetKeeper());
             ResetStatus();
         }
 
+        private IEnumerator ShooterRunAndShoot()
+        {
+            shooterAnimator.SetBool(IsRunningHash, true);
+
+            yield return MoveTo(shooterObj, shootPoint.position, 0.6f);
+
+            shooterAnimator.SetBool(IsRunningHash, false);
+            shooterAnimator.SetBool(IsShootingHash, true);
+
+            SpawnAndShootBall();
+
+            yield return new WaitForSeconds(0.4f);
+            shooterAnimator.SetBool(IsShootingHash, false);
+
+            yield return MoveTo(shooterObj, orignPos.position, 0.5f);
+        }
+
         private void SpawnAndShootBall()
         {
-            if (currentBall != null)
-                Destroy(currentBall);
+            currentBall = startBall;
 
-            currentBall = Instantiate(ballPrefab, shootPoint.position, Quaternion.identity);
             var rb = currentBall.GetComponent<Rigidbody>();
-
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+
             rb.AddForce(shooterDir.normalized * shootPower, ForceMode.VelocityChange);
+        }
+
+        private IEnumerator DelayedKeeperAction(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            KeeperJump();
+            RotateKeeper();
+            DetermineWinner();
         }
 
         private void KeeperJump()
@@ -128,7 +142,7 @@ namespace Code.PK
                 _ => 0f
             };
 
-            keeperPrefab.transform.DORotate(new Vector3(0, 0, zRot), 0.3f, RotateMode.Fast);
+            keeperPrefab.transform.rotation = Quaternion.Euler(0, 0, zRot);
         }
 
         private void DetermineWinner()
@@ -147,25 +161,34 @@ namespace Code.PK
 
             if (currentBall != null)
             {
-                currentBall.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-                currentBall.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                Rigidbody rb = currentBall.GetComponent<Rigidbody>();
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
 
-                currentBall.transform.DOMove(shootPoint.position, 0.5f).OnComplete(() =>
-                {
-                    startBall.SetActive(true);
-                    Destroy(currentBall);
-                    currentBall = null;
-                });
-            }
-            else
-            {
-                startBall.SetActive(true);
+                // ✅ Lerp 대신 그냥 바로 리셋
+                currentBall.transform.position = shootPoint.position;
+                currentBall.transform.rotation = Quaternion.identity;
             }
 
             isShoot = false;
             keeperAnimator.SetBool(IsKeepingHash, isShoot);
         }
 
+        private IEnumerator MoveTo(GameObject obj, Vector3 target, float duration)
+        {
+            Vector3 start = obj.transform.position;
+            float time = 0f;
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = time / duration;
+                obj.transform.position = Vector3.Lerp(start, target, t);
+                yield return null;
+            }
+
+            obj.transform.position = target;
+        }
 
         private void SetShooterDir(Direction type, Vector3 dir)
         {

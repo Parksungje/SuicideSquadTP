@@ -11,18 +11,18 @@ public class VolleyBallController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 7f;
     [SerializeField] private float smashPower = 10f;
-    [SerializeField] private float normalHitPower = 5f;
+    //[SerializeField] private float normalHitPower = 5f;
 
     private Rigidbody leftRb;
     private Rigidbody rightRb;
     private Rigidbody ballRb;
 
-    private bool whoIsServe = true;
+    //private bool whoIsServe = true;
     private float baseBallSpeed = 6f;
 
     private void Awake()
     {
-        whoIsServe = true;
+        //whoIsServe = true;
         SpawnBall();
 
         leftRb = leftPlayer.GetComponent<Rigidbody>();
