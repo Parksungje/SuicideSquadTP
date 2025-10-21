@@ -9,31 +9,32 @@ namespace Code.PK
     public class PenaltyKickController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private PenaltyKickSO PKInput;
-        [SerializeField] private GameObject keeperPrefab;
-        [SerializeField] private GameObject startBall;
-        [SerializeField] private Transform shootPoint;
-        [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private Transform orignPos;
-        [SerializeField] private GameObject shooterObj;
-        [SerializeField] private Animator keeperAnimator;
-        [SerializeField] private Animator shooterAnimator;
+        [SerializeField] private PenaltyKickSO _PKInput;
+        [SerializeField] private GameObject _keeperPrefab;
+        [SerializeField] private GameObject _startBall;
+        [SerializeField] private Transform _shootPoint;
+        [SerializeField] private TextMeshProUGUI _shooterText;
+        [SerializeField] private TextMeshProUGUI _keeperText;
+        [SerializeField] private Transform _orignPos;
+        [SerializeField] private GameObject _shooterObj;
+        [SerializeField] private Animator _keeperAnimator;
+        [SerializeField] private Animator _shooterAnimator;
 
         [Header("Settings")]
-        [SerializeField] private float shootPower = 20f;
-        [SerializeField] private float keeperJumpPower = 10f;
-        [SerializeField] private float runDuration = 0.6f;
-        [SerializeField] private float returnDuration = 0.5f;
-        [SerializeField] private float keeperActionDelay = 0.25f;
-        [SerializeField] private float resetDelay = 3f;
+        [SerializeField] private float _shootPower = 20f;
+        [SerializeField] private float _keeperJumpPower = 10f;
+        [SerializeField] private float _runDuration = 0.6f;
+        [SerializeField] private float _returnDuration = 0.5f;
+        [SerializeField] private float _keeperActionDelay = 0.25f;
+        [SerializeField] private float _resetDelay = 3f;
 
         private static readonly int IsKeepingHash = Animator.StringToHash("isKeeping");
         private static readonly int IsShootingHash = Animator.StringToHash("isShooting");
         private static readonly int IsRunningHash = Animator.StringToHash("isRunning");
 
-        private Rigidbody keeperRb;
-        private Vector3 keeperOriginPos;
-        private GameObject currentBall;
+        private Rigidbody _keeperRb;
+        private Vector3 _keeperOriginPos;
+        private GameObject _currentBall;
 
         private bool IsShoot { get; set; }
         private bool ShooterConfirmed { get; set; }
@@ -49,30 +50,30 @@ namespace Code.PK
         private Vector3 ShooterDir { get; set; } = Vector3.forward;
         private Vector3 KeeperDir { get; set; } = Vector3.zero;
 
-        private void Awake() => keeperRb = keeperPrefab.GetComponent<Rigidbody>();
+        private void Awake() => _keeperRb = _keeperPrefab.GetComponent<Rigidbody>();
 
         private void OnEnable()
         {
-            PKInput.OnSConfrim += () => { if (IsShoot) return; ShooterConfirmed = true; };
-            PKInput.OnSLeftDir += () => { if (IsShoot) return; SetShooterDir(Direction.Left, new Vector3(-0.35f, 0.3f, 1f)); };
-            PKInput.OnSRightDir += () => { if (IsShoot) return; SetShooterDir(Direction.Right, new Vector3(0.35f, 0.3f, 1f)); };
-            PKInput.OnSMiddleDir += () => { if (IsShoot) return; SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f)); };
+            _PKInput.OnSConfrim += () => { if (IsShoot) return; ShooterConfirmed = true; };
+            _PKInput.OnSLeftDir += () => { if (IsShoot) return; SetShooterDir(Direction.Left, new Vector3(-0.35f, 0.3f, 1f)); };
+            _PKInput.OnSRightDir += () => { if (IsShoot) return; SetShooterDir(Direction.Right, new Vector3(0.35f, 0.3f, 1f)); };
+            _PKInput.OnSMiddleDir += () => { if (IsShoot) return; SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f)); };
 
-            PKInput.OnKConfrim += () => { if (IsShoot) return; KeeperConfirmed = true; };
-            PKInput.OnKLeftDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Left, Vector3.left); };
-            PKInput.OnKRightDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Right, Vector3.right); };
-            PKInput.OnKMiddleDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Middle, Vector3.zero); };
+            _PKInput.OnKConfrim += () => { if (IsShoot) return; KeeperConfirmed = true; };
+            _PKInput.OnKLeftDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Left, Vector3.left); };
+            _PKInput.OnKRightDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Right, Vector3.right); };
+            _PKInput.OnKMiddleDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Middle, Vector3.zero); };
 
-            PKInput.OnConfirm += HandleConfirm;
+            _PKInput.OnConfirm += HandleConfirm;
         }
 
-        private void OnDisable() => PKInput.OnConfirm -= HandleConfirm;
+        private void OnDisable() => _PKInput.OnConfirm -= HandleConfirm;
 
         private void Start()
         {
-            keeperOriginPos = keeperPrefab.transform.position;
-            currentBall = startBall;
-            currentBall.SetActive(true);
+            _keeperOriginPos = _keeperPrefab.transform.position;
+            _currentBall = _startBall;
+            _currentBall.SetActive(true);
             ResetScores();
             ResetStatus();
         }
@@ -82,10 +83,10 @@ namespace Code.PK
             if (IsShoot || !ShooterConfirmed || !KeeperConfirmed) return;
 
             IsShoot = true;
-            keeperAnimator.SetBool(IsKeepingHash, true);
+            _keeperAnimator.SetBool(IsKeepingHash, true);
 
             StartCoroutine(ShooterSequence());
-            StartCoroutine(DelayedKeeperAction(keeperActionDelay));
+            StartCoroutine(DelayedKeeperAction(_keeperActionDelay));
             StartCoroutine(ResetKeeper());
             ResetStatus();
         }
@@ -93,26 +94,26 @@ namespace Code.PK
 
         private IEnumerator ShooterSequence()
         {
-            shooterAnimator.SetBool(IsRunningHash, true);
-            yield return shooterObj.transform.DOMove(shootPoint.position, runDuration).WaitForCompletion();
+            _shooterAnimator.SetBool(IsRunningHash, true);
+            yield return _shooterObj.transform.DOMove(_shootPoint.position, _runDuration).WaitForCompletion();
 
-            shooterAnimator.SetBool(IsRunningHash, false);
-            shooterAnimator.SetBool(IsShootingHash, true);
+            _shooterAnimator.SetBool(IsRunningHash, false);
+            _shooterAnimator.SetBool(IsShootingHash, true);
 
             ShootBall();
 
             yield return new WaitForSeconds(0.4f);
-            shooterAnimator.SetBool(IsShootingHash, false);
+            _shooterAnimator.SetBool(IsShootingHash, false);
 
-            yield return shooterObj.transform.DOMove(orignPos.position, returnDuration).WaitForCompletion();
+            yield return _shooterObj.transform.DOMove(_orignPos.position, _returnDuration).WaitForCompletion();
         }
 
         private void ShootBall()
         {
-            if (!currentBall.TryGetComponent(out Rigidbody rb)) return;
+            if (!_currentBall.TryGetComponent(out Rigidbody rb)) return;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            rb.AddForce(ShooterDir.normalized * shootPower, ForceMode.VelocityChange);
+            rb.AddForce(ShooterDir.normalized * _shootPower, ForceMode.VelocityChange);
         }
 
         private IEnumerator DelayedKeeperAction(float delay)
@@ -125,9 +126,9 @@ namespace Code.PK
 
         private void KeeperJump()
         {
-            keeperRb.linearVelocity = Vector3.zero;
+            _keeperRb.linearVelocity = Vector3.zero;
             Vector3 jumpDir = KeeperDir + Vector3.up * 1.2f;
-            keeperRb.AddForce(jumpDir.normalized * keeperJumpPower, ForceMode.VelocityChange);
+            _keeperRb.AddForce(jumpDir.normalized * _keeperJumpPower, ForceMode.VelocityChange);
         }
 
         private void RotateKeeper()
@@ -138,7 +139,7 @@ namespace Code.PK
                 Direction.Right => -25f,
                 _ => 0f
             };
-            keeperPrefab.transform.rotation = Quaternion.Euler(0, 0, zRot);
+            _keeperPrefab.transform.rotation = Quaternion.Euler(0, 0, zRot);
         }
 
         private void DetermineWinner()
@@ -149,20 +150,20 @@ namespace Code.PK
 
         private IEnumerator ResetKeeper()
         {
-            yield return new WaitForSeconds(resetDelay);
+            yield return new WaitForSeconds(_resetDelay);
 
-            keeperRb.linearVelocity = Vector3.zero;
-            keeperPrefab.transform.SetPositionAndRotation(keeperOriginPos, Quaternion.identity);
+            _keeperRb.linearVelocity = Vector3.zero;
+            _keeperPrefab.transform.SetPositionAndRotation(_keeperOriginPos, Quaternion.identity);
 
-            if (currentBall != null && currentBall.TryGetComponent(out Rigidbody rb))
+            if (_currentBall != null && _currentBall.TryGetComponent(out Rigidbody rb))
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                currentBall.transform.SetPositionAndRotation(shootPoint.position, Quaternion.identity);
+                _currentBall.transform.SetPositionAndRotation(_shootPoint.position, Quaternion.identity);
             }
 
             IsShoot = false;
-            keeperAnimator.SetBool(IsKeepingHash, false);
+            _keeperAnimator.SetBool(IsKeepingHash, false);
         }
 
 
@@ -188,16 +189,20 @@ namespace Code.PK
         {
             ShooterScore = 0;
             KeeperScore = 0;
-            UpdateScoreText();
+            UpdateScoreText(ShooterScore, KeeperScore);
         }
 
         private void UpdateScore(bool shooterWin)
         {
             if (shooterWin) ShooterScore++;
             else KeeperScore++;
-            UpdateScoreText();
+            UpdateScoreText(ShooterScore, KeeperScore);
         }
 
-        private void UpdateScoreText() => scoreText.text = $"{ShooterScore} : {KeeperScore}";
+        private void UpdateScoreText(int shooterScore, int keeperScore)
+        {
+            _shooterText.text = shooterScore.ToString();
+            _keeperText.text = keeperScore.ToString();
+        }
     }
 }
