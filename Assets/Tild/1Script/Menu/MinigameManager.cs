@@ -51,7 +51,7 @@ namespace Tild.Menu
             if (is1Pwin) _1PScore++;
             else _2PScore++; 
             
-            SceneManager.LoadScene("GameChoice");
+            SceneManager.LoadScene("Choice_Scene");
         }
     }
 
