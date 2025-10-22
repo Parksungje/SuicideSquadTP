@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using System.Diagnostics;
 using Tild._1Script.Menu;
+using Tild.Menu;
 
 public class GameManager_SpeedReact : MonoBehaviour
 {
@@ -89,6 +90,8 @@ public class GameManager_SpeedReact : MonoBehaviour
         {
             string finalWinner = scoreL > scoreR ? "P1" : "P2";
             resultText.text = $"{finalWinner} ¿ì½Â!!";
+            yield return new WaitForSecondsRealtime(3);
+            MinigameManager.instance.Finish(scoreL > scoreR ? true : false);
             yield break;
         }
 
