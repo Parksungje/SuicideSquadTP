@@ -4,7 +4,6 @@ public class Movement2Component : MonoBehaviour
 {
     [SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private Transform player1Target;
 
     private Rigidbody _rigid;
     private Vector3 _moveDir;
@@ -52,14 +51,10 @@ public class Movement2Component : MonoBehaviour
         if (rightPressed) _moveDir += Vector3.right;
 
         _moveDir = _moveDir.normalized;
-        _rigid.linearVelocity = new Vector3(_moveDir.x * moveSpeed, _rigid.linearVelocity.y, _moveDir.z * moveSpeed);
-
-        if (player1Target != null)
-        {
-            Vector3 lookDir = player1Target.position - transform.position;
-            lookDir.y = 0f;
-            if (lookDir != Vector3.zero)
-                transform.rotation = Quaternion.LookRotation(lookDir);
-        }
+        _rigid.linearVelocity = new Vector3(
+            _moveDir.x * moveSpeed,
+            _rigid.linearVelocity.y,
+            _moveDir.z * moveSpeed
+        );
     }
 }

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-public class Movement1Component : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
