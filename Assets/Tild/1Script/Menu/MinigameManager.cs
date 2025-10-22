@@ -11,11 +11,6 @@ namespace Tild._1Script.Menu
         private GameType gameType;
         private int amount;
         private bool isRandomMode = false;
-
-        private int _1PScore;
-        private int _2PScore;
-        
-        
         
         public List<MinigameSO> minigamePlayed;
         void Awake()
@@ -44,11 +39,6 @@ namespace Tild._1Script.Menu
         public void NextMinigame(string scene)
         {
             SceneManager.LoadScene(scene);
-        }
-        
-        public void Finish()
-        {
-            SceneManager.LoadScene("GameChoice");
         }
     }
 
