@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Tild._1Script.Menu
+namespace Tild.Menu
 {
     public class MinigameManager : MonoBehaviour
     {
@@ -38,7 +38,7 @@ namespace Tild._1Script.Menu
             this.gameType = gameType;
             this.isRandomMode = isRandom;
             this.amount = amount;
-            SceneManager.LoadScene("GameChoice");
+            
         }
 
         public void NextMinigame(string scene)
@@ -46,8 +46,11 @@ namespace Tild._1Script.Menu
             SceneManager.LoadScene(scene);
         }
         
-        public void Finish()
+        public void Finish(bool is1Pwin)
         {
+            if (is1Pwin) _1PScore++;
+            else _2PScore++; 
+            
             SceneManager.LoadScene("GameChoice");
         }
     }
