@@ -7,12 +7,12 @@ namespace Code.Player
     [CreateAssetMenu(fileName = "PenaltyKick Input", menuName = "SJ/GameSO/PenaltyKick", order = 1)]
     public class PenaltyKickSO : BaseInputSO
     {
-        public Action OnSConfrim;
+        public Action OnSConfirm;
         public Action OnSLeftDir;
         public Action OnSRightDir;
         public Action OnSMiddleDir;
 
-        public Action OnKConfrim;
+        public Action OnKConfirm;
         public Action OnKLeftDir;
         public Action OnKRightDir;
         public Action OnKMiddleDir;
@@ -24,7 +24,7 @@ namespace Code.Player
             base.OnWKey(context);
 
             if (context.performed)
-                OnSConfrim?.Invoke();
+                OnSConfirm?.Invoke();
         }
 
         public override void OnAKey(InputAction.CallbackContext context)
@@ -56,7 +56,7 @@ namespace Code.Player
             base.OnUArrow(context);
 
             if (context.performed)
-                OnKConfrim?.Invoke();
+                OnKConfirm?.Invoke();
         }
 
         public override void OnRArrow(InputAction.CallbackContext context)

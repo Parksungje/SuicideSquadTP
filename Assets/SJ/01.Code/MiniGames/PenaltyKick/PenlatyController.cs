@@ -54,12 +54,12 @@ namespace Code.PK
 
         private void OnEnable()
         {
-            _PKInput.OnSConfrim += () => { if (IsShoot) return; ShooterConfirmed = true; };
+            _PKInput.OnSConfirm += () => { if (IsShoot) return; ShooterConfirmed = true; };
             _PKInput.OnSLeftDir += () => { if (IsShoot) return; SetShooterDir(Direction.Left, new Vector3(-0.35f, 0.3f, 1f)); };
             _PKInput.OnSRightDir += () => { if (IsShoot) return; SetShooterDir(Direction.Right, new Vector3(0.35f, 0.3f, 1f)); };
             _PKInput.OnSMiddleDir += () => { if (IsShoot) return; SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f)); };
 
-            _PKInput.OnKConfrim += () => { if (IsShoot) return; KeeperConfirmed = true; };
+            _PKInput.OnKConfirm += () => { if (IsShoot) return; KeeperConfirmed = true; };
             _PKInput.OnKLeftDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Left, Vector3.left); };
             _PKInput.OnKRightDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Right, Vector3.right); };
             _PKInput.OnKMiddleDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Middle, Vector3.zero); };
