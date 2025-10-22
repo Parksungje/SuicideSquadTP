@@ -25,6 +25,7 @@ namespace Tild._1Script.Menu
         {
             int rand = Random.Range(0, minigame.Count);
             MinigameManager.instance.minigamePlayed.Add(minigame[rand]);
+            
             currentMinigame = minigame[rand];
             minigameName.text = currentMinigame.gameName;
             minigameDesc.text = currentMinigame.description;
@@ -41,10 +42,10 @@ namespace Tild._1Script.Menu
         private void OnConfirmPressed(bool obj)
         {
             MinigameManager.instance.NextMinigame(currentMinigame.scene);
-            inputSO.OnConfirmPressed -= OnConfirmPressed;
+        
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             inputSO.OnConfirmPressed -= OnConfirmPressed;
         }

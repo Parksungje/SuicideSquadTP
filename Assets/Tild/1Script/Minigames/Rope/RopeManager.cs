@@ -67,8 +67,13 @@ namespace Tild._1Script.Minigames.Rope
             Vector3 pos = rope.localPosition;
             pos.x = Mathf.Lerp(minX, maxX, t);
             rope.localPosition = pos;
-        }
 
+            if (percentage > 100)
+            {
+                
+            }
+        }
+        
         private void Control1P(Control control)
         {
             if (control == _current1PControl)
