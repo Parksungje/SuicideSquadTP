@@ -8,10 +8,11 @@ namespace Tild.Menu
     {
         public static MinigameManager instance = null;
         
-        private GameType gameType;
+        public GameType gameType { get; set; }
+      
+        public bool isRandomMode { get; set; }
+        
         private int amount;
-        private bool isRandomMode = false;
-
         private int _1PScore;
         private int _2PScore;
         

@@ -42,12 +42,37 @@ namespace Tild.Menu
         );
 
         #endregion
-      
+
+        #region Minigame Select Resources
+
+        [SerializeField] private GameObject minigameSelectWindow;
+        [SerializeField] private Transform minigameBtnsParent;
+        [SerializeField] private GameObject minigameBtnPrefab;
+        #endregion
         
         private MinigameSO currentMinigame;
-        
 
         private void Start()
+        {
+            ScreenManager.instance.FadeOut(0.3f,0, (() =>
+            {
+                if (MinigameManager.instance.isRandomMode)
+                {
+                    PlayRandomMinigame();
+                }
+                else
+                {
+                    ScreenManager.instance.FadeIn(0.3f,(() =>
+                    {
+                        minigameSelectWindow.SetActive(true);
+                        ScreenManager.instance.FadeOut(0.3f, 1f, null);
+                    }));
+                }
+            }));
+          
+        }
+
+        private void PlayRandomMinigame()
         {
             int temp = 0;
             for (int i = 0; i < 70; i++)
@@ -56,14 +81,15 @@ namespace Tild.Menu
                 if (temp >= minigame.Count) temp = 0;
                 Instantiate(namePrefab, scroller.transform).SetText(minigame[temp].gameName);
             }
-            
+
             int rand = Random.Range(0, minigame.Count);
             MinigameManager.instance.minigamePlayed.Add(minigame[rand]);
-            
+
             currentMinigame = minigame[rand];
-            
+
             Instantiate(namePrefab, scroller.transform).SetText(currentMinigame.gameName);
             finalMinigameName.text = currentMinigame.gameName;
+            
             scroller.DOAnchorPosY(-9636f, 2f).SetEase(Ease.InBounce).SetDelay(2).OnComplete(() =>
             {
                 scroller.DOAnchorPosY(8565, 7f)
@@ -80,34 +106,31 @@ namespace Tild.Menu
                             .SetEase(Ease.OutQuad)
                             .SetDelay(1.1f).OnComplete(() =>
                             {
-                                fadeImage.DOFade(1f, 0.3f).SetDelay(3f).OnComplete(() =>
+                                ScreenManager.instance.FadeIn(0.3f, () =>
                                 {
                                     info.SetActive(true);
                                     ViewInfo();
-                                } );
-                                fadeImage.DOFade(0f, 0.3f).SetDelay(4f);
-                             
+                                    ScreenManager.instance.FadeOut(0.3f, 4, null);
+                                });
                             });
                     });
-                
             });
+
         }
-        public void ViewInfo()
+        
+        private void ViewInfo()
         {
-         
             minigameName.text = currentMinigame.gameName;
             minigameDesc.text = currentMinigame.description;
             minigameImage.sprite = currentMinigame.playScreen;
             minigameBackground.color = currentMinigame.backgroundColor;
             spaceText.color = currentMinigame.backgroundColor;
-            
             inputSO.OnConfirmPressed += OnConfirmPressed;
         }
 
         private void OnConfirmPressed(bool obj)
         {
             MinigameManager.instance.NextMinigame(currentMinigame.scene);
-        
         }
 
         private void OnDisable()
