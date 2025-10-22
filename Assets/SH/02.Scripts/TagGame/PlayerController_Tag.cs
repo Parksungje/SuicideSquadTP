@@ -14,8 +14,23 @@ public class PlayerController_Tag : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float groundRayDistance = 1.1f;
 
+    private Animator animator_P1;
+    private Animator animator_P2;
+
     private int dirP1;
     private int dirP2;
+
+    private bool isJumpingP1 = false;
+    private bool isJumpingP2 = false;
+
+    private readonly int IsJumpingHash = Animator.StringToHash("IsJumping");
+    private readonly int IsRunningHash = Animator.StringToHash("IsRunning");
+
+    private void Start()
+    {
+        animator_P1 = rigidbody_P1.GetComponentInChildren<Animator>();
+        animator_P2 = rigidbody_P2.GetComponentInChildren<Animator>();
+    }
 
     private void OnEnable()
     {
@@ -42,17 +57,22 @@ public class PlayerController_Tag : MonoBehaviour
     private void HandleL_LeftDir(bool isHolding)
     {
         dirP1 = isHolding ? -1 : (dirP1 == -1 ? 0 : dirP1);
+        animator_P1.SetBool(IsRunningHash, isHolding);
     }
 
     private void HandleL_RightDir(bool isHolding)
     {
         dirP1 = isHolding ? 1 : (dirP1 == 1 ? 0 : dirP1);
+        animator_P1.SetBool(IsRunningHash, isHolding);
     }
 
     private void HandleL_Jump()
     {
         if (IsGrounded(rigidbody_P1))
         {
+            isJumpingP1 = true;
+            animator_P1.SetBool(IsJumpingHash, true);
+
             Vector3 v = rigidbody_P1.linearVelocity;
             v.y = 0f;
             rigidbody_P1.linearVelocity = v;
@@ -63,17 +83,22 @@ public class PlayerController_Tag : MonoBehaviour
     private void HandleR_LeftDir(bool isHolding)
     {
         dirP2 = isHolding ? -1 : (dirP2 == -1 ? 0 : dirP2);
+        animator_P2.SetBool(IsRunningHash, isHolding);
     }
 
     private void HandleR_RightDir(bool isHolding)
     {
         dirP2 = isHolding ? 1 : (dirP2 == 1 ? 0 : dirP2);
+        animator_P2.SetBool(IsRunningHash, isHolding);
     }
 
     private void HandleR_Jump()
     {
         if (IsGrounded(rigidbody_P2))
         {
+            isJumpingP2 = true;
+            animator_P2.SetBool(IsJumpingHash, true);
+
             Vector3 v = rigidbody_P2.linearVelocity;
             v.y = 0f;
             rigidbody_P2.linearVelocity = v;
@@ -84,9 +109,12 @@ public class PlayerController_Tag : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer(rigidbody_P1, dirP1);
-        ApplyExtraGravity(rigidbody_P1);
         MovePlayer(rigidbody_P2, dirP2);
+
+        ApplyExtraGravity(rigidbody_P1);
         ApplyExtraGravity(rigidbody_P2);
+
+        UpdateAnimatorStates();
     }
 
     private void MovePlayer(Rigidbody rb, int dir)
@@ -105,5 +133,22 @@ public class PlayerController_Tag : MonoBehaviour
     private bool IsGrounded(Rigidbody rb)
     {
         return Physics.Raycast(rb.position + Vector3.up, Vector3.down, groundRayDistance, groundMask);
+    }
+
+    private void UpdateAnimatorStates()
+    {
+        bool grounded1 = IsGrounded(rigidbody_P1);
+        if (isJumpingP1 && grounded1)
+        {
+            isJumpingP1 = false;
+            animator_P1.SetBool(IsJumpingHash, false);
+        }
+
+        bool grounded2 = IsGrounded(rigidbody_P2);
+        if (isJumpingP2 && grounded2)
+        {
+            isJumpingP2 = false;
+            animator_P2.SetBool(IsJumpingHash, false);
+        }
     }
 }
