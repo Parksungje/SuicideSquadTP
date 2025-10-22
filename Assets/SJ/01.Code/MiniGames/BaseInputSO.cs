@@ -90,5 +90,16 @@ namespace Code.Player
         {
             return Input.anyKey;
         }
+
+        //Todo : 이거 내일 슈팅 구현하고 패널티킥 끝나는거 만들기
+        public void OnEnter(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnEKey(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

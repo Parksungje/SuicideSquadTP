@@ -7,7 +7,6 @@ public class ShootingManager : MonoBehaviour
     [SerializeField] private Rigidbody _p2CrossHair;
     [SerializeField] private float _moveSpeed;
 
-
     private Vector3 _p1HairDir;
     private Vector3 _p2HairDir;
 
@@ -64,18 +63,17 @@ public class ShootingManager : MonoBehaviour
         _p1HairDir = Vector3.zero;
         _p2HairDir = Vector3.zero;
 
-        if (_wPressed) _p1HairDir = Vector3.up;
-        if (_sPressed) _p1HairDir = Vector3.down;
-        if (_aPressed) _p1HairDir = Vector3.left;
-        if (_dPressed) _p1HairDir = Vector3.right;
+        if (_wPressed) _p1HairDir += Vector3.up;
+        if (_sPressed) _p1HairDir += Vector3.down;
+        if (_aPressed) _p1HairDir += Vector3.left;
+        if (_dPressed) _p1HairDir += Vector3.right;
 
-        if (_upArrowPressed) _p2HairDir = Vector3.up;
-        if (_downArrowPressed) _p2HairDir = Vector3.down;
-        if (_leftArrowPressed) _p2HairDir = Vector3.left;
-        if (_rightArrowPressed) _p2HairDir = Vector3.right;
+        if (_upArrowPressed) _p2HairDir += Vector3.up;
+        if (_downArrowPressed) _p2HairDir += Vector3.down;
+        if (_leftArrowPressed) _p2HairDir += Vector3.left;
+        if (_rightArrowPressed) _p2HairDir += Vector3.right;
 
-
-        _p1CrossHair.AddForce(_p1HairDir * _moveSpeed, ForceMode.Force);
-        _p2CrossHair.AddForce(_p2HairDir * _moveSpeed, ForceMode.Force);
+        _p1CrossHair.linearVelocity = _p1HairDir.normalized * _moveSpeed;
+        _p2CrossHair.linearVelocity = _p2HairDir.normalized * _moveSpeed;
     }
 }
