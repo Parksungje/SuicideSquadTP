@@ -2,15 +2,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Tild._1Script.Menu
+namespace Tild.Menu
 {
     public class MinigameManager : MonoBehaviour
     {
         public static MinigameManager instance = null;
         
-        private GameType gameType;
+        public GameType gameType { get; set; }
+      
+        public bool isRandomMode { get; set; }
+        
         private int amount;
-        private bool isRandomMode = false;
+        private int _1PScore;
+        private int _2PScore;
+        
+        
         
         public List<MinigameSO> minigamePlayed;
         void Awake()
@@ -33,12 +39,20 @@ namespace Tild._1Script.Menu
             this.gameType = gameType;
             this.isRandomMode = isRandom;
             this.amount = amount;
-            SceneManager.LoadScene("GameChoice");
+            
         }
 
         public void NextMinigame(string scene)
         {
             SceneManager.LoadScene(scene);
+        }
+        
+        public void Finish(bool is1Pwin)
+        {
+            if (is1Pwin) _1PScore++;
+            else _2PScore++; 
+            
+            SceneManager.LoadScene("Choice_Scene");
         }
     }
 
