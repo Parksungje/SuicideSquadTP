@@ -2,8 +2,9 @@
 using Tild._1Script.Minigames.Rope;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Tild._1Script.Menu
+namespace Tild.Menu
 {
     public class MinigameSetting : MonoBehaviour
     {
@@ -24,6 +25,11 @@ namespace Tild._1Script.Menu
         private void Start()
         {
             cameras.SetActive(true);
+        }
+
+        private void OnDisable()
+        {
+            inputSO.OnConfirmPressed -= OnConfirmPressed;
         }
 
         private void ChangeAmountTitle(int index)
@@ -62,7 +68,8 @@ namespace Tild._1Script.Menu
                     amount = 9;
                     break;  
             }
-            
+            SceneManager.LoadScene("Choice_Scene");
+           
             MinigameManager.instance.Initialize(gameType, isRandomMode, amount);
         }
         
