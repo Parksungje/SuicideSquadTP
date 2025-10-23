@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< Updated upstream
+=======
+using DG.Tweening;
+using Tild._1Script.Menu;
+>>>>>>> Stashed changes
 using Tild._1Script.Minigames.Rope;
+using Tild.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,13 +25,130 @@ namespace Tild._1Script.Menu
         [SerializeField] private Image minigameImage;
         [SerializeField] private Image minigameBackground;
         [SerializeField] private TMP_Text spaceText;
+<<<<<<< Updated upstream
+=======
+        
+      
+        #endregion
+        #region Random Minigame Resources
+        [SerializeField] private RectTransform scroller;
+        [SerializeField] private TMP_Text namePrefab;
+        [SerializeField] private CanvasGroup finalMinigame;
+        [SerializeField] private TMP_Text finalMinigameName;
+        [SerializeField] private Image fadeImage;
+        [SerializeField] private GameObject info;
+        private AnimationCurve rouletteCurve = new AnimationCurve(
+            new Keyframe(0f, 0f, 0f, 3f),  
+            new Keyframe(0.6f, 0.8f, 0.5f, 0.5f),
+            new Keyframe(1f, 1f, 0f, 0f)    
+        );
+
+        #endregion
+
+        #region Minigame Select Resources
+
+        [SerializeField] private GameObject minigameSelectWindow;
+        [SerializeField] private Transform minigameBtnsParent;
+        [SerializeField] private MinigameSelectButton minigameBtnPrefab;
+        #endregion
+        
+>>>>>>> Stashed changes
         private MinigameSO currentMinigame;
+
+        private void Awake()
+        {
+            GameEventBus.AddListener<OnMinigameBtnClicked>(SelectedMinigame);
+        }
+
+        private void SelectedMinigame(OnMinigameBtnClicked obj)
+        {
+            ScreenManager.instance.FadeIn(1,(() =>
+            {
+                info.SetActive(true);
+                ViewInfo(obj.minigame);
+                minigameSelectWindow.SetActive(false);
+                ScreenManager.instance.FadeOut(1,2,()=>{});
+            }));
+         
+        }
 
         private void Start()
         {
+<<<<<<< Updated upstream
+=======
+            ScreenManager.instance.FadeOut(0.3f, 0, (() =>
+            {
+                if (MinigameManager.instance.isRandomMode)
+                {
+                    PlayRandomMinigame();
+                }
+                else
+                {
+                    minigameSelectWindow.SetActive(true);
+                    foreach (var minigame in minigame)
+                    {
+                        MinigameSelectButton btn = Instantiate(minigameBtnPrefab, minigameBtnsParent);
+                        btn.Initialize(minigame);
+                    }
+                }
+
+            }));
+        }
+
+        private void PlayRandomMinigame()
+        {
+            int temp = 0;
+            for (int i = 0; i < 70; i++)
+            {
+                temp += 1;
+                if (temp >= minigame.Count) temp = 0;
+                Instantiate(namePrefab, scroller.transform).SetText(minigame[temp].gameName);
+            }
+
+>>>>>>> Stashed changes
             int rand = Random.Range(0, minigame.Count);
             MinigameManager.instance.minigamePlayed.Add(minigame[rand]);
             currentMinigame = minigame[rand];
+<<<<<<< Updated upstream
+=======
+
+            Instantiate(namePrefab, scroller.transform).SetText(currentMinigame.gameName);
+            finalMinigameName.text = currentMinigame.gameName;
+            
+            scroller.DOAnchorPosY(-9636f, 2f).SetEase(Ease.InBounce).SetDelay(2).OnComplete(() =>
+            {
+                scroller.DOAnchorPosY(8565, 7f)
+                    .SetEase(rouletteCurve)
+                    .OnComplete(() =>
+                    {
+                        finalMinigame.DOFade(1f, 0.3f).SetDelay(1f);
+                        finalMinigame.transform
+                            .DOScale(Vector3.one, 0.5f)
+                            .SetEase(Ease.OutBack)
+                            .SetDelay(1f);
+                        finalMinigameName.transform
+                            .DOScale(new Vector3(1, 0.75f, 1), 0.2f)
+                            .SetEase(Ease.OutQuad)
+                            .SetDelay(1.1f).OnComplete(() =>
+                            {
+                                ScreenManager.instance.FadeIn(0.3f, () =>
+                                {
+                                    info.SetActive(true);
+                                    ViewInfo(null);
+                                    ScreenManager.instance.FadeOut(0.3f, 4, null);
+                                });
+                            });
+                    });
+            });
+
+        }
+        
+        private void ViewInfo( MinigameSO minigameSO )
+        {
+            if (minigameSO != null)
+                currentMinigame = minigameSO;
+            
+>>>>>>> Stashed changes
             minigameName.text = currentMinigame.gameName;
             minigameDesc.text = currentMinigame.description;
             minigameImage.sprite = currentMinigame.playScreen;
