@@ -142,10 +142,8 @@ namespace Tild._1Script.Minigames.Rope
                 _current1PButton.Disappear();
                 _buttonQueue1P.RemoveAt(0);
 
-                if (percentage <= -80)
-                    CreateSpecialButtons(false);
-                else
-                    CreateNew1PButton();
+         
+                CreateNew1PButton();
 
                 _is1PEnable = false;
                 yield return new WaitUntil(() => !baseInputSO.IsAnyKeyPressed());
@@ -170,10 +168,7 @@ namespace Tild._1Script.Minigames.Rope
                 _current2PButton.Disappear();
                 _buttonQueue2P.RemoveAt(0);
 
-                if (percentage >= 80)
-                    CreateSpecialButtons(true);
-                else
-                    CreateNew2PButton();
+                CreateNew2PButton();
 
                 _is2PEnable = false;
                 yield return new WaitUntil(() => !baseInputSO.IsAnyKeyPressed());
@@ -195,51 +190,7 @@ namespace Tild._1Script.Minigames.Rope
             _buttonQueue2P.Add(btn);
         }
 
-        private void CreateSpecialButtons(bool is1P)
-        {
-            if (is1P)
-            {
-                _special1PControl = _1PControls[Random.Range(0, _1PControls.Count)];
-
-                for (int i = _buttonQueue1P.Count - 1; i >= 0; i--)
-                {
-                    if (_buttonQueue1P[i] != _current1PButton)
-                    {
-                        _buttonQueue1P[i]?.DOKill();
-                        Destroy(_buttonQueue1P[i].gameObject);
-                        _buttonQueue1P.RemoveAt(i);
-                    }
-                }
-
-                for (int i = 0; i < 20; i++)
-                {
-                    RopePullButton btn = Instantiate(ropePullButton1P, uiParent1P);
-                    btn.Initialize(_special1PControl);
-                    _buttonQueue1P.Add(btn);
-                }
-            }
-            else
-            {
-                _special2PControl = _2PControls[Random.Range(0, _2PControls.Count)];
-
-                for (int i = _buttonQueue2P.Count - 1; i >= 0; i--)
-                {
-                    if (_buttonQueue2P[i] != _current2PButton)
-                    {
-                        _buttonQueue2P[i]?.DOKill();
-                        Destroy(_buttonQueue2P[i].gameObject);
-                        _buttonQueue2P.RemoveAt(i);
-                    }
-                }
-
-                for (int i = 0; i < 20; i++)
-                {
-                    RopePullButton btn = Instantiate(ropePullButton2P, uiParent2P);
-                    btn.Initialize(_special2PControl);
-                    _buttonQueue2P.Add(btn);
-                }
-            }
-        }
+      
     }
 
     public enum Control

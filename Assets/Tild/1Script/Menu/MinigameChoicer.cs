@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< Updated upstream
+=======
 using DG.Tweening;
+using Tild._1Script.Menu;
+>>>>>>> Stashed changes
 using Tild._1Script.Minigames.Rope;
+using Tild.Core;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace Tild.Menu
+namespace Tild._1Script.Menu
 {
     public class MinigameChoicer : MonoBehaviour
     {
-        
         public List<MinigameSO> minigame;
-        
-        #region Minigame Info Resources
-      
         [SerializeField] private MenuInputSO inputSO;
-   
+        private bool OnPopuped = false;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMP_Text minigameName;
         [SerializeField] private TMP_Text minigameDesc;
         [SerializeField] private Image minigameImage;
         [SerializeField] private Image minigameBackground;
         [SerializeField] private TMP_Text spaceText;
+<<<<<<< Updated upstream
+=======
         
       
         #endregion
@@ -47,14 +49,34 @@ namespace Tild.Menu
 
         [SerializeField] private GameObject minigameSelectWindow;
         [SerializeField] private Transform minigameBtnsParent;
-        [SerializeField] private GameObject minigameBtnPrefab;
+        [SerializeField] private MinigameSelectButton minigameBtnPrefab;
         #endregion
         
+>>>>>>> Stashed changes
         private MinigameSO currentMinigame;
+
+        private void Awake()
+        {
+            GameEventBus.AddListener<OnMinigameBtnClicked>(SelectedMinigame);
+        }
+
+        private void SelectedMinigame(OnMinigameBtnClicked obj)
+        {
+            ScreenManager.instance.FadeIn(1,(() =>
+            {
+                info.SetActive(true);
+                ViewInfo(obj.minigame);
+                minigameSelectWindow.SetActive(false);
+                ScreenManager.instance.FadeOut(1,2,()=>{});
+            }));
+         
+        }
 
         private void Start()
         {
-            ScreenManager.instance.FadeOut(0.3f,0, (() =>
+<<<<<<< Updated upstream
+=======
+            ScreenManager.instance.FadeOut(0.3f, 0, (() =>
             {
                 if (MinigameManager.instance.isRandomMode)
                 {
@@ -62,14 +84,15 @@ namespace Tild.Menu
                 }
                 else
                 {
-                    ScreenManager.instance.FadeIn(0.3f,(() =>
+                    minigameSelectWindow.SetActive(true);
+                    foreach (var minigame in minigame)
                     {
-                        minigameSelectWindow.SetActive(true);
-                        ScreenManager.instance.FadeOut(0.3f, 1f, null);
-                    }));
+                        MinigameSelectButton btn = Instantiate(minigameBtnPrefab, minigameBtnsParent);
+                        btn.Initialize(minigame);
+                    }
                 }
+
             }));
-          
         }
 
         private void PlayRandomMinigame()
@@ -82,10 +105,12 @@ namespace Tild.Menu
                 Instantiate(namePrefab, scroller.transform).SetText(minigame[temp].gameName);
             }
 
+>>>>>>> Stashed changes
             int rand = Random.Range(0, minigame.Count);
             MinigameManager.instance.minigamePlayed.Add(minigame[rand]);
-
             currentMinigame = minigame[rand];
+<<<<<<< Updated upstream
+=======
 
             Instantiate(namePrefab, scroller.transform).SetText(currentMinigame.gameName);
             finalMinigameName.text = currentMinigame.gameName;
@@ -109,7 +134,7 @@ namespace Tild.Menu
                                 ScreenManager.instance.FadeIn(0.3f, () =>
                                 {
                                     info.SetActive(true);
-                                    ViewInfo();
+                                    ViewInfo(null);
                                     ScreenManager.instance.FadeOut(0.3f, 4, null);
                                 });
                             });
@@ -118,22 +143,31 @@ namespace Tild.Menu
 
         }
         
-        private void ViewInfo()
+        private void ViewInfo( MinigameSO minigameSO )
         {
+            if (minigameSO != null)
+                currentMinigame = minigameSO;
+            
+>>>>>>> Stashed changes
             minigameName.text = currentMinigame.gameName;
             minigameDesc.text = currentMinigame.description;
             minigameImage.sprite = currentMinigame.playScreen;
             minigameBackground.color = currentMinigame.backgroundColor;
             spaceText.color = currentMinigame.backgroundColor;
+        }
+
+        private void OnEnable()
+        {
             inputSO.OnConfirmPressed += OnConfirmPressed;
         }
 
         private void OnConfirmPressed(bool obj)
         {
             MinigameManager.instance.NextMinigame(currentMinigame.scene);
+            inputSO.OnConfirmPressed -= OnConfirmPressed;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             inputSO.OnConfirmPressed -= OnConfirmPressed;
         }

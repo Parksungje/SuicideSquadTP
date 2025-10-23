@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Tild.Menu
@@ -23,6 +24,8 @@ namespace Tild.Menu
             DontDestroyOnLoad(gameObject); 
             
         }
+
+    
 
         public void FadeIn(float duration = 0.3f, System.Action onComplete = null)
         {
