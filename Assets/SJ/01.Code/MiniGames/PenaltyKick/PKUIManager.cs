@@ -58,12 +58,12 @@ public class PKUIManager : MonoBehaviour
         if (_p1Score >= MaxScore)
         {
             ShowWinUI(true);
-            MinigameManager.instance.Finish(true);
+            //MinigameManager.instance.Finish(true);
         }
         else if (_p2Score >= MaxScore)
         {
             ShowWinUI(false);
-            MinigameManager.instance.Finish(false);
+            //MinigameManager.instance.Finish(false);
         }
     }
 
