@@ -142,9 +142,7 @@ namespace Tild._1Script.Minigames.Rope
                 _current1PButton.Disappear();
                 _buttonQueue1P.RemoveAt(0);
 
-                if (percentage <= -80)
-                    CreateSpecialButtons(false);
-                else
+              
                     CreateNew1PButton();
 
                 _is1PEnable = false;
@@ -170,9 +168,7 @@ namespace Tild._1Script.Minigames.Rope
                 _current2PButton.Disappear();
                 _buttonQueue2P.RemoveAt(0);
 
-                if (percentage >= 80)
-                    CreateSpecialButtons(true);
-                else
+                
                     CreateNew2PButton();
 
                 _is2PEnable = false;
