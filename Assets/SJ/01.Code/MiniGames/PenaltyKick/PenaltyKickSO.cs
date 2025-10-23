@@ -19,6 +19,8 @@ namespace Code.Player
 
         public Action OnConfirm;
 
+        public Action OnEKeyDown;
+
         public override void OnWKey(InputAction.CallbackContext context)
         {
             base.OnWKey(context);
@@ -88,6 +90,14 @@ namespace Code.Player
 
             if (context.performed)
                 OnConfirm?.Invoke();
+        }
+
+        public override void OnEKey(InputAction.CallbackContext context)
+        {
+            base.OnEKey(context);
+
+            if (context.performed)
+                OnEKeyDown?.Invoke();
         }
     }
 }

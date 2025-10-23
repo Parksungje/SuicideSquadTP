@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using Tild.Menu;
+using System.Collections;
 
 public class PKUIManager : MonoBehaviour
 {
@@ -24,11 +25,12 @@ public class PKUIManager : MonoBehaviour
 
     public void ShowSaveUI()
     {
+
         _saveUI.SetActive(true);
         _goalUI.SetActive(false);
     }
 
-    public void HideResultUI()
+    public  void HideResultUI()
     {
         _goalUI.SetActive(false);
         _saveUI.SetActive(false);
@@ -56,19 +58,22 @@ public class PKUIManager : MonoBehaviour
         if (_p1Score >= MaxScore)
         {
             ShowWinUI(true);
-            MinigameManager.instance.Finish(true);
+            //MinigameManager.instance.Finish(true);
         }
         else if (_p2Score >= MaxScore)
         {
             ShowWinUI(false);
-            MinigameManager.instance.Finish(false);
+            //MinigameManager.instance.Finish(false);
         }
     }
 
     private void ShowWinUI(bool p1Win)
     {
+
         HideResultUI();
         _p1WinUI.SetActive(p1Win);
         _p2WinUI.SetActive(!p1Win);
     }
+
+
 }

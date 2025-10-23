@@ -19,7 +19,7 @@ namespace Tild.Menu
         private void Awake()
         {
             gameTypeDropdown.onValueChanged.AddListener(ChangeAmountTitle);
-            inputSO.OnConfirmPressed += OnConfirmPressed;
+            inputSO.OnSpacePressed += OnConfirmPressed;
             cameras.SetActive(false);
         }
 
@@ -30,7 +30,7 @@ namespace Tild.Menu
 
         private void OnDisable()
         {
-            inputSO.OnConfirmPressed -= OnConfirmPressed;
+            inputSO.OnSpacePressed -= OnConfirmPressed;
         }
 
         private void ChangeAmountTitle(int index)

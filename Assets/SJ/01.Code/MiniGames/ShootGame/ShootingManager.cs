@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class ShootingManager : MonoBehaviour
 {
-    [SerializeField] private ShootGameSO _shootGameSO;
+    [field: SerializeField] private ShootGameSO _shootGameSO;
+
     [SerializeField] private Rigidbody _p1CrossHair;
     [SerializeField] private Rigidbody _p2CrossHair;
+    [SerializeField] private Rigidbody _p1Obj;
+    [SerializeField] private Rigidbody _p2Obj;
+
     [SerializeField] private float _moveSpeed;
 
     private Vector3 _p1HairDir;
@@ -65,6 +69,14 @@ public class ShootingManager : MonoBehaviour
 
         _p1CrossHair.linearVelocity = _p1HairDir.normalized * _moveSpeed;
         _p2CrossHair.linearVelocity = _p2HairDir.normalized * _moveSpeed;
+
+        Vector3 p1TargetPos = _p1CrossHair.position;
+        p1TargetPos.y = _p1Obj.transform.position.y;
+        _p1Obj.transform.LookAt(p1TargetPos);
+
+        Vector3 p2TargetPos = _p2CrossHair.position;
+        p2TargetPos.y = _p2Obj.transform.position.y;
+        _p2Obj.transform.LookAt(p2TargetPos);
     }
 
     private void UpdateP1Direction()
