@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ShootingManager : MonoBehaviour
@@ -36,7 +37,12 @@ public class ShootingManager : MonoBehaviour
         _shootGameSO.OnDownArrowDown += SetP2DownArrow;
         _shootGameSO.OnLeftArrowDown += SetP2LeftArrow;
         _shootGameSO.OnRightArrowDown += SetP2RightArrow;
+
+        _shootGameSO.OnEKeyDown += SetP1Shoot;
+        _shootGameSO.OnEnterKeyDown += SetP2Shoot;
     }
+
+    
 
     private void OnDisable()
     {
@@ -61,6 +67,13 @@ public class ShootingManager : MonoBehaviour
     private void SetP2DownArrow(bool isPressed) => _downArrowPressed = isPressed;
     private void SetP2LeftArrow(bool isPressed) => _leftArrowPressed = isPressed;
     private void SetP2RightArrow(bool isPressed) => _rightArrowPressed = isPressed;
+    private void SetP1Shoot(bool isPressed)
+    {
+    }
+
+    private void SetP2Shoot(bool isPressed)
+    {
+    }
 
     private void FixedUpdate()
     {

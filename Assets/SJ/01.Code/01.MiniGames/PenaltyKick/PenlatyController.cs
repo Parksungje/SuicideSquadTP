@@ -10,7 +10,7 @@ namespace Code.PK
     public class PenaltyKickController : MonoBehaviour
     {
         [Header("References")]
-        [field:SerializeField] private PenaltyKickSO _PKInput;
+        [field: SerializeField] private PenaltyKickSO _PKInput;
         [SerializeField] private GameObject _keeperPrefab;
         [SerializeField] private GameObject _startBall;
         [SerializeField] private Transform _shootPoint;
@@ -91,11 +91,14 @@ namespace Code.PK
         {
             ResetScores();
             ResetConfirmationStatus();
+            _uiManager.ShowConfirmationUI();
         }
 
         private void HandleConfirm()
         {
             if (IsShoot || !ShooterConfirmed || !KeeperConfirmed) return;
+
+            _uiManager.HideConfirmationUI();
 
             IsShoot = true;
             _keeperAnimator.SetBool(IsKeepingHash, true);
@@ -208,6 +211,7 @@ namespace Code.PK
             }
 
             _uiManager.HideResultUI();
+            _uiManager.ShowConfirmationUI();
 
             IsShoot = false;
             _keeperAnimator.SetBool(IsKeepingHash, false);
@@ -228,6 +232,7 @@ namespace Code.PK
         private void HandleRandom()
         {
             if (IsShoot) return;
+
 
             ShooterDirType = (Direction)UnityEngine.Random.Range(0, 3);
             ShooterDir = ShooterDirType switch
