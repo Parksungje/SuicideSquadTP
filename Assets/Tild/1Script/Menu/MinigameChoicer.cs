@@ -26,7 +26,7 @@ namespace Tild._1Script.Menu
         [SerializeField] private TMP_Text spaceText;
 
         
-      
+        public bool IsPopuped;
       
         #region Random Minigame Resources
         [SerializeField] private RectTransform scroller;
@@ -65,6 +65,7 @@ namespace Tild._1Script.Menu
                 info.SetActive(true);
                 ViewInfo(obj.Minigame);
                 minigameSelectWindow.SetActive(false);
+                IsPopuped = true;
                 ScreenManager.instance.FadeOut(1,2,()=>{});
             }));
          
@@ -126,11 +127,13 @@ namespace Tild._1Script.Menu
                             .SetEase(Ease.OutQuad)
                             .SetDelay(1.1f).OnComplete(() =>
                             {
-                                ScreenManager.instance.FadeIn(0.3f, () =>
+                                ScreenManager.instance.FadeIn(3f, () =>
                                 {
                                     info.SetActive(true);
                                     ViewInfo(null);
+                                    IsPopuped = true;
                                     ScreenManager.instance.FadeOut(0.3f, 4, null);
+                                    
                                 });
                             });
                     });
@@ -157,9 +160,12 @@ namespace Tild._1Script.Menu
 
         private void OnConfirmPressed(bool obj)
         {
+            if (IsPopuped)
             MinigameManager.instance.NextMinigame(currentMinigame.scene);
             inputSO.OnConfirmPressed -= OnConfirmPressed;
         }
+
+      
 
         private void OnDestroy()
         {

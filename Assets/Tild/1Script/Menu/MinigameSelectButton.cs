@@ -18,6 +18,7 @@ namespace Tild._1Script.Menu
         {
             minigameImage.sprite = minigame.playScreen;
             buttonText.text = minigame.gameName;
+            sceneName = minigame.scene;
         }
 
         public void OnPressed()

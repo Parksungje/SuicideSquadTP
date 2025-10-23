@@ -14,6 +14,7 @@ namespace Tild.Menu
         [SerializeField] private TMP_Text amountTitle;
         [SerializeField] private InputSO inputSO;
         [SerializeField] private GameObject cameras;
+        private bool isEnded = false;
 
         private void Awake()
         {
@@ -50,8 +51,13 @@ namespace Tild.Menu
 
         public void OnConfirmPressed(bool a)
         {
+            if (isEnded) return;
+            
+            isEnded = true;
+                
             GameType gameType = (GameType)gameTypeDropdown.value;
             bool isRandomMode = (isRandomModeDropdown.value == 0);
+            print(isRandomMode);
             int amount = 3;
             switch (amountDropdown.value)
             {
@@ -68,9 +74,10 @@ namespace Tild.Menu
                     amount = 9;
                     break;  
             }
+            MinigameManager.instance.Initialize(gameType, isRandomMode, amount);
             SceneManager.LoadScene("Choice_Scene");
            
-            MinigameManager.instance.Initialize(gameType, isRandomMode, amount);
+        
         }
         
         
