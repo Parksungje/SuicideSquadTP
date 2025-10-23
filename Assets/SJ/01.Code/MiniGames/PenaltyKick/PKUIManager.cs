@@ -1,6 +1,4 @@
-﻿C#
-
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using Tild.Menu;
 
