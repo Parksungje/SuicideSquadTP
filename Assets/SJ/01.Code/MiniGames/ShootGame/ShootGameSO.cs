@@ -17,7 +17,9 @@ public class ShootGameSO : BaseInputSO
     public Action<bool> OnRightArrowDown;
     public Action<bool> OnDownArrowDown;
 
-    public Action<bool> OnShooting;
+    public Action<bool> OnEKeyDown;
+    public Action<bool> OnEnterKeyDown;
+
 
     public override void OnWKey(InputAction.CallbackContext context)
     {
@@ -97,14 +99,5 @@ public class ShootGameSO : BaseInputSO
             OnDownArrowDown?.Invoke(true);
         else
             OnDownArrowDown?.Invoke(false);
-    }
-    public override void OnSpace(InputAction.CallbackContext context)
-    {
-        base.OnSpace(context);
-
-        if (context.performed)
-            OnShooting?.Invoke(true);
-        else
-            OnShooting?.Invoke(false);
     }
 }

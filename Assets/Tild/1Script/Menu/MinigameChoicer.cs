@@ -155,21 +155,21 @@ namespace Tild._1Script.Menu
 
         private void OnEnable()
         {
-            inputSO.OnConfirmPressed += OnConfirmPressed;
+            inputSO.OnSpacePressed += OnConfirmPressed;
         }
 
         private void OnConfirmPressed(bool obj)
         {
             if (IsPopuped)
             MinigameManager.instance.NextMinigame(currentMinigame.scene);
-            inputSO.OnConfirmPressed -= OnConfirmPressed;
+            inputSO.OnSpacePressed -= OnConfirmPressed;
         }
 
       
 
         private void OnDestroy()
         {
-            inputSO.OnConfirmPressed -= OnConfirmPressed;
+            inputSO.OnSpacePressed -= OnConfirmPressed;
         }
     }
 }

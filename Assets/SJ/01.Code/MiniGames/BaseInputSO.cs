@@ -19,7 +19,9 @@ namespace Code.Player
         public Action<bool> OnDownArrowPressed;
         public Action<bool> OnUpArrowPressed;
 
-        public Action<bool> OnConfirmPressed;
+        public Action<bool> OnSpacePressed;
+        public Action<bool> OnEKeyPressed;
+        public Action<bool> OnEnterPressed;
 
         protected virtual void OnEnable()
         {
@@ -83,12 +85,23 @@ namespace Code.Player
 
         public virtual void OnSpace(InputAction.CallbackContext context)
         {
-            OnConfirmPressed?.Invoke(context.performed);
+            OnSpacePressed?.Invoke(context.performed);
         }
 
         public bool IsAnyKeyPressed()
         {
             return Input.anyKey;
+        }
+
+        //Todo : 이거 내일 슈팅 구현하고 패널티킥 끝나는거 만들기
+        public virtual void OnEnter(InputAction.CallbackContext context)
+        {
+            OnEnterPressed?.Invoke(context.performed);
+        }
+
+        public virtual void OnEKey(InputAction.CallbackContext context)
+        {
+            OnEKeyPressed?.Invoke(context.performed);
         }
     }
 }

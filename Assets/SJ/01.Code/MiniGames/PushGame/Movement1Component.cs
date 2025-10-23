@@ -2,7 +2,7 @@
 
 public class Movement1Component : MonoBehaviour
 {
-    [SerializeField] private PushGameSO pushInput;
+    [field:SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
 
     private Rigidbody _rigid;
@@ -19,7 +19,7 @@ public class Movement1Component : MonoBehaviour
     {
         if (pushInput == null)
         {
-            Debug.LogError("s");
+            Debug.LogError("PushGameSO reference is missing for Movement1Component.");
             return;
         }
 
@@ -52,6 +52,11 @@ public class Movement1Component : MonoBehaviour
         if (aPressed) _moveDir += Vector3.left;
         if (dPressed) _moveDir += Vector3.right;
 
+        ApplyMovement();
+    }
+
+    private void ApplyMovement()
+    {
         _moveDir = _moveDir.normalized;
         _rigid.linearVelocity = new Vector3(
             _moveDir.x * moveSpeed,
