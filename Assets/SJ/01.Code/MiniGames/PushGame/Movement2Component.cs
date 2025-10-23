@@ -17,8 +17,7 @@ public class Movement2Component : MonoBehaviour
 
     private void OnEnable()
     {
-        if (pushInput == null)
-            return;
+        if (pushInput == null) return;
 
         pushInput.OnUpArrowDown += OnUpKey;
         pushInput.OnDownArrowDown += OnDownKey;
@@ -28,8 +27,7 @@ public class Movement2Component : MonoBehaviour
 
     private void OnDisable()
     {
-        if (pushInput == null)
-            return;
+        if (pushInput == null) return;
 
         pushInput.OnUpArrowDown -= OnUpKey;
         pushInput.OnDownArrowDown -= OnDownKey;
@@ -50,6 +48,11 @@ public class Movement2Component : MonoBehaviour
         if (leftPressed) _moveDir += Vector3.left;
         if (rightPressed) _moveDir += Vector3.right;
 
+        ApplyMovement();
+    }
+
+    private void ApplyMovement()
+    {
         _moveDir = _moveDir.normalized;
         _rigid.linearVelocity = new Vector3(
             _moveDir.x * moveSpeed,
