@@ -152,13 +152,7 @@ namespace Code.PK
         private void DetermineRoundResult()
         {
             bool shooterScored = ShooterDirType != KeeperDirType;
-
-            if (shooterScored)
-                _uiManager.ShowGoalUI();
-            else
-                _uiManager.ShowSaveUI();
-
-            StartCoroutine(DelayAddScore(shooterScored));
+            StartCoroutine(DelayShowResult(shooterScored));
         }
 
         private void SetShooterDirection(Direction type, Vector3 dir)
@@ -216,6 +210,18 @@ namespace Code.PK
 
             IsShoot = false;
             _keeperAnimator.SetBool(IsKeepingHash, false);
+        }
+
+        private IEnumerator DelayShowResult(bool shooterScored)
+        {
+            yield return new WaitForSeconds(0.8f);
+            if (shooterScored)
+                _uiManager.ShowGoalUI();
+            else
+                _uiManager.ShowSaveUI();
+
+            yield return new WaitForSeconds(0.5f);
+            _uiManager.AddScore(shooterScored);
         }
     }
 }
