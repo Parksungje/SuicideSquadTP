@@ -36,8 +36,8 @@ namespace Tild.Minigames.Boxing
             boxingInputSO.SKeyPressed += Handle1PDefend;
 
             // Player 2
-            boxingInputSO.LeftKeyPressed += Handle2PBack;
-            boxingInputSO.RightKeyPressed += Handle2PDashAttack;
+            boxingInputSO.LeftKeyPressed += Handle2PDashAttack;
+            boxingInputSO.RightKeyPressed += Handle2PBack;
             boxingInputSO.DownKeyPressed += Handle2PDefend;
         }
 
@@ -47,8 +47,8 @@ namespace Tild.Minigames.Boxing
             boxingInputSO.DKeyPressed -= Handle1PDashAttack;
             boxingInputSO.SKeyPressed -= Handle1PDefend;
 
-            boxingInputSO.LeftKeyPressed -= Handle2PBack;
-            boxingInputSO.RightKeyPressed -= Handle2PDashAttack;
+            boxingInputSO.LeftKeyPressed += Handle2PDashAttack;
+            boxingInputSO.RightKeyPressed += Handle2PBack;
             boxingInputSO.DownKeyPressed -= Handle2PDefend;
         }
 
@@ -59,7 +59,7 @@ namespace Tild.Minigames.Boxing
             if (debounce1P) return;
             debounce1P = true;
             rigid1P.linearVelocity = Vector3.right * backForce;
-            animator1P.SetTrigger("Back");
+            animator1P.SetTrigger("Defense");
             Invoke(nameof(Stop1PMove), 0.25f);
             Invoke(nameof(Reset1PDebounce), 0.3f);
         }
@@ -68,14 +68,14 @@ namespace Tild.Minigames.Boxing
         {
             if (debounce1P) return;
             debounce1P = true;
-            animator1P.SetTrigger("Attack");
+            animator1P.SetTrigger("Punch");
             rigid1P.linearVelocity = Vector3.left * dashForce;
 
            
             if (Vector3.Distance(rigid1P.position, rigid2P.position) < attackRange)
             {
                 if (!isDefending2P)
-                    TakeDamage(ref health2P, hitImpact2P, rigid2P, Vector3.right);
+                    TakeDamage(ref health2P, hitImpact2P, rigid2P,animator2P, Vector3.right);
             }
 
             Invoke(nameof(Stop1PMove), 0.25f);
@@ -87,7 +87,6 @@ namespace Tild.Minigames.Boxing
         private void Handle1PDefend()
         {
             isDefending1P = true;
-            animator1P.SetBool("Defend", true);
             CancelInvoke(nameof(Stop1PDefend));
             Invoke(nameof(Stop1PDefend), 1.5f);
         }
@@ -95,7 +94,7 @@ namespace Tild.Minigames.Boxing
         private void Stop1PDefend()
         {
             isDefending1P = false;
-            animator1P.SetBool("Defend", false);
+       
         }
 
         private void Reset1PDebounce() => debounce1P = false;
@@ -109,8 +108,8 @@ namespace Tild.Minigames.Boxing
         {
             if (debounce2P) return;
             debounce2P = true;
-            rigid2P.linearVelocity = Vector3.right * backForce;
-            animator2P.SetTrigger("Back");
+            rigid2P.linearVelocity = Vector3.left * backForce;
+            animator2P.SetTrigger("Defense");
             Invoke(nameof(Stop2PMove), 0.25f);
             Invoke(nameof(Reset2PDebounce), 0.3f);
         }
@@ -119,13 +118,13 @@ namespace Tild.Minigames.Boxing
         {
             if (debounce2P) return;
             debounce2P = true;
-            animator2P.SetTrigger("Attack");
-            rigid2P.linearVelocity = Vector3.left * dashForce;
+            animator2P.SetTrigger("Punch");
+            rigid2P.linearVelocity = Vector3.right * dashForce;
 
             if (Vector3.Distance(rigid2P.position, rigid1P.position) < attackRange)
             {
                 if (!isDefending1P)
-                    TakeDamage(ref health1P, hitImpact1P, rigid1P, Vector3.left);
+                    TakeDamage(ref health1P, hitImpact1P, rigid1P,animator1P, Vector3.left);
             }
 
             Invoke(nameof(Stop2PMove), 0.25f);
@@ -137,7 +136,7 @@ namespace Tild.Minigames.Boxing
         private void Handle2PDefend()
         {
             isDefending2P = true;
-            animator2P.SetBool("Defend", true);
+           
             CancelInvoke(nameof(Stop2PDefend));
             Invoke(nameof(Stop2PDefend), 1.5f);
         }
@@ -145,7 +144,7 @@ namespace Tild.Minigames.Boxing
         private void Stop2PDefend()
         {
             isDefending2P = false;
-            animator2P.SetBool("Defend", false);
+           
         }
 
         private void Reset2PDebounce() => debounce2P = false;
@@ -156,11 +155,12 @@ namespace Tild.Minigames.Boxing
         /// <summary>
         /// 피격 시 데미지 처리 + 넉백 효과
         /// </summary>
-        private void TakeDamage(ref int health, ParticleSystem impact, Rigidbody targetRigid, Vector3 knockDir)
+        private void TakeDamage(ref int health, ParticleSystem impact, Rigidbody targetRigid,Animator animator, Vector3 knockDir)
         {
             int dealtDamage = UnityEngine.Random.value < 0.2f ? criticalDamage : damage;
             health -= dealtDamage;
             impact.Play();
+            animator.SetTrigger("Damaged");
             UpdateUI();
 
             // 살짝 밀리기 (0.4초 뒤 멈춤)

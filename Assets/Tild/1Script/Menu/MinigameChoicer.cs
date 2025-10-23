@@ -155,7 +155,7 @@ namespace Tild._1Script.Menu
 
         private void OnEnable()
         {
-            inputSO.OnConfirmPressed += OnConfirmPressed;
+            inputSO.OnSpacePressed += OnConfirmPressed;
         }
 
         private void OnConfirmPressed(bool obj)
@@ -163,7 +163,7 @@ namespace Tild._1Script.Menu
             if (IsPopuped)
             {
                 MinigameManager.instance.NextMinigame(currentMinigame.scene);
-                inputSO.OnConfirmPressed -= OnConfirmPressed;
+                inputSO.OnSpacePressed -= OnConfirmPressed;
             }
    
         }
@@ -172,7 +172,7 @@ namespace Tild._1Script.Menu
 
         private void OnDestroy()
         {
-            inputSO.OnConfirmPressed -= OnConfirmPressed;
+            inputSO.OnSpacePressed -= OnConfirmPressed;
         }
     }
 }
