@@ -94,12 +94,12 @@ namespace Code.Player
         }
 
         //Todo : 이거 내일 슈팅 구현하고 패널티킥 끝나는거 만들기
-        public void OnEnter(InputAction.CallbackContext context)
+        public virtual void OnEnter(InputAction.CallbackContext context)
         {
             OnEnterPressed?.Invoke(context.performed);
         }
 
-        public void OnEKey(InputAction.CallbackContext context)
+        public virtual void OnEKey(InputAction.CallbackContext context)
         {
             OnEKeyPressed?.Invoke(context.performed);
         }

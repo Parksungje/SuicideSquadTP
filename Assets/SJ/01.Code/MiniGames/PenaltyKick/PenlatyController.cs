@@ -1,5 +1,6 @@
 ﻿using Code.Player;
 using DG.Tweening;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Code.PK
     public class PenaltyKickController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private PenaltyKickSO _PKInput;
+        [field:SerializeField] private PenaltyKickSO _PKInput;
         [SerializeField] private GameObject _keeperPrefab;
         [SerializeField] private GameObject _startBall;
         [SerializeField] private Transform _shootPoint;
@@ -67,9 +68,16 @@ namespace Code.PK
             _PKInput.OnKMiddleDir += () => { if (IsShoot) return; SetKeeperDirection(Direction.Middle, Vector3.zero); };
 
             _PKInput.OnConfirm += HandleConfirm;
+            _PKInput.OnEKeyDown += HandleRandom;
         }
 
-        private void OnDisable() => _PKInput.OnConfirm -= HandleConfirm;
+
+
+        private void OnDisable()
+        {
+            _PKInput.OnConfirm -= HandleConfirm;
+            _PKInput.OnEKeyDown -= HandleRandom;
+        }
 
         private void Start()
         {
@@ -185,13 +193,6 @@ namespace Code.PK
             _shooterText.text = shooterScore.ToString();
             _keeperText.text = keeperScore.ToString();
         }
-
-        private IEnumerator DelayAddScore(bool shooterWin)
-        {
-            yield return new WaitForSeconds(2f);
-            _uiManager.AddScore(shooterWin);
-        }
-
         private IEnumerator ResetRoundAfterDelay()
         {
             yield return new WaitForSeconds(_resetDelay);
@@ -223,5 +224,34 @@ namespace Code.PK
             yield return new WaitForSeconds(0.5f);
             _uiManager.AddScore(shooterScored);
         }
+
+        private void HandleRandom()
+        {
+            if (IsShoot) return;
+
+            ShooterDirType = (Direction)UnityEngine.Random.Range(0, 3);
+            ShooterDir = ShooterDirType switch
+            {
+                Direction.Left => new Vector3(-0.35f, 0.3f, 1f),
+                Direction.Middle => new Vector3(0f, 0.3f, 1f),
+                Direction.Right => new Vector3(0.35f, 0.3f, 1f),
+                _ => Vector3.forward
+            };
+
+            KeeperDirType = (Direction)UnityEngine.Random.Range(0, 3);
+            KeeperDir = KeeperDirType switch
+            {
+                Direction.Left => Vector3.left,
+                Direction.Middle => Vector3.zero,
+                Direction.Right => Vector3.right,
+                _ => Vector3.zero
+            };
+
+            ShooterConfirmed = true;
+            KeeperConfirmed = true;
+
+            HandleConfirm();
+        }
+
     }
 }

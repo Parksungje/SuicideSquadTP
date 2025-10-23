@@ -2,7 +2,7 @@
 
 public class Movement1Component : MonoBehaviour
 {
-    [SerializeField] private PushGameSO pushInput;
+    [field:SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
 
     private Rigidbody _rigid;
