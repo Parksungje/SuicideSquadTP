@@ -19,6 +19,8 @@ namespace Code.PK
         [SerializeField] private GameObject _shooterObj;
         [SerializeField] private Animator _keeperAnimator;
         [SerializeField] private Animator _shooterAnimator;
+        [SerializeField] private PKUIManager _uiManager;
+
 
         [Header("Settings")]
         [SerializeField] private float _shootPower = 20f;
@@ -55,14 +57,14 @@ namespace Code.PK
         private void OnEnable()
         {
             _PKInput.OnSConfirm += () => { if (IsShoot) return; ShooterConfirmed = true; };
-            _PKInput.OnSLeftDir += () => { if (IsShoot) return; SetShooterDir(Direction.Left, new Vector3(-0.35f, 0.3f, 1f)); };
-            _PKInput.OnSRightDir += () => { if (IsShoot) return; SetShooterDir(Direction.Right, new Vector3(0.35f, 0.3f, 1f)); };
-            _PKInput.OnSMiddleDir += () => { if (IsShoot) return; SetShooterDir(Direction.Middle, new Vector3(0f, 0.3f, 1f)); };
+            _PKInput.OnSLeftDir += () => { if (IsShoot) return; SetShooterDirection(Direction.Left, new Vector3(-0.35f, 0.3f, 1f)); };
+            _PKInput.OnSRightDir += () => { if (IsShoot) return; SetShooterDirection(Direction.Right, new Vector3(0.35f, 0.3f, 1f)); };
+            _PKInput.OnSMiddleDir += () => { if (IsShoot) return; SetShooterDirection(Direction.Middle, new Vector3(0f, 0.3f, 1f)); };
 
             _PKInput.OnKConfirm += () => { if (IsShoot) return; KeeperConfirmed = true; };
-            _PKInput.OnKLeftDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Left, Vector3.left); };
-            _PKInput.OnKRightDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Right, Vector3.right); };
-            _PKInput.OnKMiddleDir += () => { if (IsShoot) return; SetKeeperDir(Direction.Middle, Vector3.zero); };
+            _PKInput.OnKLeftDir += () => { if (IsShoot) return; SetKeeperDirection(Direction.Left, Vector3.left); };
+            _PKInput.OnKRightDir += () => { if (IsShoot) return; SetKeeperDirection(Direction.Right, Vector3.right); };
+            _PKInput.OnKMiddleDir += () => { if (IsShoot) return; SetKeeperDirection(Direction.Middle, Vector3.zero); };
 
             _PKInput.OnConfirm += HandleConfirm;
         }
@@ -74,8 +76,13 @@ namespace Code.PK
             _keeperOriginPos = _keeperPrefab.transform.position;
             _currentBall = _startBall;
             _currentBall.SetActive(true);
+            InitializeGame();
+        }
+
+        private void InitializeGame()
+        {
             ResetScores();
-            ResetStatus();
+            ResetConfirmationStatus();
         }
 
         private void HandleConfirm()
@@ -85,14 +92,14 @@ namespace Code.PK
             IsShoot = true;
             _keeperAnimator.SetBool(IsKeepingHash, true);
 
-            StartCoroutine(ShooterSequence());
+            StartCoroutine(ExecuteShootSequence());
             StartCoroutine(DelayedKeeperAction(_keeperActionDelay));
-            StartCoroutine(ResetKeeper());
-            ResetStatus();
+            StartCoroutine(ResetRoundAfterDelay());
+            ResetConfirmationStatus();
         }
 
 
-        private IEnumerator ShooterSequence()
+        private IEnumerator ExecuteShootSequence()
         {
             _shooterAnimator.SetBool(IsRunningHash, true);
             yield return _shooterObj.transform.DOMove(_shootPoint.position, _runDuration).WaitForCompletion();
@@ -119,16 +126,16 @@ namespace Code.PK
         private IEnumerator DelayedKeeperAction(float delay)
         {
             yield return new WaitForSeconds(delay);
-            KeeperJump();
-            RotateKeeper();
-            DetermineWinner();
+            ExecuteKeeperAction();
+            DetermineRoundResult();
         }
 
-        private void KeeperJump()
+        private void ExecuteKeeperAction()
         {
             _keeperRb.linearVelocity = Vector3.zero;
             Vector3 jumpDir = KeeperDir + Vector3.up * 1.2f;
             _keeperRb.AddForce(jumpDir.normalized * _keeperJumpPower, ForceMode.VelocityChange);
+            RotateKeeper();
         }
 
         private void RotateKeeper()
@@ -142,13 +149,56 @@ namespace Code.PK
             _keeperPrefab.transform.rotation = Quaternion.Euler(0, 0, zRot);
         }
 
-        private void DetermineWinner()
+        private void DetermineRoundResult()
         {
-            bool shooterWin = ShooterDirType != KeeperDirType;
-            UpdateScore(shooterWin);
+            bool shooterScored = ShooterDirType != KeeperDirType;
+
+            if (shooterScored)
+                _uiManager.ShowGoalUI();
+            else
+                _uiManager.ShowSaveUI();
+
+            StartCoroutine(DelayAddScore(shooterScored));
         }
 
-        private IEnumerator ResetKeeper()
+        private void SetShooterDirection(Direction type, Vector3 dir)
+        {
+            ShooterDirType = type;
+            ShooterDir = dir;
+        }
+
+        private void SetKeeperDirection(Direction type, Vector3 dir)
+        {
+            KeeperDirType = type;
+            KeeperDir = dir;
+        }
+
+        private void ResetConfirmationStatus()
+        {
+            ShooterConfirmed = false;
+            KeeperConfirmed = false;
+        }
+
+        private void ResetScores()
+        {
+            ShooterScore = 0;
+            KeeperScore = 0;
+            UpdateScoreDisplay(ShooterScore, KeeperScore);
+        }
+
+        private void UpdateScoreDisplay(int shooterScore, int keeperScore)
+        {
+            _shooterText.text = shooterScore.ToString();
+            _keeperText.text = keeperScore.ToString();
+        }
+
+        private IEnumerator DelayAddScore(bool shooterWin)
+        {
+            yield return new WaitForSeconds(1f);
+            _uiManager.AddScore(shooterWin);
+        }
+
+        private IEnumerator ResetRoundAfterDelay()
         {
             yield return new WaitForSeconds(_resetDelay);
 
@@ -162,47 +212,10 @@ namespace Code.PK
                 _currentBall.transform.SetPositionAndRotation(_shootPoint.position, Quaternion.identity);
             }
 
+            _uiManager.HideResultUI();
+
             IsShoot = false;
             _keeperAnimator.SetBool(IsKeepingHash, false);
-        }
-
-
-        private void SetShooterDir(Direction type, Vector3 dir)
-        {
-            ShooterDirType = type;
-            ShooterDir = dir;
-        }
-
-        private void SetKeeperDir(Direction type, Vector3 dir)
-        {
-            KeeperDirType = type;
-            KeeperDir = dir;
-        }
-
-        private void ResetStatus()
-        {
-            ShooterConfirmed = false;
-            KeeperConfirmed = false;
-        }
-
-        private void ResetScores()
-        {
-            ShooterScore = 0;
-            KeeperScore = 0;
-            UpdateScoreText(ShooterScore, KeeperScore);
-        }
-
-        private void UpdateScore(bool shooterWin)
-        {
-            if (shooterWin) ShooterScore++;
-            else KeeperScore++;
-            UpdateScoreText(ShooterScore, KeeperScore);
-        }
-
-        private void UpdateScoreText(int shooterScore, int keeperScore)
-        {
-            _shooterText.text = shooterScore.ToString();
-            _keeperText.text = keeperScore.ToString();
         }
     }
 }
