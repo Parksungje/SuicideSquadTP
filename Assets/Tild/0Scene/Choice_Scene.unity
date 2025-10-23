@@ -2874,7 +2874,6 @@ MonoBehaviour:
   minigame:
   - {fileID: 11400000, guid: 488439cf1c3d69f4890cf4ec8b90a81c, type: 2}
   - {fileID: 11400000, guid: fb86de0fb718cb04497c237c10625b13, type: 2}
-  - {fileID: 11400000, guid: 89538ed1d605ef04c87aa174ed997b17, type: 2}
   inputSO: {fileID: 11400000, guid: 1363783125641f34c87855465353b640, type: 2}
   canvasGroup: {fileID: 0}
   minigameName: {fileID: 1621361045}
@@ -2882,6 +2881,7 @@ MonoBehaviour:
   minigameImage: {fileID: 871584594}
   minigameBackground: {fileID: 400954508}
   spaceText: {fileID: 970257329}
+  IsPopuped: 0
   scroller: {fileID: 1785804698}
   namePrefab: {fileID: 2044114469232792948, guid: 7829d9e71cc01934a9b844d6551cfda0, type: 3}
   finalMinigame: {fileID: 1770812050}
