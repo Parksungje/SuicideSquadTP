@@ -7,6 +7,7 @@ using Tild._1Script.Menu;
 >>>>>>> Stashed changes
 using Tild._1Script.Minigames.Rope;
 using Tild.Core;
+using Tild.Menu;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,8 +75,6 @@ namespace Tild._1Script.Menu
 
         private void Start()
         {
-<<<<<<< Updated upstream
-=======
             ScreenManager.instance.FadeOut(0.3f, 0, (() =>
             {
                 if (MinigameManager.instance.isRandomMode)

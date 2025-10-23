@@ -194,7 +194,7 @@ namespace Code.PK
 
         private IEnumerator DelayAddScore(bool shooterWin)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             _uiManager.AddScore(shooterWin);
         }
 
