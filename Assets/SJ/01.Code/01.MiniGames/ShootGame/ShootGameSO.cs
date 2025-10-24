@@ -100,4 +100,25 @@ public class ShootGameSO : BaseInputSO
         else
             OnDownArrowDown?.Invoke(false);
     }
+
+    public override void OnEKey(InputAction.CallbackContext context)
+    {
+        base.OnEKey(context);
+
+        if (context.performed)
+            OnEKeyDown?.Invoke(true);
+        else
+            OnEKeyDown?.Invoke(false);
+    }
+
+    public override void OnEnter(InputAction.CallbackContext context)
+    {
+        base.OnEnter(context);
+
+        if (context.performed)
+            OnEnterKeyDown?.Invoke(true);
+        else
+            OnEnterKeyDown?.Invoke(false);
+
+    }
 }
