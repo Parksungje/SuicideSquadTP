@@ -12,6 +12,10 @@ public class ShootingManager : MonoBehaviour
 
     [SerializeField] private float _moveSpeed;
 
+    [Header("CrossHair Components")]
+    [SerializeField] private CrossHairComponent _p1CrossHairComponent;
+    [SerializeField] private CrossHairComponent _p2CrossHairComponent;
+
     private Vector3 _p1HairDir;
     private Vector3 _p2HairDir;
 
@@ -42,8 +46,6 @@ public class ShootingManager : MonoBehaviour
         _shootGameSO.OnEnterKeyDown += SetP2Shoot;
     }
 
-    
-
     private void OnDisable()
     {
         if (_shootGameSO == null) return;
@@ -57,6 +59,9 @@ public class ShootingManager : MonoBehaviour
         _shootGameSO.OnDownArrowDown -= SetP2DownArrow;
         _shootGameSO.OnLeftArrowDown -= SetP2LeftArrow;
         _shootGameSO.OnRightArrowDown -= SetP2RightArrow;
+
+        _shootGameSO.OnEKeyDown -= SetP1Shoot;
+        _shootGameSO.OnEnterKeyDown -= SetP2Shoot;
     }
 
     private void SetP1W(bool isPressed) => _wPressed = isPressed;
@@ -67,12 +72,19 @@ public class ShootingManager : MonoBehaviour
     private void SetP2DownArrow(bool isPressed) => _downArrowPressed = isPressed;
     private void SetP2LeftArrow(bool isPressed) => _leftArrowPressed = isPressed;
     private void SetP2RightArrow(bool isPressed) => _rightArrowPressed = isPressed;
+
+    // P1 사격 입력: 적 조준 여부 확인 후 사격 시도
     private void SetP1Shoot(bool isPressed)
     {
+        if (isPressed)
+            AttemptShoot(1);
     }
 
+    // P2 사격 입력: 적 조준 여부 확인 후 사격 시도
     private void SetP2Shoot(bool isPressed)
     {
+        if (isPressed)
+            AttemptShoot(2);
     }
 
     private void FixedUpdate()
@@ -110,5 +122,24 @@ public class ShootingManager : MonoBehaviour
         if (_downArrowPressed) _p2HairDir += Vector3.down;
         if (_leftArrowPressed) _p2HairDir += Vector3.left;
         if (_rightArrowPressed) _p2HairDir += Vector3.right;
+    }
+
+    private void AttemptShoot(int playerNumber)
+    {
+        CrossHairComponent crossHair = (playerNumber == 1) ? _p1CrossHairComponent : _p2CrossHairComponent;
+
+        if (crossHair != null && crossHair.IsAimingAtEnemy())
+        {
+            Shooting(playerNumber);
+        }
+        else
+        {
+            Debug.Log($"P{playerNumber} 사격 시도 실패: 조준 대상이 적이 아닙니다.");
+        }
+    }
+
+    private void Shooting(int playerNumber)
+    {
+        Debug.Log($"P{playerNumber} 사격 성공! 적 명중!");
     }
 }
