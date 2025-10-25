@@ -4,12 +4,22 @@ using System.Collections;
 
 public class TargetComponent : MonoBehaviour
 {
+    public enum TargetMovementType
+    {
+        None,
+        Horizontal,
+        Vertical,
+        ArcJump
+    }
+
     [SerializeField] private float appearDuration = 0.3f;
-    [SerializeField] private float visibleTime = 1.5f; 
+    [SerializeField] private float visibleTime = 1.5f;
     [SerializeField] private float disappearDuration = 0.3f;
+
+    [SerializeField] private TargetMovementType movementType = TargetMovementType.Horizontal;
     [SerializeField] private float moveRange = 1.5f;
     [SerializeField] private float moveSpeed = 1f;
-    [SerializeField] private bool moveHorizontally = true;
+    [SerializeField] private float arcHeight = 1f;
 
     private Vector3 _startPos;
     private bool _isActive = false;
@@ -26,7 +36,18 @@ public class TargetComponent : MonoBehaviour
         if (_routine != null)
             StopCoroutine(_routine);
 
+        SetRandomMovementType();
+
+        transform.localPosition = _startPos;
         _routine = StartCoroutine(TargetRoutine());
+    }
+
+    private void SetRandomMovementType()
+    {
+        int randomValue = Random.Range(1, (int)TargetMovementType.ArcJump + 1);
+        movementType = (TargetMovementType)randomValue;
+
+        Debug.Log($"Target Activated with Random Movement: {movementType}");
     }
 
     private IEnumerator TargetRoutine()
@@ -36,24 +57,60 @@ public class TargetComponent : MonoBehaviour
 
         transform.localScale = Vector3.zero;
         transform.DOScale(Vector3.one, appearDuration).SetEase(Ease.OutBack);
-
         yield return new WaitForSeconds(appearDuration);
 
-        if (moveHorizontally)
-        {
-            transform.DOLocalMoveX(_startPos.x + moveRange, moveSpeed)
-                .SetEase(Ease.InOutSine)
-                .SetLoops(-1, LoopType.Yoyo);
-        }
+        ApplyMovement();
 
         yield return new WaitForSeconds(visibleTime);
 
-        transform.DOKill();
-        transform.DOScale(Vector3.zero, disappearDuration).SetEase(Ease.InBack);
-        yield return new WaitForSeconds(disappearDuration);
+        Disappear();
+    }
 
-        gameObject.SetActive(false);
+    private void ApplyMovement()
+    {
+        transform.DOKill(true);
+
+        switch (movementType)
+        {
+            case TargetMovementType.Horizontal:
+                transform.DOLocalMoveX(_startPos.x + moveRange, moveSpeed)
+                    .SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo);
+                break;
+
+            case TargetMovementType.Vertical:
+                transform.DOLocalMoveY(_startPos.y + moveRange, moveSpeed)
+                    .SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo);
+                break;
+
+            case TargetMovementType.ArcJump:
+                Sequence arcSequence = DOTween.Sequence()
+                    .Append(transform.DOLocalMoveY(_startPos.y + arcHeight, moveSpeed * 0.5f).SetEase(Ease.OutQuad))
+                    .Join(transform.DOLocalMoveX(_startPos.x + moveRange, moveSpeed).SetEase(Ease.Linear))
+                    .Append(transform.DOLocalMoveY(_startPos.y, moveSpeed * 0.5f).SetEase(Ease.InQuad));
+
+                arcSequence.SetLoops(-1, LoopType.Restart);
+                break;
+
+            case TargetMovementType.None:
+            default:
+                break;
+        }
+    }
+
+    private void Disappear()
+    {
+        if (!_isActive) return;
+
         _isActive = false;
+        transform.DOKill(true);
+
+        transform.DOScale(Vector3.zero, disappearDuration).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            transform.localPosition = _startPos;
+        });
     }
 
     public void OnHit()
@@ -63,9 +120,9 @@ public class TargetComponent : MonoBehaviour
         _isActive = false;
         transform.DOKill();
 
-        transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
-        {
-            gameObject.SetActive(false);
-        });
+        gameObject.SetActive(false);
+        transform.localPosition = _startPos;
+
+        Debug.Log($"{name} was instantly deactivated (super fast hit).");
     }
 }

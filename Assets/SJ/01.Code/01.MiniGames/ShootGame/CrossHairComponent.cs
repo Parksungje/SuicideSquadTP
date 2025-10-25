@@ -7,25 +7,32 @@ public class CrossHairComponent : MonoBehaviour
     public float rightOffset = 0.2f;
     public LayerMask hitLayers;
     public string enemyLayerName = "Enemy";
+    public string ignoreLayerName = "Player";
 
     private RaycastHit _currentHit;
     private bool _isHitting = false;
     private int _enemyLayerIndex;
+    private int _ignoreLayerIndex;
 
     private const float GIZMO_SPHERE_RADIUS = 0.1f;
 
     void Start()
     {
         _enemyLayerIndex = LayerMask.NameToLayer(enemyLayerName);
+        _ignoreLayerIndex = LayerMask.NameToLayer(ignoreLayerName);
+
         if (_enemyLayerIndex == -1)
-        {
-            Debug.LogError($"Layer named '{enemyLayerName}' was not found. Please create it.");
-        }
+            Debug.LogError($"Layer '{enemyLayerName}' not found.");
+        if (_ignoreLayerIndex == -1)
+            Debug.LogError($"Layer '{ignoreLayerName}' not found.");
+
         if (hitLayers.value == 0)
-        {
             hitLayers = ~0;
-        }
+
+        if (_ignoreLayerIndex != -1)
+            hitLayers &= ~(1 << _ignoreLayerIndex);
     }
+
 
     void Update()
     {
@@ -45,24 +52,6 @@ public class CrossHairComponent : MonoBehaviour
         {
             _isHitting = false;
         }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-        }
-    }
-
-    private void Shoot()
-    {
-        if (!_isHitting) return;
-
-        TargetComponent target = _currentHit.collider.GetComponent<TargetComponent>();
-
-        if (target != null)
-        {
-            target.OnHit();
-            Debug.Log($"Hit target: {target.name}");
-        }
     }
 
     public bool IsAimingAtEnemy()
@@ -72,6 +61,16 @@ public class CrossHairComponent : MonoBehaviour
                _currentHit.collider != null &&
                _currentHit.collider.gameObject.layer == _enemyLayerIndex;
     }
+
+    public TargetComponent GetCurrentTarget()
+    {
+        if (_isHitting && _currentHit.collider != null)
+        {
+            return _currentHit.collider.GetComponent<TargetComponent>();
+        }
+        return null;
+    }
+
 
     private void OnDrawGizmos()
     {
