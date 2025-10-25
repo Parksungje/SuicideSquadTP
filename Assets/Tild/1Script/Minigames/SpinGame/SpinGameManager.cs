@@ -71,7 +71,7 @@ namespace Tild.Minigames.SpinGame
             spinInputSO.UpKeyPressed -= () => TryJump(rigid2P,animator2P, ref canJump2P, Vector3.forward);
         }
 
-        private void TryJump(Rigidbody rigid, Animator animator,ref bool canJump, Vector3 dir)
+        private void TryJump(Rigidbody rigid, Animator animator, ref bool canJump, Vector3 dir)
         {
             if (!canJump) return;
             canJump = false;
@@ -80,19 +80,15 @@ namespace Tild.Minigames.SpinGame
 
             Vector3 camForward = mainCamera.transform.forward;
             Vector3 camRight = mainCamera.transform.right;
-            camForward.y = 0; camRight.y = 0;
-            camForward.Normalize(); camRight.Normalize();
+            camForward.y = 0f; camRight.y = 0f;
+            camForward.Normalize();
+            camRight.Normalize();
 
-            Vector3 worldDir = (dir.z * camForward + dir.x * camRight).normalized;
+            Vector3 moveDir = (dir.z * camForward + dir.x * camRight).normalized;
 
-      
-            if (dir.sqrMagnitude > 0.01f)
+            if (moveDir.sqrMagnitude > 0.01f)
             {
-        
-                Vector3 camDir = (dir.z * camForward + dir.x * camRight).normalized;
-
-            
-                Quaternion targetRotation = Quaternion.LookRotation(dir, Vector3.up);
+                Quaternion targetRotation = Quaternion.LookRotation(moveDir, Vector3.up);
                 float rotationSpeed = 10f; 
                 rigid.transform.rotation = Quaternion.Slerp(
                     rigid.transform.rotation,
@@ -102,13 +98,14 @@ namespace Tild.Minigames.SpinGame
             }
 
             animator.SetTrigger("JUMP");
-            Vector3 jumpVector = (Vector3.up * jumpPower) + (worldDir * movePower);
+            
+            Vector3 jumpVector = (Vector3.up * jumpPower) + (moveDir * movePower);
             rigid.AddForce(jumpVector, ForceMode.Impulse);
-
+            
             StartCoroutine(ExtraGravity(rigid));
-
             StartCoroutine(JumpCooldown(rigid == rigid1P));
         }
+
 
         private IEnumerator ExtraGravity(Rigidbody rigid)
         {
