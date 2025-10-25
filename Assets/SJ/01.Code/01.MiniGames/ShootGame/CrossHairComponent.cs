@@ -3,68 +3,82 @@ using UnityEngine;
 public class CrossHairComponent : MonoBehaviour
 {
     public float raycastDistance = 100f;
+    public float raycastOffset = 0.2f;
+    public float rightOffset = 0.2f;
+    public LayerMask hitLayers;
+    public string enemyLayerName = "Enemy";
 
-    private RaycastHit currentHit;
-    private bool isHitting = false;
+    private RaycastHit _currentHit;
+    private bool _isHitting = false;
+    private int _enemyLayerIndex;
+
+    private const float GIZMO_SPHERE_RADIUS = 0.1f;
 
     void Start()
     {
+        _enemyLayerIndex = LayerMask.NameToLayer(enemyLayerName);
+        if (_enemyLayerIndex == -1)
+        {
+            Debug.LogError($"Layer named '{enemyLayerName}' was not found. Please create it.");
+        }
+        if (hitLayers.value == 0)
+        {
+            hitLayers = ~0;
+        }
     }
 
     void Update()
     {
-        Vector3 rayOrigin = transform.position;
-        Vector3 rayDirection = transform.forward;
+        Transform t = transform;
 
-        rayOrigin += rayDirection * 0.2f;
+        Vector3 rayOrigin = t.position + t.forward * raycastOffset + t.right * rightOffset;
+        Vector3 rayDirection = t.forward;
+
         RaycastHit hit;
 
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, raycastDistance))
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, raycastDistance, hitLayers))
         {
-            isHitting = true;
-            currentHit = hit;
-
-            int enemyLayerIndex = LayerMask.NameToLayer("Enemy");
-
-            if (hit.collider.gameObject.layer == enemyLayerIndex)
-            {
-                Debug.Log($"Enemy 레이어 오브젝트에 닿음: {hit.collider.gameObject.name}");
-            }
+            _isHitting = true;
+            _currentHit = hit;
         }
         else
         {
-            isHitting = false;
+            _isHitting = false;
         }
+    }
 
+    public bool IsAimingAtEnemy()
+    {
+        return _isHitting &&
+               _enemyLayerIndex != -1 &&
+               _currentHit.collider != null &&
+               _currentHit.collider.gameObject.layer == _enemyLayerIndex;
     }
 
     private void OnDrawGizmos()
     {
-        Vector3 rayOrigin = transform.position;
-        Vector3 rayDirection = transform.forward;
+        Transform t = transform;
+        Vector3 rayOrigin = t.position + t.forward * raycastOffset + t.right * rightOffset;
+        Vector3 rayDirection = t.forward;
 
-        Gizmos.color = Color.yellow;
-
-        if (isHitting)
+        if (_isHitting)
         {
-            Gizmos.DrawLine(rayOrigin, currentHit.point);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(rayOrigin, _currentHit.point);
 
-            int enemyLayerIndex = LayerMask.NameToLayer("Enemy");
-
-            if (currentHit.collider.gameObject.layer == enemyLayerIndex)
+            if (_enemyLayerIndex != -1 && _currentHit.collider != null && _currentHit.collider.gameObject.layer == _enemyLayerIndex)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawSphere(currentHit.point, 0.1f);
             }
             else
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawSphere(currentHit.point, 0.1f);
             }
-
+            Gizmos.DrawSphere(_currentHit.point, GIZMO_SPHERE_RADIUS);
         }
         else
         {
+            Gizmos.color = Color.yellow;
             Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * raycastDistance);
         }
     }
