@@ -5,28 +5,28 @@ namespace Tild.Minigames.Boxing
 {
     public class BoxingManager : MonoBehaviour
     {
-        #region Combats
+        [Header("Systems")]
+        
         [SerializeField] private BoxingInputSO boxingInputSO;
         [SerializeField] private Rigidbody rigid1P, rigid2P;
         [SerializeField] private Animator animator1P, animator2P;
-        #endregion
 
-        #region Values
-        [SerializeField] private int health1P = 100, health2P = 100;
+        [Header("Values")]
+        [Space]
         [SerializeField] private int damage = 10;
         [SerializeField] private int criticalDamage = 20;
         [SerializeField] private float backForce = 5f;
         [SerializeField] private float dashForce = 8f;
         [SerializeField] private float attackRange = 2f;
         [SerializeField] private float knockbackForce = 3f;
-        [SerializeField] private bool debounce1P, debounce2P;
-        [SerializeField] private bool isDefending1P, isDefending2P;
-        #endregion
-
-        #region UI&Effects
+        private int health1P = 100, health2P = 100;
+        private bool debounce1P, debounce2P;
+        private bool isDefending1P, isDefending2P;
+        
+        [Header("UI&Effects")]
+        [Space]
         [SerializeField] private RectTransform healthBar1P, healthBar2P;
         [SerializeField] private ParticleSystem hitImpact1P, hitImpact2P;
-        #endregion
 
         private void OnEnable()
         {
@@ -150,11 +150,7 @@ namespace Tild.Minigames.Boxing
         private void Reset2PDebounce() => debounce2P = false;
 
         #endregion
-
-
-        /// <summary>
-        /// 피격 시 데미지 처리 + 넉백 효과
-        /// </summary>
+        
         private void TakeDamage(ref int health, ParticleSystem impact, Rigidbody targetRigid,Animator animator, Vector3 knockDir)
         {
             int dealtDamage = UnityEngine.Random.value < 0.2f ? criticalDamage : damage;
@@ -163,7 +159,7 @@ namespace Tild.Minigames.Boxing
             animator.SetTrigger("Damaged");
             UpdateUI();
 
-            // 살짝 밀리기 (0.4초 뒤 멈춤)
+           
             targetRigid.linearVelocity = knockDir * knockbackForce;
             Invoke(nameof(StopKnockback), 0.4f);
         }
