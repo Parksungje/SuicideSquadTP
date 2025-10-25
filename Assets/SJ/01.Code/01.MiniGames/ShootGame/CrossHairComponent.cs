@@ -45,6 +45,24 @@ public class CrossHairComponent : MonoBehaviour
         {
             _isHitting = false;
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        if (!_isHitting) return;
+
+        TargetComponent target = _currentHit.collider.GetComponent<TargetComponent>();
+
+        if (target != null)
+        {
+            target.OnHit();
+            Debug.Log($"Hit target: {target.name}");
+        }
     }
 
     public bool IsAimingAtEnemy()

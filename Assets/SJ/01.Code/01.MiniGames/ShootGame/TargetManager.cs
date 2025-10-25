@@ -1,16 +1,31 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class TargetManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private List<TargetComponent> targets;
+    [SerializeField] private float spawnInterval = 2f;
+
+    private void Start()
     {
-        
+        StartCoroutine(SpawnRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SpawnRoutine()
     {
-        
+        while (true)
+        {
+            yield return new WaitForSeconds(spawnInterval);
+
+            var inactiveTargets = targets.FindAll(t => !t.gameObject.activeSelf);
+            if (inactiveTargets.Count > 0)
+            {
+                var target = inactiveTargets[Random.Range(0, inactiveTargets.Count)];
+                target.gameObject.SetActive(true);
+                target.Activate();
+            }
+
+        }
     }
 }
