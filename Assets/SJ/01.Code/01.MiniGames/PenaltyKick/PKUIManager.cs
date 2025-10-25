@@ -13,6 +13,7 @@ public class PKUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _p1ScoreText;
     [SerializeField] private TextMeshProUGUI _p2ScoreText;
 
+
     private int _p1Score;
     private int _p2Score;
     private const int MaxScore = 5;
@@ -21,20 +22,33 @@ public class PKUIManager : MonoBehaviour
     {
         _goalUI.SetActive(true);
         _saveUI.SetActive(false);
+        HideConfirmationUI();
     }
 
     public void ShowSaveUI()
     {
-
         _saveUI.SetActive(true);
         _goalUI.SetActive(false);
+        HideConfirmationUI();
     }
 
-    public  void HideResultUI()
+    public void HideResultUI()
     {
         _goalUI.SetActive(false);
         _saveUI.SetActive(false);
     }
+
+    public void ShowConfirmationUI()
+    {
+        HideResultUI();
+        _p1WinUI.SetActive(false);
+        _p2WinUI.SetActive(false);
+    }
+
+    public void HideConfirmationUI()
+    {
+    }
+
 
     public void AddScore(bool shooterWin)
     {
@@ -69,11 +83,9 @@ public class PKUIManager : MonoBehaviour
 
     private void ShowWinUI(bool p1Win)
     {
-
         HideResultUI();
+        HideConfirmationUI();
         _p1WinUI.SetActive(p1Win);
         _p2WinUI.SetActive(!p1Win);
     }
-
-
 }
