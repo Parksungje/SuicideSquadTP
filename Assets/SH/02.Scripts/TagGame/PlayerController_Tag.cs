@@ -23,8 +23,8 @@ public class PlayerController_Tag : MonoBehaviour
     private bool isJumpingP1 = false;
     private bool isJumpingP2 = false;
 
-    private readonly int IsJumpingHash = Animator.StringToHash("IsJumping");
-    private readonly int IsRunningHash = Animator.StringToHash("IsRunning");
+    private readonly int IsJumpingHash = Animator.StringToHash("isJumping");
+    private readonly int IsRunninwgHash = Animator.StringToHash("isRunning");
 
     private void Start()
     {
@@ -57,13 +57,13 @@ public class PlayerController_Tag : MonoBehaviour
     private void HandleL_LeftDir(bool isHolding)
     {
         dirP1 = isHolding ? -1 : (dirP1 == -1 ? 0 : dirP1);
-        animator_P1.SetBool(IsRunningHash, isHolding);
+        animator_P1.SetBool(IsRunninwgHash, isHolding);
     }
 
     private void HandleL_RightDir(bool isHolding)
     {
         dirP1 = isHolding ? 1 : (dirP1 == 1 ? 0 : dirP1);
-        animator_P1.SetBool(IsRunningHash, isHolding);
+        animator_P1.SetBool(IsRunninwgHash, isHolding);
     }
 
     private void HandleL_Jump()
@@ -83,13 +83,13 @@ public class PlayerController_Tag : MonoBehaviour
     private void HandleR_LeftDir(bool isHolding)
     {
         dirP2 = isHolding ? -1 : (dirP2 == -1 ? 0 : dirP2);
-        animator_P2.SetBool(IsRunningHash, isHolding);
+        animator_P2.SetBool(IsRunninwgHash, isHolding);
     }
 
     private void HandleR_RightDir(bool isHolding)
     {
         dirP2 = isHolding ? 1 : (dirP2 == 1 ? 0 : dirP2);
-        animator_P2.SetBool(IsRunningHash, isHolding);
+        animator_P2.SetBool(IsRunninwgHash, isHolding);
     }
 
     private void HandleR_Jump()
@@ -115,6 +115,7 @@ public class PlayerController_Tag : MonoBehaviour
         ApplyExtraGravity(rigidbody_P2);
 
         UpdateAnimatorStates();
+        CalcRot();
     }
 
     private void MovePlayer(Rigidbody rb, int dir)
@@ -133,6 +134,19 @@ public class PlayerController_Tag : MonoBehaviour
     private bool IsGrounded(Rigidbody rb)
     {
         return Physics.Raycast(rb.position + Vector3.up, Vector3.down, groundRayDistance, groundMask);
+    }
+
+    private void CalcRot()
+    {
+        if (dirP1 < 0)
+            rigidbody_P1.transform.rotation = Quaternion.Euler(0f, -110f, 0f);
+        else if (dirP1 > 0)
+            rigidbody_P1.transform.rotation = Quaternion.Euler(0f, 110f, 0f);
+
+        if (dirP2 < 0)
+            rigidbody_P2.transform.rotation = Quaternion.Euler(0f, -110f, 0f);
+        else if (dirP2 > 0)
+            rigidbody_P2.transform.rotation = Quaternion.Euler(0f, 110f, 0f);
     }
 
     private void UpdateAnimatorStates()

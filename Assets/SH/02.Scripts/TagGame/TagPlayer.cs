@@ -2,15 +2,28 @@ using UnityEngine;
 
 public class TagPlayer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private bool isHunter = false;
+    private GameManager_Tag manager;
+
+    private void Start()
     {
-        
+        manager = FindFirstObjectByType<GameManager_Tag>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetIsHunter(bool value)
     {
-        
+        isHunter = value;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        TagPlayer otherPlayer = other.gameObject.GetComponent<TagPlayer>();
+        if (otherPlayer != null)
+        {
+            if (isHunter)
+            {
+                manager.OnPlayerTagged(otherPlayer);
+            }
+        }
     }
 }
