@@ -10,7 +10,15 @@ public class ShootingManager : MonoBehaviour
     [SerializeField] private Rigidbody _p1Obj;
     [SerializeField] private Rigidbody _p2Obj;
 
+    [SerializeField] private CrossHairComponent _p1CrossHairComponent;
+    [SerializeField] private CrossHairComponent _p2CrossHairComponent;
+
+    [SerializeField] private Animator _p1Animator;
+    [SerializeField] private Animator _p2Animator;
+
     [SerializeField] private float _moveSpeed;
+
+    [SerializeField] private float _shootCooldown = 0.5f;
 
     private Vector3 _p1HairDir;
     private Vector3 _p2HairDir;
@@ -18,10 +26,22 @@ public class ShootingManager : MonoBehaviour
     private bool _wPressed, _sPressed, _aPressed, _dPressed,
         _upArrowPressed, _downArrowPressed, _leftArrowPressed, _rightArrowPressed;
 
+    private float _p1LastShootTime;
+    private float _p2LastShootTime;
+
+    private int _p1Score;
+    private int _p2Score;
+
     private void Awake()
     {
         _p1HairDir = Vector3.zero;
         _p2HairDir = Vector3.zero;
+
+        _p1LastShootTime = -_shootCooldown;
+        _p2LastShootTime = -_shootCooldown;
+
+        _p1Score = 0;
+        _p2Score = 0;
     }
 
     private void OnEnable()
@@ -42,8 +62,6 @@ public class ShootingManager : MonoBehaviour
         _shootGameSO.OnEnterKeyDown += SetP2Shoot;
     }
 
-    
-
     private void OnDisable()
     {
         if (_shootGameSO == null) return;
@@ -57,6 +75,9 @@ public class ShootingManager : MonoBehaviour
         _shootGameSO.OnDownArrowDown -= SetP2DownArrow;
         _shootGameSO.OnLeftArrowDown -= SetP2LeftArrow;
         _shootGameSO.OnRightArrowDown -= SetP2RightArrow;
+
+        _shootGameSO.OnEKeyDown -= SetP1Shoot;
+        _shootGameSO.OnEnterKeyDown -= SetP2Shoot;
     }
 
     private void SetP1W(bool isPressed) => _wPressed = isPressed;
@@ -67,12 +88,23 @@ public class ShootingManager : MonoBehaviour
     private void SetP2DownArrow(bool isPressed) => _downArrowPressed = isPressed;
     private void SetP2LeftArrow(bool isPressed) => _leftArrowPressed = isPressed;
     private void SetP2RightArrow(bool isPressed) => _rightArrowPressed = isPressed;
+
     private void SetP1Shoot(bool isPressed)
     {
+        if (isPressed && Time.time - _p1LastShootTime >= _shootCooldown)
+        {
+            _p1LastShootTime = Time.time;
+            AttemptShoot(_p1CrossHairComponent, _p1Animator, 1);
+        }
     }
 
     private void SetP2Shoot(bool isPressed)
     {
+        if (isPressed && Time.time - _p2LastShootTime >= _shootCooldown)
+        {
+            _p2LastShootTime = Time.time;
+            AttemptShoot(_p2CrossHairComponent, _p2Animator, 2);
+        }
     }
 
     private void FixedUpdate()
@@ -95,7 +127,6 @@ public class ShootingManager : MonoBehaviour
     private void UpdateP1Direction()
     {
         _p1HairDir = Vector3.zero;
-
         if (_wPressed) _p1HairDir += Vector3.up;
         if (_sPressed) _p1HairDir += Vector3.down;
         if (_aPressed) _p1HairDir += Vector3.left;
@@ -105,10 +136,40 @@ public class ShootingManager : MonoBehaviour
     private void UpdateP2Direction()
     {
         _p2HairDir = Vector3.zero;
-
         if (_upArrowPressed) _p2HairDir += Vector3.up;
         if (_downArrowPressed) _p2HairDir += Vector3.down;
         if (_leftArrowPressed) _p2HairDir += Vector3.left;
         if (_rightArrowPressed) _p2HairDir += Vector3.right;
+    }
+
+    private void AttemptShoot(CrossHairComponent crossHair, Animator animator, int playerNumber)
+    {
+        if (crossHair == null) return;
+
+        if (animator != null)
+        {
+            animator.SetBool("isFire", true);
+            Invoke(nameof(ResetFireFlags), 0.1f);
+        }
+
+        TargetComponent target = crossHair.GetCurrentTarget();
+        if (target != null)
+        {
+            target.OnHit();
+            if (playerNumber == 1) _p1Score += 20;
+            else _p2Score += 20;
+
+            Debug.Log($"P{playerNumber} 사격 성공! {target.name} 명중! 현재 점수: P1={_p1Score}, P2={_p2Score}");
+        }
+        else
+        {
+            Debug.Log($"P{playerNumber} 사격 실패: 명중 대상 없음. 현재 점수: P1={_p1Score}, P2={_p2Score}");
+        }
+    }
+
+    private void ResetFireFlags()
+    {
+        if (_p1Animator != null) _p1Animator.SetBool("isFire", false);
+        if (_p2Animator != null) _p2Animator.SetBool("isFire", false);
     }
 }
