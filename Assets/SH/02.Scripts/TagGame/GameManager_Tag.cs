@@ -6,9 +6,11 @@ public class GameManager_Tag : MonoBehaviour
     public float timeLimit = 90f;
     private float remainingTime;
 
+    public bool collisionDebounce = true;
+
     [Header("Game")]
     [SerializeField] private UIManager_Tag uiManager;
-    public TagPlayer hunter;
+    public bool _is1PHunter;
 
     [Header("Players")]
     [SerializeField] private Collider[] players;
@@ -31,7 +33,7 @@ public class GameManager_Tag : MonoBehaviour
         remainingTime = timeLimit;
         gameActive = true;
 
-        SetHunter(player1Tag);
+        SetHunter(true);
         StartCoroutine(GameTimer());
     }
 
@@ -52,21 +54,21 @@ public class GameManager_Tag : MonoBehaviour
     private void EndGame()
     {
         gameActive = false;
-        uiManager.ResultText(hunter == player1Tag ? 2 : 1);
+        uiManager.ResultText(_is1PHunter ? 2 : 1);
         Time.timeScale = 0f;
     }
 
-    public void SetHunter(TagPlayer newHunter)
+    public void SetHunter(bool is1P)
     {
-        hunter = newHunter;
-        player1Tag.SetIsHunter(hunter == player1Tag);
-        player2Tag.SetIsHunter(hunter == player2Tag);
+        _is1PHunter = is1P;
+        player1Tag.SetIsHunter(is1P == true);
+        player2Tag.SetIsHunter(is1P == false);
     }
 
-    public void OnPlayerTagged(TagPlayer tagged)
+    public void OnPlayerTagged(bool is1P)
     {
-        if (hunter == tagged) return;
-        SetHunter(tagged);
         print("¼ú·¡ ¹Ù²ñ");
+        SetHunter(!is1P);
+    
     }
 }
