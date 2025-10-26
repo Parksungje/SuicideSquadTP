@@ -3,6 +3,9 @@ using UnityEngine;
 public class TagPlayer : MonoBehaviour
 {
     private bool isHunter = false;
+    
+
+    [SerializeField] private bool _is1P;
     private GameManager_Tag manager;
 
     private void Start()
@@ -15,15 +18,23 @@ public class TagPlayer : MonoBehaviour
         isHunter = value;
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        TagPlayer otherPlayer = other.gameObject.GetComponent<TagPlayer>();
-        if (otherPlayer != null)
+        if (!manager.collisionDebounce) return;
+
+        manager.collisionDebounce = true;
+        print("충돌");
+        if (isHunter)
         {
-            if (isHunter)
-            {
-                manager.OnPlayerTagged(otherPlayer);
-            }
+            print("헌터 입니다.");
+
+            manager.OnPlayerTagged(_is1P);
+            Invoke("DebounceDelay", 2);
         }
+        
+    }
+    private void DebounceDelay()
+    {
+        manager.collisionDebounce = false;
     }
 }
