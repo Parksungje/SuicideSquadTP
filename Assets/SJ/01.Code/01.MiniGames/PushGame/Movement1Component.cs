@@ -2,8 +2,9 @@
 
 public class Movement1Component : MonoBehaviour
 {
-    [field:SerializeField] private PushGameSO pushInput;
-    [SerializeField] private float moveSpeed = 5f;
+    [field:SerializeField] private PushGameSO _pushInput;
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private Transform _targetTrm;
 
     private Rigidbody _rigid;
     private Vector3 _moveDir;
@@ -17,26 +18,26 @@ public class Movement1Component : MonoBehaviour
 
     private void OnEnable()
     {
-        if (pushInput == null)
+        if (_pushInput == null)
         {
             Debug.LogError("PushGameSO reference is missing for Movement1Component.");
             return;
         }
 
-        pushInput.OnWKeyDown += OnWKey;
-        pushInput.OnSKeyDown += OnSKey;
-        pushInput.OnAKeyDown += OnAKey;
-        pushInput.OnDKeyDown += OnDKey;
+        _pushInput.OnWKeyDown += OnWKey;
+        _pushInput.OnSKeyDown += OnSKey;
+        _pushInput.OnAKeyDown += OnAKey;
+        _pushInput.OnDKeyDown += OnDKey;
     }
 
     private void OnDisable()
     {
-        if (pushInput == null) return;
+        if (_pushInput == null) return;
 
-        pushInput.OnWKeyDown -= OnWKey;
-        pushInput.OnSKeyDown -= OnSKey;
-        pushInput.OnAKeyDown -= OnAKey;
-        pushInput.OnDKeyDown -= OnDKey;
+        _pushInput.OnWKeyDown -= OnWKey;
+        _pushInput.OnSKeyDown -= OnSKey;
+        _pushInput.OnAKeyDown -= OnAKey;
+        _pushInput.OnDKeyDown -= OnDKey;
     }
 
     private void OnWKey(bool pressed) => wPressed = pressed;
@@ -46,6 +47,8 @@ public class Movement1Component : MonoBehaviour
 
     private void FixedUpdate()
     {
+        this.transform.rotation = _targetTrm.rotation;
+
         _moveDir = Vector3.zero;
         if (wPressed) _moveDir += Vector3.forward;
         if (sPressed) _moveDir += Vector3.back;
@@ -59,9 +62,9 @@ public class Movement1Component : MonoBehaviour
     {
         _moveDir = _moveDir.normalized;
         _rigid.linearVelocity = new Vector3(
-            _moveDir.x * moveSpeed,
+            _moveDir.x * _moveSpeed,
             _rigid.linearVelocity.y,
-            _moveDir.z * moveSpeed
+            _moveDir.z * _moveSpeed
         );
     }
 }

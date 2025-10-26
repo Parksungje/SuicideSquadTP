@@ -4,6 +4,7 @@ public class Movement2Component : MonoBehaviour
 {
     [SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private Transform _targetTrm;
 
     private Rigidbody _rigid;
     private Vector3 _moveDir;
@@ -42,6 +43,8 @@ public class Movement2Component : MonoBehaviour
 
     private void FixedUpdate()
     {
+        this.transform.rotation = _targetTrm.rotation;
+
         _moveDir = Vector3.zero;
         if (upPressed) _moveDir += Vector3.forward;
         if (downPressed) _moveDir += Vector3.back;

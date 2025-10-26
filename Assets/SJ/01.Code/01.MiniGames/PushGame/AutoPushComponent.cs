@@ -5,10 +5,11 @@ public class AutoPushComponent : MonoBehaviour
 {
     [SerializeField] private int pushForce = 10;
     [SerializeField] private float pushDelay = 1f;
+    [SerializeField] private Rigidbody targetRb;
 
     private bool _canPush = true;
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (!_canPush) return;
         if (other.attachedRigidbody == null) return;
@@ -19,7 +20,7 @@ public class AutoPushComponent : MonoBehaviour
     private IEnumerator PushRoutine(Rigidbody target)
     {
         _canPush = false;
-        target.AddForce(Vector3.right * pushForce, ForceMode.Impulse);
+        targetRb.AddForce(Vector3.back * pushForce, ForceMode.Impulse);
         yield return new WaitForSeconds(pushDelay);
         _canPush = true;
     }
