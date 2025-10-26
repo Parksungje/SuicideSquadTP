@@ -161,8 +161,11 @@ namespace Tild._1Script.Menu
         private void OnConfirmPressed(bool obj)
         {
             if (IsPopuped)
-            MinigameManager.instance.NextMinigame(currentMinigame.scene);
-            inputSO.OnSpacePressed -= OnConfirmPressed;
+            {
+                MinigameManager.instance.NextMinigame(currentMinigame.scene);
+                inputSO.OnSpacePressed -= OnConfirmPressed;
+            }
+   
         }
 
       
