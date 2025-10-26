@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Tild.Minigames.SpinGame
 {
     public class SpinObstacle : MonoBehaviour
     {
-        [SerializeField] private float knockbackForce = 15f; 
+        [SerializeField] private float knockbackForce = 15f;
 
         private void OnCollisionEnter(Collision collision)
         {
