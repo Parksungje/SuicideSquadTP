@@ -255,7 +255,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 829cab2a7f234e949a88c1938203785d, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: cefdd43093f91d34cb849e29077e9e74, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -314,7 +314,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -43.7}
+  m_AnchoredPosition: {x: 0, y: -43.69995}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &110177636
@@ -1053,12 +1053,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dcb2be7fdc3c574f9d387bc3a66f48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PKInput: {fileID: 11400000, guid: 80de4eaf94782484f82537230ba48e06, type: 2}
-  ballPrefab: {fileID: 3340291480457862772, guid: 9415ba23fc095d94992ffe1f9bf6007b, type: 3}
-  shootPoint: {fileID: 1713691469}
-  shootForce: 30
+  _PKInput: {fileID: 0}
   _keeperPrefab: {fileID: 965773596}
-  _scoreText: {fileID: 110177636}
+  _startBall: {fileID: 0}
+  _shootPoint: {fileID: 0}
+  _shooterText: {fileID: 0}
+  _keeperText: {fileID: 0}
+  _orignPos: {fileID: 0}
+  _shooterObj: {fileID: 0}
+  _keeperAnimator: {fileID: 0}
+  _shooterAnimator: {fileID: 0}
+  _uiManager: {fileID: 0}
+  _shootPower: 20
+  _keeperJumpPower: 10
+  _runDuration: 0.6
+  _returnDuration: 0.5
+  _keeperActionDelay: 0.25
+  _resetDelay: 3
 --- !u!4 &428587205
 Transform:
   m_ObjectHideFlags: 0
@@ -1871,7 +1882,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 829cab2a7f234e949a88c1938203785d, type: 2}
+  m_Texture: {fileID: 8400000, guid: cefdd43093f91d34cb849e29077e9e74, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
