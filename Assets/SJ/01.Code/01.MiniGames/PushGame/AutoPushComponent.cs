@@ -6,7 +6,6 @@ public class AutoPushComponent : MonoBehaviour
 {
     [SerializeField] private int pushForce = 10;
     [SerializeField] private float rayDistance = 2f;
-
     private bool _canPush = true;
     private bool _isPushing = false;
 
@@ -38,22 +37,37 @@ public class AutoPushComponent : MonoBehaviour
         if (!_isPushing) return;
 
         RaycastHit hit;
-    
+
         if (Physics.Raycast(transform.position, transform.forward, out hit, rayDistance))
         {
-            Debug.Log(hit.collider.gameObject.name);
             
             Rigidbody targetRb = hit.collider.attachedRigidbody;
-
+            targetRb.freezeRotation = false;
             if (targetRb != null)
             {
-                Debug.Log(targetRb.name);
-                Vector3 pushDir = transform.forward;
-                targetRb.AddForce(transform.forward * pushForce, ForceMode.Impulse);
-                _isPushing = false;
+                // 밀리는 상태 적용
+                var movement1 = targetRb.GetComponent<Movement1Component>();
+                if (movement1 != null)
+                {
+                    movement1._isBeingPushed = true;
+                }
+                else
+                {
+                    var movement2 = targetRb.GetComponent<Movement2Component>();
+                    if (movement2 != null)
+                    {
+                        movement2._isBeingPushed = true;
+                    }
+                }
+
+                targetRb.AddForce((transform.forward + (Vector3.up / 2)) * pushForce, ForceMode.Impulse);
+                targetRb.AddTorque(Vector3.up * pushForce, ForceMode.Impulse);
+         
             }
         }
     }
+
+    
 
     private void OnDrawGizmosSelected()
     {

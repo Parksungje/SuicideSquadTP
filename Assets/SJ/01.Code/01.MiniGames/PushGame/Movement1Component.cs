@@ -12,7 +12,7 @@ public class Movement1Component : MonoBehaviour
     private Vector3 _moveDir;
 
     private bool wPressed, aPressed, sPressed, dPressed, ePressed;
-
+    public bool _isBeingPushed = false;
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
@@ -71,6 +71,7 @@ public class Movement1Component : MonoBehaviour
  
     private void ApplyMovement()
     {
+        if (_isBeingPushed) return;
         _moveDir = _moveDir.normalized;
         _rigid.linearVelocity = new Vector3(
             _moveDir.x * moveSpeed,

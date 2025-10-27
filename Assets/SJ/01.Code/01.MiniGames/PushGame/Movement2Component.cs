@@ -5,7 +5,9 @@ public class Movement2Component : MonoBehaviour
     [SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Rigidbody target;
+    [SerializeField] private AutoPushComponent autoPush;
 
+    public bool _isBeingPushed = false;
 
     private Rigidbody _rigid;
     private Animator _animator;
@@ -27,7 +29,10 @@ public class Movement2Component : MonoBehaviour
         pushInput.OnDownArrowDown += OnDownKey;
         pushInput.OnLeftArrowDown += OnLeftKey;
         pushInput.OnRightArrowDown += OnRightKey;
+        pushInput.OnEnterPressed += OnEnterKey;
     }
+
+  
 
     private void OnDisable()
     {
@@ -43,6 +48,8 @@ public class Movement2Component : MonoBehaviour
     private void OnDownKey(bool pressed) => downPressed = pressed;
     private void OnLeftKey(bool pressed) => leftPressed = pressed;
     private void OnRightKey(bool pressed) => rightPressed = pressed;
+    private void OnEnterKey(bool pressed) => autoPush.Push();
+    
 
     private void FixedUpdate()
     {
@@ -60,6 +67,7 @@ public class Movement2Component : MonoBehaviour
 
     private void ApplyMovement()
     {
+        if (_isBeingPushed) return;
         _moveDir = _moveDir.normalized;
         _rigid.linearVelocity = new Vector3(
             _moveDir.x * moveSpeed,
