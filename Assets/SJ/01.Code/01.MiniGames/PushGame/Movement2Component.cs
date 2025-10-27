@@ -4,8 +4,11 @@ public class Movement2Component : MonoBehaviour
 {
     [SerializeField] private PushGameSO pushInput;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private Rigidbody target;
+
 
     private Rigidbody _rigid;
+    private Animator _animator;
     private Vector3 _moveDir;
 
     private bool upPressed, leftPressed, downPressed, rightPressed;
@@ -13,6 +16,7 @@ public class Movement2Component : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -43,12 +47,15 @@ public class Movement2Component : MonoBehaviour
     private void FixedUpdate()
     {
         _moveDir = Vector3.zero;
+        ApplyRotation();
+        
         if (upPressed) _moveDir += Vector3.forward;
         if (downPressed) _moveDir += Vector3.back;
         if (leftPressed) _moveDir += Vector3.left;
         if (rightPressed) _moveDir += Vector3.right;
-
+        
         ApplyMovement();
+        _animator.SetBool("isRunning", _moveDir.sqrMagnitude > 0.001f);
     }
 
     private void ApplyMovement()
@@ -59,5 +66,15 @@ public class Movement2Component : MonoBehaviour
             _rigid.linearVelocity.y,
             _moveDir.z * moveSpeed
         );
+    }
+    
+    private void ApplyRotation()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        direction.y = 0f; 
+        
+        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+        _rigid.MoveRotation(Quaternion.Slerp(_rigid.rotation, targetRotation, 60 * Time.fixedDeltaTime));
+        
     }
 }
