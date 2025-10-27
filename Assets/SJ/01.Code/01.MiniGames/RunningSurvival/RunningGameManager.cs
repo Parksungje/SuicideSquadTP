@@ -59,7 +59,7 @@ public class RunningGameManager : MonoBehaviour
         if (_aPressed) _p1Obj.transform.DOMove(new Vector3(-16, 0, 15), 0.3f);
         if (_dPressed) _p1Obj.transform.DOMove(new Vector3(-4, 0, 15), 0.3f);
 
-        if (_leftArrowPressed) _p2Obj.transform.DOMove(new Vector3(16, 0, 15), 0.3f);
-        if (_rightArrowPressed) _p2Obj.transform.DOMove(new Vector3(4, 0, 15), 0.3f);
+        if (_leftArrowPressed) _p2Obj.transform.DOMove(new Vector3(4, 0, 15), 0.3f);
+        if (_rightArrowPressed) _p2Obj.transform.DOMove(new Vector3(16, 0, 15), 0.3f);
     }
 }
