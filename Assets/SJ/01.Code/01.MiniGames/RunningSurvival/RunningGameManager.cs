@@ -10,12 +10,15 @@ public class RunningGameManager : MonoBehaviour
     [SerializeField] private GameObject _p1Obj;
     [SerializeField] private GameObject _p2Obj;
     [SerializeField] private GameObject _scoreBoard;
-    [SerializeField] private TMP_Text _scoreText;
+
+    [SerializeField] private TMP_Text _p1Score;
+    [SerializeField] private TMP_Text _p2Score;
 
     private bool _aPressed, _dPressed, _leftArrowPressed, _rightArrowPressed;
     private Coroutine _spawnCoroutine;
 
-    public int currentScore;
+    public int p1Score;
+    public int p2Score;
 
     private void OnEnable()
     {
@@ -49,19 +52,16 @@ public class RunningGameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_aPressed) _p1Obj.transform.DOMove(new Vector3(-20, 0, 15), 0.4f);
-        if (_dPressed) _p1Obj.transform.DOMove(new Vector3(-6.5f, 0, 15), 0.4f);
-        if (_leftArrowPressed) _p2Obj.transform.DOMove(new Vector3(6.5f, 0, 15), 0.4f);
-        if (_rightArrowPressed) _p2Obj.transform.DOMove(new Vector3(20, 0, 15), 0.4f);
+        if (_aPressed) _p1Obj.transform.DOMove(new Vector3(-13, 0, 15), 0.4f);
+        if (_dPressed) _p1Obj.transform.DOMove(new Vector3(13f, 0, 15), 0.4f);
+        if (_leftArrowPressed) _p2Obj.transform.DOMove(new Vector3(-13f, 0, 15), 0.4f);
+        if (_rightArrowPressed) _p2Obj.transform.DOMove(new Vector3(13, 0, 15), 0.4f);
     }
 
     public void UpdateScoreUI()
     {
-        if (_scoreText == null) return;
-        _scoreText.text = currentScore.ToString();
-        _scoreText.transform.DOKill();
-        _scoreText.transform.localScale = Vector3.one;
-        _scoreText.transform.DOScale(1.3f, 0.15f).SetLoops(2, LoopType.Yoyo);
+        _p1Score.text = $"{p1Score}";
+        _p2Score.text = $"{p2Score}";
     }
 
     private IEnumerator ScoreBoardSpawnLoop()
@@ -70,8 +70,8 @@ public class RunningGameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(3f);
 
-            Vector3 startPos = new Vector3(5, 7, 200);
-            Vector3 endPos = new Vector3(5, 7, -20);
+            Vector3 startPos = new Vector3(0, 7, 200);
+            Vector3 endPos = new Vector3(0, 7, -20);
             float moveDuration = 10f;
 
             GameObject newScoreBoard = Instantiate(_scoreBoard, startPos, Quaternion.identity);
