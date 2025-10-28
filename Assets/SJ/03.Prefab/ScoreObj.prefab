@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4965223157897513084}
   - component: {fileID: 6733831302993830406}
   - component: {fileID: 871312484179208768}
+  - component: {fileID: 6773552075781393589}
   m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Untagged
@@ -176,6 +177,28 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6733831302993830406}
   m_maskType: 0
+--- !u!64 &6773552075781393589
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287242109313673750}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &739289130203794503
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,6 +210,7 @@ GameObject:
   - component: {fileID: 5500508453338999976}
   - component: {fileID: 345223107628033724}
   - component: {fileID: 4252103218682139197}
+  - component: {fileID: 19306429607157028}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -352,6 +376,28 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 345223107628033724}
   m_maskType: 0
+--- !u!64 &19306429607157028
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739289130203794503}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &998776414268695335
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,6 +409,7 @@ GameObject:
   - component: {fileID: 5086096905276088721}
   - component: {fileID: 5434809324296003352}
   - component: {fileID: 8164228215512719519}
+  - component: {fileID: 312986889879628536}
   m_Layer: 0
   m_Name: GameObject (2)
   m_TagString: Untagged
@@ -528,6 +575,28 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5434809324296003352}
   m_maskType: 0
+--- !u!64 &312986889879628536
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998776414268695335}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &1226044305643754969
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +829,7 @@ GameObject:
   - component: {fileID: 1542765337777991162}
   - component: {fileID: 67739610395244194}
   - component: {fileID: 5433499139861113605}
+  - component: {fileID: 653726230503778179}
   m_Layer: 0
   m_Name: P1S2
   m_TagString: Untagged
@@ -858,6 +928,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &653726230503778179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166740883938312994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c56296613ad9aec40a02ffd459cb1fe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameManager: {fileID: 0}
+  _scoreText: {fileID: 871312484179208768}
+  _scoreType: 0
+  _randomizeType: 1
 --- !u!1 &2624240010857545719
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,6 +1066,7 @@ GameObject:
   - component: {fileID: 230181345917771221}
   - component: {fileID: 3943971164610204783}
   - component: {fileID: 4855141473847764990}
+  - component: {fileID: 7100197928748889282}
   m_Layer: 0
   m_Name: P1S1
   m_TagString: Untagged
@@ -1078,6 +1165,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &7100197928748889282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4351582542071599066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c56296613ad9aec40a02ffd459cb1fe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameManager: {fileID: 0}
+  _scoreText: {fileID: 4252103218682139197}
+  _scoreType: 0
+  _randomizeType: 1
 --- !u!1 &4906260167022578038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,6 +1193,7 @@ GameObject:
   - component: {fileID: 3989258711845814797}
   - component: {fileID: 4599624473631856281}
   - component: {fileID: 1226710456260832558}
+  - component: {fileID: 2334831114248380653}
   m_Layer: 0
   m_Name: P2S1
   m_TagString: Untagged
@@ -1188,6 +1292,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2334831114248380653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4906260167022578038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c56296613ad9aec40a02ffd459cb1fe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameManager: {fileID: 0}
+  _scoreText: {fileID: 8164228215512719519}
+  _scoreType: 0
+  _randomizeType: 1
 --- !u!1 &5183085611204158001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,6 +1319,7 @@ GameObject:
   - component: {fileID: 578721049912341852}
   - component: {fileID: 4318416633541293802}
   - component: {fileID: 1342107652558267089}
+  - component: {fileID: 6562151615986497299}
   m_Layer: 0
   m_Name: GameObject (3)
   m_TagString: Untagged
@@ -1364,6 +1485,28 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 4318416633541293802}
   m_maskType: 0
+--- !u!64 &6562151615986497299
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5183085611204158001}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &8290158894016807665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,6 +1519,7 @@ GameObject:
   - component: {fileID: 5175935888138871045}
   - component: {fileID: 7318629860865379350}
   - component: {fileID: 5239675942147997464}
+  - component: {fileID: 4235119056970381043}
   m_Layer: 0
   m_Name: P2S2
   m_TagString: Untagged
@@ -1474,6 +1618,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4235119056970381043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290158894016807665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c56296613ad9aec40a02ffd459cb1fe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameManager: {fileID: 0}
+  _scoreText: {fileID: 1342107652558267089}
+  _scoreType: 0
+  _randomizeType: 1
 --- !u!1 &8687354406402108390
 GameObject:
   m_ObjectHideFlags: 0
