@@ -53,7 +53,6 @@ public class Movement1Component : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ApplyRotation();
         
         _moveDir = Vector3.zero;
         if (wPressed) _moveDir += Vector3.forward;
@@ -61,8 +60,14 @@ public class Movement1Component : MonoBehaviour
         if (aPressed) _moveDir += Vector3.left;
         if (dPressed) _moveDir += Vector3.right;
 
-        ApplyMovement();
-      
+     
+        if (wPressed || aPressed || sPressed || ePressed)
+        {
+            ApplyRotation();
+            ApplyMovement();
+
+        }
+       
     
         _animator.SetBool("isRunning", _moveDir.sqrMagnitude > 0.001f);
 
