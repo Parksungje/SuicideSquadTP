@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Code.Player
 {
-    [CreateAssetMenu(fileName = "Running Input", menuName = "SJ/GameSO/Gunning", order = 5)]
+    [CreateAssetMenu(fileName = "Running Input", menuName = "SJ/GameSO/Running", order = 5)]
     public class RunningGameSO : BaseInputSO
     {
         public Action<bool> OnAKeyDown;
