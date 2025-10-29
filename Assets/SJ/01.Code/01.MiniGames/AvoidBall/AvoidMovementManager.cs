@@ -9,8 +9,14 @@ public class AvoidMovementManager : MonoBehaviour
     [SerializeField] private Rigidbody _p1Rb;
     [SerializeField] private Rigidbody _p2Rb;
 
+    [SerializeField] private Animator _p1Animator;
+    [SerializeField] private Animator _p2Animator;
+
     private Vector3 _p1moveDir;
     private Vector3 _p2moveDir;
+
+
+    private static readonly int IsRunningHash = Animator.StringToHash("isRunning");
 
     private bool wPressed, aPressed, sPressed, dPressed,
         upPressed, leftPressed, downPressed, rightPressed;
@@ -75,22 +81,28 @@ public class AvoidMovementManager : MonoBehaviour
         if (rightPressed) _p2moveDir += Vector3.right;
 
         ApplyMovement();
+
+        _p1Animator.SetBool(IsRunningHash, _p1moveDir != Vector3.zero);
+        _p2Animator.SetBool(IsRunningHash, _p2moveDir != Vector3.zero);
     }
+
 
     private void ApplyMovement()
     {
-        _p1moveDir = _p1moveDir.normalized;
-        _p1Rb.linearVelocity = new Vector3(
-            _p1moveDir.x * _moveSpeed,
-            _p1Rb.linearVelocity.y,
-            _p1moveDir.z * _moveSpeed
-        );
+        _p1Rb.MovePosition(_p1Rb.position + _p1moveDir * _moveSpeed * Time.fixedDeltaTime);
+        _p2Rb.MovePosition(_p2Rb.position + _p2moveDir * _moveSpeed * Time.fixedDeltaTime);
 
-        _p2moveDir = _p2moveDir.normalized;
-        _p2Rb.linearVelocity = new Vector3(
-            _p2moveDir.x * _moveSpeed,
-            _p2Rb.linearVelocity.y,
-            _p2moveDir.z * _moveSpeed
-        );
+
+        if (_p1moveDir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(_p1moveDir);
+            _p1Rb.MoveRotation(Quaternion.Slerp(_p1Rb.rotation, targetRotation, Time.fixedDeltaTime * 10f));
+        }
+        if (_p2moveDir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(_p2moveDir);
+            _p2Rb.MoveRotation(Quaternion.Slerp(_p2Rb.rotation, targetRotation, Time.fixedDeltaTime * 10f));
+        }
     }
+
 }
