@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Morning1
+  m_Name: Sky
   m_Shader: {fileID: 4800000, guid: eb3c6fb598ded4c71b8968e1c40a3b4d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -25,21 +25,21 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _HorizonLineContribution: 0
-    - _HorizonLineExponent: 4
-    - _SkyGradientExponent: 3
+    - _HorizonLineContribution: 1
+    - _HorizonLineExponent: 1
+    - _SkyGradientExponent: 5
     - _SunDiscContribution: 1
-    - _SunDiscExponent: 6250
-    - _SunDiscMultiplier: 2
+    - _SunDiscExponent: 0
+    - _SunDiscMultiplier: 0
     - _SunHaloContribution: 0.5
-    - _SunHaloExponent: 25
+    - _SunHaloExponent: 100
     - _Title: 0
     - __dirty: 0
     m_Colors:
-    - _HorizonLineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SkyGradientBottom: {r: 0, g: 0.9999995, b: 1, a: 1}
-    - _SkyGradientTop: {r: 0, g: 0.58804226, b: 1, a: 1}
-    - _SunDiscColor: {r: 0.051886797, g: 1, b: 0.9949693, a: 1}
-    - _SunHaloColor: {r: 0, g: 0.5734668, b: 1, a: 1}
+    - _HorizonLineColor: {r: 0, g: 0.26545024, b: 1, a: 1}
+    - _SkyGradientBottom: {r: 0.745283, g: 0.9302059, b: 1, a: 1}
+    - _SkyGradientTop: {r: 0.11320752, g: 0.8259057, b: 1, a: 1}
+    - _SunDiscColor: {r: 0.9954746, g: 0.995283, b: 1, a: 0.98039216}
+    - _SunHaloColor: {r: 0.21648788, g: 0, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
