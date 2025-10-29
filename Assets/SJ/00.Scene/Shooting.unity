@@ -2987,7 +2987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastDistance: 100
   raycastOffset: 0.2
-  rightOffset: -0.7
+  rightOffset: -0.5
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -9508,7 +9508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastDistance: 100
-  raycastOffset: 0.2
+  raycastOffset: 0.5
   rightOffset: 1
   hitLayers:
     serializedVersion: 2
