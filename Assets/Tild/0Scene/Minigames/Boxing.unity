@@ -215,6 +215,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7362175049966653944, guid: 6384f1f2309cf384995c949f5d56ad82, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362891713322136732, guid: 6384f1f2309cf384995c949f5d56ad82, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 8400000, guid: e3d2dbfe039a088409f803e71b047ba9, type: 2}
     - target: {fileID: 8932854402582227948, guid: 6384f1f2309cf384995c949f5d56ad82, type: 3}
       propertyPath: m_Name
       value: Pixelated
@@ -436,18 +444,12 @@ MonoBehaviour:
   rigid2P: {fileID: 1755506739}
   animator1P: {fileID: 370667765}
   animator2P: {fileID: 152356934}
-  health1P: 100
-  health2P: 100
   damage: 10
   criticalDamage: 20
   backForce: 15
   dashForce: 20
   attackRange: 3
   knockbackForce: 3
-  debounce1P: 0
-  debounce2P: 0
-  isDefending1P: 0
-  isDefending2P: 0
   healthBar1P: {fileID: 440880898}
   healthBar2P: {fileID: 416966727}
   hitImpact1P: {fileID: 4600780393681788548}
@@ -4582,7 +4584,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 829cab2a7f234e949a88c1938203785d, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: cefdd43093f91d34cb849e29077e9e74, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
