@@ -712,7 +712,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
   m_sharedMaterial: {fileID: -1219206826528259320, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: -1219206826528259320, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -925,7 +926,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 10204ad4572cfb44f820ababa119ae40, type: 2}
   m_sharedMaterial: {fileID: -7289054932363512898, guid: 10204ad4572cfb44f820ababa119ae40, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: -7289054932363512898, guid: 10204ad4572cfb44f820ababa119ae40, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -2129,7 +2131,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
   m_sharedMaterial: {fileID: -1219206826528259320, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: -1219206826528259320, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -2731,7 +2734,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
   m_sharedMaterial: {fileID: -1219206826528259320, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: -1219206826528259320, guid: 9932fa702ba9a564781e1cfb3ededc1b, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3450,6 +3454,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1278732903}
     m_Modifications:
+    - target: {fileID: 2269736875539489819, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269736876275701289, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 170930606161478896, guid: e5eb85ebc951b0540ae24c92f0930940, type: 3}
       propertyPath: playOnAwake
       value: 0
@@ -3542,22 +3562,6 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2269736875539489819, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269736876275701289, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5170873127881588998, guid: e48479216bd6b4a4cbd62d1a2832ecb1, type: 3}
@@ -3586,6 +3590,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1278732903}
     m_Modifications:
+    - target: {fileID: 2269736875539489819, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269736876275701289, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7404148373894969016, guid: 54ba040c3e9dc97469f15c038b119d6a, type: 3}
       propertyPath: playOnAwake
       value: 0
@@ -3694,22 +3714,6 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: a01bb6d4d0511e5479342b0f425f27fd, type: 2}
-    - target: {fileID: 2269736875539489819, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269736876275701289, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269736876788433482, guid: fd06b4f607e838e4bbdef2cd0467975b, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5170873127881588998, guid: e48479216bd6b4a4cbd62d1a2832ecb1, type: 3}
