@@ -25,7 +25,7 @@ public class AvoidBall : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("플레이어 맞음!");
+            Debug.Log("Hit");
 
             Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
             if (playerRb != null)
