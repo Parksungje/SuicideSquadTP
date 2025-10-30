@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "HuddleGame Input", menuName = "SJ/GameSO/HuddleGame", order = 3)]
-public class HuddleGameSO : BaseInputSO
+public class HurddleGameSO : BaseInputSO
 {
     public Action<bool> OnWKeyDown;
     public Action<bool> OnAKeyDown;
