@@ -61,13 +61,15 @@ public class GameManager_Tag : MonoBehaviour
     public void SetHunter(bool is1P)
     {
         _is1PHunter = is1P;
-        player1Tag.SetIsHunter(is1P == true);
-        player2Tag.SetIsHunter(is1P == false);
+        player1Tag.SetIsHunter(_is1PHunter);
+        print("1P" +_is1PHunter);
+        player2Tag.SetIsHunter(!_is1PHunter);
+        
     }
 
-    public void OnPlayerTagged(bool is1P)
+    public void OnPlayerTagged(bool is1P) 
     {
-        print("¼ú·¡ ¹Ù²ñ");
+        print("ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½");
         SetHunter(!is1P);
     
     }

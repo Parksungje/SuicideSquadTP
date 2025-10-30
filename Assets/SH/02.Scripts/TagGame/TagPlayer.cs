@@ -22,19 +22,19 @@ public class TagPlayer : MonoBehaviour
     {
         if (!manager.collisionDebounce) return;
 
-        manager.collisionDebounce = true;
-        print("√Êµπ");
+        print("ÔøΩÊµπ");
         if (isHunter)
         {
-            print("«Â≈Õ ¿‘¥œ¥Ÿ.");
+            manager.collisionDebounce = false;
+            print(_is1P);
 
             manager.OnPlayerTagged(_is1P);
-            Invoke("DebounceDelay", 2);
+            Invoke("DebounceDelay", 0.5f);
         }
         
     }
     private void DebounceDelay()
     {
-        manager.collisionDebounce = false;
+        manager.collisionDebounce = true;
     }
 }
