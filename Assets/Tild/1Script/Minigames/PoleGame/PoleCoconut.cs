@@ -18,7 +18,7 @@ namespace Tild.Minigames.PoleGame
             rigid.AddForce(Vector3.down * speed, ForceMode.Impulse);
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter(Collider other)
         {
             
             if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Player"))
@@ -27,15 +27,15 @@ namespace Tild.Minigames.PoleGame
                 transform.DOShakePosition(0.6f, 5, 3, 3).OnComplete(
                     () =>
                     {
-                        Destroy(other.gameObject);
+                        Destroy(gameObject);                                      
                     });
-                if (other.rigidbody != null)
+                if (other.attachedRigidbody != null)
                 {
                     
-                    other.rigidbody.useGravity = true;
-                    other.rigidbody.linearVelocity = Vector3.down * 50;
-                    PoleGameManager.instance.GetFall(other.rigidbody);
-                    StartCoroutine(FallDelay(other.rigidbody));
+                    other.attachedRigidbody.useGravity = true;
+                    other.attachedRigidbody.linearVelocity = Vector3.down * 50;
+                    PoleGameManager.instance.GetFall(other.attachedRigidbody);
+                    StartCoroutine(FallDelay(other.attachedRigidbody));
                   
                 }
             }

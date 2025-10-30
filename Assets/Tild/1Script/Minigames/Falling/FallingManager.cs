@@ -80,7 +80,7 @@ namespace Tild.Minigames.Falling
                 _rigid.linearVelocity.y,
                 _moveDir.z * moveSpeed
             );
-        }
+        }   
         private void ApplyRotation()
         {
             Vector3 direction = (target.position - transform.position).normalized;

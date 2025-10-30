@@ -11,7 +11,6 @@ namespace Tild.Minigames.SpinGame
         {
             if (collision.rigidbody != null)
             {
-                collision.rigidbody.freezeRotation = false;
                 Vector3 hitNormal = collision.contacts[0].normal;
 
               
