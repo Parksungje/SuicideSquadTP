@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tild.MiscUI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +17,7 @@ namespace Tild.Menu
         private int _1PScore;
         private int _2PScore;
         
-        
+        private ResultUI resultUI;
         
         public List<MinigameSO> minigamePlayed;
         void Awake()
@@ -32,6 +33,7 @@ namespace Tild.Menu
            
             DontDestroyOnLoad(gameObject); 
             
+            resultUI = GetComponent<ResultUI>();
         }
 
         public void Initialize(GameType gameType, bool isRandom, int amount)
@@ -46,13 +48,18 @@ namespace Tild.Menu
         {
             SceneManager.LoadScene(scene);
         }
-        
+
         public void Finish(bool is1Pwin)
         {
             if (is1Pwin) _1PScore++;
-            else _2PScore++; 
-            
-            SceneManager.LoadScene("Choice_Scene");
+            else _2PScore++;
+
+            resultUI.ViewResult(_1PScore, _2PScore, is1Pwin, (() =>
+            {
+                SceneManager.LoadScene("Choice_Scene");
+            }));
+
+       
         }
     }
 

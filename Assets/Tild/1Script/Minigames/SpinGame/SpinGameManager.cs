@@ -1,10 +1,13 @@
 using System.Collections;
+using Tild.Menu;
 using UnityEngine;
 
 namespace Tild.Minigames.SpinGame
 {
     public class SpinGameManager : MonoBehaviour
     {
+        public static SpinGameManager instance;
+        
         [SerializeField] private Rigidbody rigid1P, rigid2P;
         [SerializeField] private Animator animator1P, animator2P;
         [SerializeField] private Transform jumpObstacle, HeadObstacle;
@@ -26,6 +29,15 @@ namespace Tild.Minigames.SpinGame
         private void Start()
         {
             currentSpeed = baseSpeed;
+        }
+        void Awake()
+        {
+           
+            if (instance == null) 
+                instance = this; 
+            
+            else if (instance != this) 
+                Destroy(gameObject);
         }
 
         private void Update()
@@ -116,6 +128,18 @@ namespace Tild.Minigames.SpinGame
                 if (collision.rigidbody == rigid2P)
                     canJump2P = true;
             
+        }
+
+        public void Falled(Rigidbody rigid)
+        {
+            if (rigid == rigid1P)
+            {
+                MinigameManager.instance.Finish(false);
+            }
+            if (rigid == rigid2P)
+            {
+                MinigameManager.instance.Finish(true);
+            }
         }
     }
 }

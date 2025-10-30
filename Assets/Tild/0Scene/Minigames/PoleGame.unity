@@ -413,8 +413,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FramingMode: 2
-  FramingSize: 0.3
-  CenterOffset: {x: 0, y: -0.51}
+  FramingSize: 0.155
+  CenterOffset: {x: 0, y: -0.76}
   Damping: 6.9
   SizeAdjustment: 2
   LateralAdjustment: 0
@@ -708,7 +708,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 59.95816
+  field of view: 59.9999
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -735,7 +735,7 @@ Transform:
   m_GameObject: {fileID: 1181407769}
   serializedVersion: 2
   m_LocalRotation: {x: -0.025217302, y: -0.0020851868, z: -0.00006139216, w: 0.99967986}
-  m_LocalPosition: {x: 6.9018283, y: 1.386261, z: -7.0657988}
+  m_LocalPosition: {x: 6.945235, y: 7.2330437, z: -18.159737}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

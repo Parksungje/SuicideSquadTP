@@ -10,6 +10,7 @@ namespace Tild.Minigames.Falling
         private MeshCollider collider;
         [SerializeField] private float duration = 0.5f;
         private MeshRenderer meshRenderer;
+        private bool _isTriggered;
 
         private void Awake()
         {
@@ -20,9 +21,13 @@ namespace Tild.Minigames.Falling
 
         private void OnCollisionEnter(Collision other)
         {
+            if (_isTriggered) return;
+            
+            _isTriggered = true;
+                
             meshRenderer.material.DOColor(Color.red, duration);
             
-            transform.DOShakePosition(duration,1,20,2).OnComplete(() =>
+            transform.DOPunchRotation(Vector3.down, duration,20,2).OnComplete(() =>
             {
              
                 rigidBody.useGravity = true;
