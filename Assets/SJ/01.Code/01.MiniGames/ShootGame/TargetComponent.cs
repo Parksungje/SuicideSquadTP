@@ -47,7 +47,6 @@ public class TargetComponent : MonoBehaviour
         int randomValue = Random.Range(1, (int)TargetMovementType.ArcJump + 1);
         movementType = (TargetMovementType)randomValue;
 
-        Debug.Log($"Target Activated with Random Movement: {movementType}");
     }
 
     private IEnumerator TargetRoutine()
@@ -122,7 +121,5 @@ public class TargetComponent : MonoBehaviour
 
         gameObject.SetActive(false);
         transform.localPosition = _startPos;
-
-        Debug.Log($"{name} was instantly deactivated (super fast hit).");
     }
 }

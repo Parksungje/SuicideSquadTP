@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class ShootingManager : MonoBehaviour
@@ -19,6 +20,12 @@ public class ShootingManager : MonoBehaviour
     [SerializeField] private float _moveSpeed;
 
     [SerializeField] private float _shootCooldown = 0.5f;
+
+    [SerializeField] private GameObject _scorePopupPrefab;
+    [SerializeField] private Canvas _worldCanvas;
+    [SerializeField] private TMP_Text _p1ScoreText;
+    [SerializeField] private TMP_Text _p2ScoreText;
+
 
     private Vector3 _p1HairDir;
     private Vector3 _p2HairDir;
@@ -156,14 +163,20 @@ public class ShootingManager : MonoBehaviour
         if (target != null)
         {
             target.OnHit();
-            if (playerNumber == 1) _p1Score += 20;
-            else _p2Score += 20;
 
-            Debug.Log($"P{playerNumber} 사격 성공! {target.name} 명중! 현재 점수: P1={_p1Score}, P2={_p2Score}");
-        }
-        else
-        {
-            Debug.Log($"P{playerNumber} 사격 실패: 명중 대상 없음. 현재 점수: P1={_p1Score}, P2={_p2Score}");
+            if (playerNumber == 1)
+            {
+                _p1Score += 20;
+                _p1ScoreText.text = _p1Score.ToString();
+                ShowScorePopup(crossHair.transform.position, "+20", Color.red);
+            }
+            else
+            {
+                _p2Score += 20;
+                _p2ScoreText.text = _p2Score.ToString();
+                ShowScorePopup(crossHair.transform.position, "+20", Color.blue);
+            }
+
         }
     }
 
@@ -172,4 +185,18 @@ public class ShootingManager : MonoBehaviour
         if (_p1Animator != null) _p1Animator.SetBool("isFire", false);
         if (_p2Animator != null) _p2Animator.SetBool("isFire", false);
     }
+
+    private void ShowScorePopup(Vector3 worldPos, string message, Color color)
+    {
+        if (_scorePopupPrefab == null || _worldCanvas == null) return;
+
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        GameObject popup = Instantiate(_scorePopupPrefab, _worldCanvas.transform);
+        popup.transform.position = screenPos;
+
+        var popupComp = popup.GetComponent<ScorePopup>();
+        if (popupComp != null)
+            popupComp.Show(message, color);
+    }
+
 }

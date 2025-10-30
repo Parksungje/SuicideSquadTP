@@ -56,7 +56,7 @@ public class ShootGameSO : BaseInputSO
         base.OnSKey(context);
 
         if (context.performed)
-            OnSKeyDown?.Invoke(true);
+            OnSKeyDown?.Invoke(true);   
         else
             OnSKeyDown?.Invoke(false);
     }

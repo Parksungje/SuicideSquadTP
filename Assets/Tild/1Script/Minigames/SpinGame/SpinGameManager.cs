@@ -1,14 +1,11 @@
 using System.Collections;
-using Tild.Minigames.BalanceGame;
 using UnityEngine;
 
 namespace Tild.Minigames.SpinGame
 {
     public class SpinGameManager : MonoBehaviour
     {
-        [SerializeField] private SpinInputSO spinInputSO;
-
-        [SerializeField] private Rigidbody rigid1P,  rigid2P;
+        [SerializeField] private Rigidbody rigid1P, rigid2P;
         [SerializeField] private Animator animator1P, animator2P;
         [SerializeField] private Transform jumpObstacle, HeadObstacle;
         [SerializeField] private float baseSpeed = 30f;  
@@ -34,41 +31,36 @@ namespace Tild.Minigames.SpinGame
         private void Update()
         {
             if (jumpObstacle == null || HeadObstacle == null) return;
-            
+
+        
             currentSpeed += acceleration * Time.deltaTime;
             currentSpeed = Mathf.Min(currentSpeed, maxSpeed);
-        
             jumpObstacle.Rotate(Vector3.up, currentSpeed * Time.deltaTime, Space.World);
             HeadObstacle.Rotate(Vector3.up, -currentSpeed * Time.deltaTime, Space.World);
+
+         
+            Vector3 dir1P = GetInputDirection(
+                KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D
+            );
+            if (dir1P != Vector3.zero && canJump1P)
+                TryJump(rigid1P, animator1P, ref canJump1P, dir1P);
+
+         
+            Vector3 dir2P = GetInputDirection(
+                KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow
+            );
+            if (dir2P != Vector3.zero && canJump2P)
+                TryJump(rigid2P, animator2P, ref canJump2P, dir2P);
         }
 
-        
-        private void OnEnable()
+        private Vector3 GetInputDirection(KeyCode forward, KeyCode back, KeyCode left, KeyCode right)
         {
-            // --- 1P ---
-            spinInputSO.AKeyPressed += () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.left);
-            spinInputSO.DKeyPressed += () => TryJump(rigid1P, animator1P,ref canJump1P, Vector3.right);
-            spinInputSO.SKeyPressed += () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.back);
-            spinInputSO.WKeyPressed += () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.forward);
-
-            // --- 2P ---
-            spinInputSO.LeftKeyPressed += () => TryJump(rigid2P, animator2P,ref canJump2P, Vector3.left);
-            spinInputSO.RightKeyPressed += () => TryJump(rigid2P,animator2P, ref canJump2P, Vector3.right);
-            spinInputSO.DownKeyPressed += () => TryJump(rigid2P, animator2P,ref canJump2P, Vector3.back);
-            spinInputSO.UpKeyPressed += () => TryJump(rigid2P,animator2P, ref canJump2P, Vector3.forward);
-        }
-
-        private void OnDisable()
-        {
-            spinInputSO.AKeyPressed -= () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.left);
-            spinInputSO.DKeyPressed -= () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.right);
-            spinInputSO.SKeyPressed -= () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.back);
-            spinInputSO.WKeyPressed -= () => TryJump(rigid1P, animator1P, ref canJump1P, Vector3.forward);
-
-            spinInputSO.LeftKeyPressed -= () => TryJump(rigid2P, animator2P,ref canJump2P, Vector3.left);
-            spinInputSO.RightKeyPressed -= () => TryJump(rigid2P,animator2P, ref canJump2P, Vector3.right);
-            spinInputSO.DownKeyPressed -= () => TryJump(rigid2P, animator2P,ref canJump2P, Vector3.back);
-            spinInputSO.UpKeyPressed -= () => TryJump(rigid2P,animator2P, ref canJump2P, Vector3.forward);
+            Vector3 dir = Vector3.zero;
+            if (Input.GetKey(forward)) dir += Vector3.forward;
+            if (Input.GetKey(back)) dir += Vector3.back;
+            if (Input.GetKey(left)) dir += Vector3.left;
+            if (Input.GetKey(right)) dir += Vector3.right;
+            return dir.normalized; 
         }
 
         private void TryJump(Rigidbody rigid, Animator animator, ref bool canJump, Vector3 dir)
@@ -77,6 +69,7 @@ namespace Tild.Minigames.SpinGame
             canJump = false;
 
             rigid.linearVelocity = Vector3.zero;
+
 
             Vector3 camForward = mainCamera.transform.forward;
             Vector3 camRight = mainCamera.transform.right;
@@ -89,12 +82,7 @@ namespace Tild.Minigames.SpinGame
             if (moveDir.sqrMagnitude > 0.01f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(moveDir, Vector3.up);
-                float rotationSpeed = 10f; 
-                rigid.transform.rotation = Quaternion.Slerp(
-                    rigid.transform.rotation,
-                    targetRotation,
-                    rotationSpeed * Time.deltaTime
-                );
+                rigid.transform.rotation = targetRotation;
             }
 
             animator.SetTrigger("JUMP");
@@ -103,9 +91,7 @@ namespace Tild.Minigames.SpinGame
             rigid.AddForce(jumpVector, ForceMode.Impulse);
             
             StartCoroutine(ExtraGravity(rigid));
-            StartCoroutine(JumpCooldown(rigid == rigid1P));
         }
-
 
         private IEnumerator ExtraGravity(Rigidbody rigid)
         {
@@ -113,17 +99,23 @@ namespace Tild.Minigames.SpinGame
             float timer = 0f;
             while(timer < duration)
             {
-                rigid.AddForce(Vector3.down * 20f, ForceMode.Acceleration);
+                rigid.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
                 timer += Time.deltaTime;
                 yield return null;
             }
         }
 
-        private IEnumerator JumpCooldown(bool is1P)
-        {
-            yield return new WaitForSeconds(jumpCooldown);
-            if (is1P) canJump1P = true;
-            else canJump2P = true;
+        private void OnCollisionEnter(Collision collision)
+        { 
+            Debug.Log(collision.rigidbody + " " + collision.gameObject.name);
+            
+                if (collision.rigidbody == rigid1P)
+                    canJump1P = true;
+
+            
+                if (collision.rigidbody == rigid2P)
+                    canJump2P = true;
+            
         }
     }
 }

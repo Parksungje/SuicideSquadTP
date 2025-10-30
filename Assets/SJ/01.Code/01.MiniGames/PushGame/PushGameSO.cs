@@ -11,6 +11,7 @@ public class PushGameSO : BaseInputSO
     public Action<bool> OnAKeyDown;
     public Action<bool> OnDKeyDown;
     public Action<bool> OnSKeyDown;
+    public Action<bool> OnEKeyDown;
 
     public Action<bool> OnUpArrowDown;
     public Action<bool> OnLeftArrowDown;
@@ -55,6 +56,15 @@ public class PushGameSO : BaseInputSO
             OnSKeyDown?.Invoke(true);
         else
             OnSKeyDown?.Invoke(false);
+    }
+    public override void OnEKey(InputAction.CallbackContext context)
+    {
+        base.OnEKey(context);
+
+        if (context.performed)
+            OnEKeyDown?.Invoke(true);
+        else
+            OnEKeyDown?.Invoke(false);
     }
 
     public override void OnUArrow(InputAction.CallbackContext context)
