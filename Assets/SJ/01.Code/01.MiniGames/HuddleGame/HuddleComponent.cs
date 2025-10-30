@@ -42,6 +42,6 @@ public class HuddleComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.AddForce(Vector3.forward * 5f, ForceMode.Impulse);
+        rb.AddForce(Vector3.forward * 1f, ForceMode.Impulse);
     }
 }
