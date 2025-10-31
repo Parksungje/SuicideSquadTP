@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
+  m_Name: PoleGame
+  m_EditorClassIdentifier: 
+  gameName: "\uC57C\uC790\uC218 \uD0C0\uAE30"
+  description: "\uC57C\uC790\uC218 \uD0C0\uB294 \uAC8C\uC784"
+  playScreen: {fileID: 0}
+  scene: PoleGame
+  backgroundColor: {r: 0.23064259, g: 0.548725, b: 0.6886792, a: 1}

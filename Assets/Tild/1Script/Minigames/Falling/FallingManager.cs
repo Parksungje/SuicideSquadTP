@@ -7,7 +7,7 @@ namespace Tild.Minigames.Falling
         [field:SerializeField] private PushGameSO pushInput;
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private Rigidbody target;
-        [SerializeField] private AutoPushComponent autoPush;
+    
 
         private Rigidbody _rigid;
         private Animator _animator;
@@ -33,7 +33,7 @@ namespace Tild.Minigames.Falling
             pushInput.OnSKeyDown += OnSKey;
             pushInput.OnAKeyDown += OnAKey;
             pushInput.OnDKeyDown += OnDKey;
-            pushInput.OnEKeyDown += OnEKey;
+            
         }
 
         private void OnDisable()
@@ -44,14 +44,14 @@ namespace Tild.Minigames.Falling
             pushInput.OnSKeyDown -= OnSKey;
             pushInput.OnAKeyDown -= OnAKey;
             pushInput.OnDKeyDown -= OnDKey;
-            pushInput.OnEKeyDown -= OnEKey;
+            
         }
 
         private void OnWKey(bool pressed) => wPressed = pressed;
         private void OnSKey(bool pressed) => sPressed = pressed;
         private void OnAKey(bool pressed) => aPressed = pressed;
         private void OnDKey(bool pressed) => dPressed = pressed;
-        private void OnEKey(bool pressed) => autoPush.Push();
+       
 
         private void FixedUpdate()
         {
@@ -80,7 +80,7 @@ namespace Tild.Minigames.Falling
                 _rigid.linearVelocity.y,
                 _moveDir.z * moveSpeed
             );
-        }
+        }   
         private void ApplyRotation()
         {
             Vector3 direction = (target.position - transform.position).normalized;

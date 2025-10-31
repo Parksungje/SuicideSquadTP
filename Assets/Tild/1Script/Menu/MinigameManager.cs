@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Febucci.UI;
 using Tild.MiscUI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -51,14 +52,15 @@ namespace Tild.Menu
 
         public void Finish(bool is1Pwin)
         {
-            if (is1Pwin) _1PScore++;
-            else _2PScore++;
+            Time.timeScale = 0;
 
             resultUI.ViewResult(_1PScore, _2PScore, is1Pwin, (() =>
             {
+                Time.timeScale = 1;
                 SceneManager.LoadScene("Choice_Scene");
             }));
-
+            if (is1Pwin) _1PScore++;
+            else _2PScore++;
        
         }
     }

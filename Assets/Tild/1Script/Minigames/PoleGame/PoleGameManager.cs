@@ -2,6 +2,8 @@
 using System.Collections;
 using DG.Tweening;
 using Tild._1Script.Minigames.Rope;
+using Tild.Menu;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,11 +15,14 @@ namespace Tild.Minigames.PoleGame
         [SerializeField] private InputSO inputSO;
         
         [SerializeField] private Rigidbody rigid1P;
+        [SerializeField] private Animator animator1P;
+        [SerializeField] private Animator animator2P;
         [SerializeField] private Rigidbody rigid2P;
         
         [SerializeField] private Transform spawnPoint1P;
         [SerializeField] private Transform spawnPoint2P;
         [SerializeField] private PoleCoconut coconutPrefab;
+        [SerializeField] private TMP_Text score1P, score2P;
 
         private bool _canRotate1P = true;
         private bool _isLeft1P = true;
@@ -27,8 +32,11 @@ namespace Tild.Minigames.PoleGame
         private bool _canClimb2P = true;
 
         private float _fallSpeed = 5;
-        private float _spawnTime = 7;
+        private float _spawnTime = 2;
         private float _playedTime = 0;
+
+        private float _1PScore = 0;
+        private float _2PScore = 0;
         void Awake()
         {
             if (instance == null) 
@@ -53,6 +61,14 @@ namespace Tild.Minigames.PoleGame
             inputSO.OnUpArrowPressed += Climb2P;
         }
 
+        private void FixedUpdate()
+        {
+            _1PScore = (float)Math.Round(rigid1P.transform.position.y);
+            _2PScore = (float)Math.Round(rigid2P.transform.position.y);
+            score1P.text = $"{_1PScore.ToString()}M";
+            score2P.text = $"{_2PScore.ToString()}M";
+        }
+
         private IEnumerator Start()
         {
             while (true)
@@ -63,12 +79,18 @@ namespace Tild.Minigames.PoleGame
                 if (Random.value < 0.5f)
                 {
                     spawnPoint = spawnPoint1P;
-                    offset = new Vector3(-1.5f, 0, 0);
                 }
                 else
                 {
                     spawnPoint = spawnPoint2P;
-                    offset = new Vector3(1.5f, 0, 0);
+                }
+                if (Random.value < 0.5f)
+                {
+                    offset = new Vector3(-3.6f, 0, 0);
+                }
+                else
+                {
+                    offset = new Vector3(3.6f, 0, 0);
                 }
 
                 PoleCoconut coconut = Instantiate(
@@ -84,13 +106,14 @@ namespace Tild.Minigames.PoleGame
       
                 _playedTime += _spawnTime;
 
-                _spawnTime = Mathf.Max(0.5f, _spawnTime - 0.2f);
-                _fallSpeed += 1.5f;
+                _spawnTime = Random.Range(0.5f, _spawnTime);
+                
 
-                if (_playedTime >= 120f)
+                if (_playedTime >= 60f)
                 {
                     Debug.Log("게임 종료");
                     Time.timeScale = 0f;
+                    MinigameManager.instance.Finish(_1PScore > _2PScore);
                     yield break;
                 }
             }
@@ -129,6 +152,7 @@ namespace Tild.Minigames.PoleGame
             {
                 _canClimb1P = false;
                 rigid1P.linearVelocity += (Vector3.up * 15f);
+                animator1P.SetTrigger("Climb");
                 
                 StartCoroutine(CoolTime1P(0.1f));
                    
@@ -168,16 +192,33 @@ namespace Tild.Minigames.PoleGame
             {
                 _canClimb2P = false;
                 rigid2P.linearVelocity += (Vector3.up * 15f);
-
+                animator2P.SetTrigger("Climb");
                 StartCoroutine(CoolTime2P(0.1f));
 
             }
         }
         private IEnumerator CoolTime1P(float time)
         {
+            
             yield return new WaitForSeconds(time);
             _canClimb1P = true;
             rigid1P.linearVelocity = Vector3.zero;
+        }
+        private IEnumerator Fall2P(float time)
+        {
+            animator2P.SetTrigger("Damaged");
+            yield return new WaitForSeconds(time);
+            _canClimb2P = true;
+            rigid2P.linearVelocity = Vector3.zero;
+        }
+
+        private IEnumerator Fall1P(float time)
+        {
+            animator1P.SetTrigger("Damaged");
+            yield return new WaitForSeconds(time);
+            _canClimb1P = true;
+            rigid1P.linearVelocity = Vector3.zero;
+            
         }
         private IEnumerator CoolTime2P(float time)
         {
@@ -185,13 +226,12 @@ namespace Tild.Minigames.PoleGame
             _canClimb2P = true;
             rigid2P.linearVelocity = Vector3.zero;
         }
-
         public void GetFall(Rigidbody rigidbody)
         {
             if (rigidbody == rigid1P)
-            StartCoroutine(CoolTime1P(0.5f));
+            StartCoroutine(Fall1P(1f));
             if (rigidbody == rigid2P)
-                StartCoroutine(CoolTime2P(0.5f));
+                StartCoroutine(Fall2P(1f));
         }
        
     }
