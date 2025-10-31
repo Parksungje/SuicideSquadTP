@@ -4,7 +4,6 @@ using TMPro;
 public class ScoreComponent : MonoBehaviour
 {
     [SerializeField] private TMP_Text _scoreText;
-    [SerializeField] private bool _randomizeType = false;
 
 
 
