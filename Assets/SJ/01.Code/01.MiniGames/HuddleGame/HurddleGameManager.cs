@@ -21,23 +21,37 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private float maxSpeed = 12f;
         [SerializeField] private float trackLength = 120f;
 
+        [Header("Round Settings")]
+        [SerializeField] private int totalRounds = 3;
+        private int currentRound = 1;
+
         [Header("Countdown")]
         [SerializeField] private float countdownSeconds = 3f;
 
         [Header("UI (Optional)")]
         [SerializeField] private TMPro.TextMeshProUGUI countdownText;
         [SerializeField] private TMPro.TextMeshProUGUI winnerText;
+        [SerializeField] private TMPro.TextMeshProUGUI roundText;
 
         public float CurrentSpeed { get; private set; }
         public HurdleGameState State { get; private set; } = HurdleGameState.Ready;
 
         private Vector3 _startPosFinish;
 
+        private void Start()
+        {
+            player1.InitStartPosition();
+            player2.InitStartPosition();
+
+            StartCoroutine(Co_StartRound());
+        }
+
         private void Awake()
         {
             _startPosFinish = finishLine.position;
             winnerText?.SetText("");
             countdownText?.SetText("");
+            roundText?.SetText("");
         }
 
         private void OnEnable()
@@ -50,12 +64,6 @@ namespace SJ.Minigames.Hurdle
         {
             inputSO.OnWKeyDown -= OnP1Jump;
             inputSO.OnUpArrowDown -= OnP2Jump;
-        }
-
-        private void Start()
-        {
-            ResetRace();
-            StartCoroutine(Co_CountdownThenStart());
         }
 
         private void Update()
@@ -71,6 +79,13 @@ namespace SJ.Minigames.Hurdle
                 FinishRace(1);
             else if (player2.transform.position.z >= finishLine.position.z)
                 FinishRace(2);
+        }
+
+        private IEnumerator Co_StartRound()
+        {
+            ResetRace();
+            roundText?.SetText($"Round {currentRound}/{totalRounds}");
+            yield return Co_CountdownThenStart();
         }
 
         private IEnumerator Co_CountdownThenStart()
@@ -100,9 +115,30 @@ namespace SJ.Minigames.Hurdle
         {
             if (State == HurdleGameState.Finished) return;
             State = HurdleGameState.Finished;
+
             player1.EnableControl(false);
             player2.EnableControl(false);
+
             winnerText?.SetText($"Player {winner} WIN!");
+
+            StartCoroutine(Co_NextRound());
+        }
+
+        private IEnumerator Co_NextRound()
+        {
+            yield return new WaitForSeconds(2f);
+
+            if (currentRound < totalRounds)
+            {
+                currentRound++;
+
+                yield return StartCoroutine(Co_StartRound());
+            }
+            else
+            {
+                roundText?.SetText("All Rounds Finished!");
+                winnerText?.SetText("Game Over!");
+            }
         }
 
         public void ResetRace()
@@ -114,9 +150,9 @@ namespace SJ.Minigames.Hurdle
             player1.ResetToStart();
             player2.ResetToStart();
 
-            var pStartZ = Mathf.Min(player1.StartZ, player2.StartZ);
-            finishLine.position = new Vector3(_startPosFinish.x, _startPosFinish.y, pStartZ + trackLength);
+            finishLine.position = _startPosFinish;
         }
+
 
         private void OnP1Jump(bool isDown)
         {
