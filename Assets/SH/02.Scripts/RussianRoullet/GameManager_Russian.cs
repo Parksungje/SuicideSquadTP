@@ -28,7 +28,7 @@ public class GameManager_Russian : MonoBehaviour
     void StartRound()
     {
         Debug.Log($"===== ROUND {currentRound} 시작 =====");
-        revolver.ReloadRandom(); // 확률 결정 및 장전
+        revolver.ReloadRandom();
         foreach (var p in players) p.Revive();
 
         currentPlayerIndex = Random.Range(0, players.Count);
