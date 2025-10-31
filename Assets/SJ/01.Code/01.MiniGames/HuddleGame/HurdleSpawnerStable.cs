@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SJ.Minigames.Hurdle
@@ -10,61 +11,90 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private Transform player2;
         [SerializeField] private Transform finishLine;
 
-        [Header("Spawn Config")]
+        [Header("Prefab & Size")]
         [SerializeField] private GameObject hurdlePrefab;
-        [SerializeField] private float laneOffsetX = 1.5f;
-        [SerializeField] private float spawnAhead = 25f;
-        [SerializeField] private float minGap = 7f;
-        [SerializeField] private float maxGap = 13f;
-        [SerializeField] private float laneJitterZ = 0.8f;
+        [SerializeField] private Vector3 hurdleScale = new Vector3(1.3f, 1.3f, 1.3f);
+        [SerializeField] private float laneOffsetX = 1.6f;
 
-        [Header("Cleanup")]
-        [SerializeField] private float destroyBehind = 12f;
+        [Header("Distribution (Z gap)")]
+        [SerializeField] private float baseGap = 25f;
+        [SerializeField] private float firstGap = 80f;
+        [SerializeField] private float gapJitter = 0.0f;
 
-        private float _nextZP1;
-        private float _nextZP2;
+        [Header("Track")]
+        [SerializeField] private float edgeMargin = 2f;
+        [SerializeField] private float maxZ = 90f;
+
+        [Header("Debug")]
+        [SerializeField] private bool regenerateOnPlay = true;
+        [SerializeField] private bool drawGizmos = true;
+
+        private readonly List<GameObject> _spawned = new();
 
         private void OnEnable()
         {
-            ResetSpawner();
+            if (regenerateOnPlay)
+                GenerateAll();
         }
 
-        public void ResetSpawner()
+        public void GenerateAll()
         {
-            _nextZP1 = player1.position.z + 6f;
-            _nextZP2 = player2.position.z + 6f;
-        }
+            for (int i = _spawned.Count - 1; i >= 0; --i)
+                if (_spawned[i]) Destroy(_spawned[i]);
+            _spawned.Clear();
 
-        private void Update()
-        {
-            if (gameManager == null || gameManager.State != HurdleGameState.Playing) return;
+            float startZ = Mathf.Min(player1.position.z, player2.position.z);
+            float usableEnd = Mathf.Min(finishLine.position.z - edgeMargin, maxZ);
+            var seqZ = BuildZSequence(startZ + firstGap, usableEnd, baseGap);
 
-            float finishZ = finishLine.position.z;
-
-            float targetZ1 = Mathf.Min(player1.position.z + spawnAhead, finishZ - 2f);
-            while (_nextZP1 < targetZ1)
+            foreach (float z in seqZ)
             {
-                float z = _nextZP1 + Random.Range(minGap, maxGap);
-                if (z >= finishZ - 1.5f) break;
-                SpawnHurdle(new Vector3(-laneOffsetX, 0f, z + Random.Range(-laneJitterZ, laneJitterZ)));
-                _nextZP1 = z;
+                Spawn(new Vector3(-laneOffsetX, 0f, z));
+                Spawn(new Vector3(+laneOffsetX, 0f, z));
             }
-
-            float targetZ2 = Mathf.Min(player2.position.z + spawnAhead, finishZ - 2f);
-            while (_nextZP2 < targetZ2)
-            {
-                float z = _nextZP2 + Random.Range(minGap, maxGap);
-                if (z >= finishZ - 1.5f) break;
-                SpawnHurdle(new Vector3(+laneOffsetX, 0f, z + Random.Range(-laneJitterZ, laneJitterZ)));
-                _nextZP2 = z;
-            }
-
-            float minZ = Mathf.Min(player1.position.z, player2.position.z) - destroyBehind;
         }
 
-        private void SpawnHurdle(Vector3 pos)
+        List<float> BuildZSequence(float zStart, float zEnd, float gap)
         {
-            GameObject obj = Instantiate(hurdlePrefab, pos, Quaternion.identity);
+            var zs = new List<float>();
+            float z = zStart;
+            while (z < zEnd)
+            {
+                zs.Add(z);
+                z += gap;
+            }
+            return zs;
+        }
+
+        void Spawn(Vector3 pos)
+        {
+            var go = Instantiate(hurdlePrefab, pos, Quaternion.identity);
+            go.transform.localScale = hurdleScale;
+
+            var col = go.GetComponent<Collider>();
+            col.isTrigger = true;
+            if (col == null)
+                col = go.AddComponent<BoxCollider>();
+
+            var rb = go.GetComponent<Rigidbody>();
+            if (rb == null)
+                rb = go.AddComponent<Rigidbody>();
+
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+            _spawned.Add(go);
+        }
+
+
+        private void OnDrawGizmosSelected()
+        {
+            if (!drawGizmos || gameManager == null || finishLine == null) return;
+            Gizmos.color = new Color(1f, 1f, 1f, 0.25f);
+            Gizmos.DrawLine(new Vector3(-laneOffsetX, 0f, player1 ? player1.position.z : 0f),
+                            new Vector3(-laneOffsetX, 0f, finishLine.position.z));
+            Gizmos.DrawLine(new Vector3(+laneOffsetX, 0f, player2 ? player2.position.z : 0f),
+                            new Vector3(+laneOffsetX, 0f, finishLine.position.z));
         }
     }
 }
