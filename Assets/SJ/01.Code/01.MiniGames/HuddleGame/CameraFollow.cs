@@ -8,9 +8,9 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private Transform targetB;
         [SerializeField] private Vector3 offsetDir = new Vector3(0f, 6f, -10f);
         [SerializeField] private float smoothTime = 0.2f;
-        [SerializeField] private float minDistance = 10f;   // 최소 거리
-        [SerializeField] private float maxDistance = 30f;   // 최대 거리
-        [SerializeField] private float zoomFactor = 1.5f;   // 타깃 간 거리 대비 카메라 거리 배수
+        [SerializeField] private float minDistance = 10f;
+        [SerializeField] private float maxDistance = 30f;
+        [SerializeField] private float zoomFactor = 1.5f;
 
         private Vector3 _vel;
 
