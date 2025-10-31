@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
-  m_Name: PoleGame
+  m_Name: POLE
   m_EditorClassIdentifier: 
-  gameName: "\uC57C\uC790\uC218 \uD0C0\uAE30"
-  description: "\uC57C\uC790\uC218 \uD0C0\uB294 \uAC8C\uC784"
+  gameName: "\uC57C\uC790\uC218 \uD074\uB77C\uC774\uBC0D"
+  description: "\uD574\uBCC0\uC774\uC57C! \uC57C\uC790\uC218\uB97C \uD0C0\uACE0 \uB05D\uAE4C\uC9C0
+    \uC62C\uB77C\uAC00\uC138\uC694. \uB5A8\uC5B4\uC9C0\uB294 \uCF54\uCF54\uB11B\uB3C4
+    \uD53C\uD574\uC57C \uD574\uC694!"
   playScreen: {fileID: 0}
-  scene: PoleGame
-  backgroundColor: {r: 0.23064259, g: 0.548725, b: 0.6886792, a: 1}
+  scene: Pole
+  backgroundColor: {r: 0.635482, g: 0.7264151, b: 0.19530971, a: 0}

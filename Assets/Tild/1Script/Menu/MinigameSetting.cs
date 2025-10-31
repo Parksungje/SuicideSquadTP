@@ -20,12 +20,7 @@ namespace Tild.Menu
         {
             gameTypeDropdown.onValueChanged.AddListener(ChangeAmountTitle);
             inputSO.OnSpacePressed += OnConfirmPressed;
-            cameras.SetActive(false);
-        }
-
-        private void Start()
-        {
-            cameras.SetActive(true);
+           
         }
 
         private void OnDisable()

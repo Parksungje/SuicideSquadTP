@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
-  m_Name: Rope
+  m_Name: PUSH
   m_EditorClassIdentifier: 
-  gameName: "\uC904\uB2E4\uB9AC\uAE30"
-  description: "\uD654\uBA74\uC5D0 \uB098\uC624\uB294 \uD0A4\uC5D0 \uB9DE\uCDB0 \uC904\uC744
-    \uB2F9\uAE30\uC138\uC694!"
-  playScreen: {fileID: 21300000, guid: e47f99b1effc809418e121e932577f89, type: 3}
-  scene: RopeGame
-  backgroundColor: {r: 0.81886786, g: 0.5303125, b: 0.31982192, a: 1}
+  gameName: "\uBC00\uCE58\uAE30 \uAC8C\uC784"
+  description: "\uC810\uC810 \uC791\uC544\uC9C0\uB294 \uAE30\uB465 \uC704\uC5D0\uC11C
+    1\uB300 1\uB85C \uBC00\uCE58\uAE30 \uC2F8\uC6C0\uC744 \uC990\uACA8\uBCF4\uC138\uC694!"
+  playScreen: {fileID: 0}
+  scene: Push
+  backgroundColor: {r: 0.3247597, g: 0.6154227, b: 0.7735849, a: 0}
