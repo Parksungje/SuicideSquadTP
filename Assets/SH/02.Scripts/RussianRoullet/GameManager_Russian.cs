@@ -1,99 +1,90 @@
-ï»¿//using Code.Players;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.Rendering.VirtualTexturing;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class GameManager_Russian : MonoBehaviour
-//{
-//    public static GameManager_Russian Instance;
+public class GameManager_Russian : MonoBehaviour
+{
+    [SerializeField] private List<Player_RussianRoulette> players;
+    [SerializeField] private Revolver revolver;
 
-//    [SerializeField] private List<Player> players;
-//    [SerializeField] private Revolver revolver;
+    public int currentPlayerIndex;
+    private int currentRound = 1;
+    private bool roundActive = false;
 
-//    private int currentPlayerIndex;
-//    private int currentRound = 1;
-//    private bool roundActive = false;
+    private void Start()
+    {
+        StartRound();
+    }
 
-//    void Awake()
-//    {
-//        if (Instance == null) Instance = this;
-//        else Destroy(gameObject);
-//    }
+    private void StartRound()
+    {
+        Debug.Log($"===== ROUND {currentRound} ½ÃÀÛ =====");
+        revolver.ReloadRandom();
+        foreach (var p in players) p.Revive();
 
-//    void Start()
-//    {
-//        StartRound();
-//    }
+        currentPlayerIndex = Random.Range(0, players.Count);
+        roundActive = true;
+        Debug.Log($"{players[currentPlayerIndex].playerName}ÀÌ(°¡) ¸ÕÀú ½ÃÀÛÇÕ´Ï´Ù.");
+    }
 
-//    void StartRound()
-//    {
-//        Debug.Log($"===== ROUND {currentRound} ì‹œì‘ =====");
-//        revolver.ReloadRandom();
-//        foreach (var p in players) p.Revive();
+    [ContextMenu("Shoot")]
+    public void OnShootButton()
+    {
+        if (!roundActive) return;
 
-//        currentPlayerIndex = Random.Range(0, players.Count);
-//        roundActive = true;
-//        Debug.Log($"{players[currentPlayerIndex].playerName}ì´(ê°€) ë¨¼ì € ì‹œì‘í•©ë‹ˆë‹¤.");
-//    }
+        Player_RussianRoulette current = players[currentPlayerIndex];
+        bool fired = revolver.Fire();
 
-//    public void OnShootButton()
-//    {
-//        if (!roundActive) return;
+        if (fired)
+        {
+            Debug.Log($"{current.playerName}ÀÌ(°¡) »ç¸ÁÇß½À´Ï´Ù!");
+            current.Die();
 
-//        Player current = players[currentPlayerIndex];
-//        bool fired = revolver.Fire();
+            roundActive = false;
+            EndRound();
+        }
+        else
+        {
+            Debug.Log($"{current.playerName} »ıÁ¸. ´ÙÀ½ ÅÏÀ¸·Î ³Ñ¾î°©´Ï´Ù.");
+            NextTurn();
+        }
+    }
 
-//        if (fired)
-//        {
-//            Debug.Log($"{current.playerName}ì´(ê°€) ì‚¬ë§í–ˆìŠµë‹ˆë‹¤!");
-//            current.Die();
+    private void NextTurn()
+    {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
+        if (!players[currentPlayerIndex].isAlive)
+            NextTurn();
+    }
 
-//            roundActive = false;
-//            EndRound();
-//        }
-//        else
-//        {
-//            Debug.Log($"{current.playerName} ìƒì¡´. ë‹¤ìŒ í„´ìœ¼ë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.");
-//            NextTurn();
-//        }
-//    }
+    private void EndRound()
+    {
+        Debug.Log($"===== ROUND {currentRound} Á¾·á =====");
 
-//    void NextTurn()
-//    {
-//        currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
-//        if (!players[currentPlayerIndex].isAlive)
-//            NextTurn();
-//    }
+        currentRound++;
 
-//    void EndRound()
-//    {
-//        Debug.Log($"===== ROUND {currentRound} ì¢…ë£Œ =====");
+        if (currentRound <= 3)
+            Invoke(nameof(StartRound), 2f); // 2ÃÊ ÈÄ ´ÙÀ½ ¶ó¿îµå
+        else
+            EndGame();
+    }
 
-//        currentRound++;
+    private void EndGame()
+    {
+        Debug.Log("===== °ÔÀÓ Á¾·á =====");
 
-//        if (currentRound <= 3)
-//            Invoke(nameof(StartRound), 2f); // 2ì´ˆ í›„ ë‹¤ìŒ ë¼ìš´ë“œ
-//        else
-//            EndGame();
-//    }
+        int minDeath = int.MaxValue;
+        Player_RussianRoulette winner = null;
 
-//    void EndGame()
-//    {
-//        Debug.Log("===== ê²Œì„ ì¢…ë£Œ =====");
+        foreach (var p in players)
+        {
+            Debug.Log($"{p.playerName}: »ç¸Á {p.deathCount}È¸");
+            if (p.deathCount < minDeath)
+            {
+                minDeath = p.deathCount;
+                winner = p;
+            }
+        }
 
-//        int minDeath = int.MaxValue;
-//        Player winner = null;
-
-//        foreach (var p in players)
-//        {
-//            Debug.Log($"{p.playerName}: ì‚¬ë§ {p.deathCount}íšŒ");
-//            if (p.deathCount < minDeath)
-//            {
-//                minDeath = p.deathCount;
-//                winner = p;
-//            }
-//        }
-
-//        Debug.Log($"ğŸ† ìŠ¹ì: {winner.playerName}!");
-//    }
-//}
+        Debug.Log($"½ÂÀÚ: {winner.playerName}!");
+    }
+}

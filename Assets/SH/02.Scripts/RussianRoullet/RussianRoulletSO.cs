@@ -1,16 +1,21 @@
+using Code.Player;
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class RussianRoulletSO : MonoBehaviour
+[CreateAssetMenu(fileName = "RussianRoulette Input", menuName = "8S/GameSO/RussinRoulette")]
+public class RussianRoulletSO : BaseInputSO
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public Action OnL_Click;
+    public Action OnR_Click;
+
+    public override void OnWKey(InputAction.CallbackContext context)
     {
-        
+        OnL_Click.Invoke();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnUArrow(InputAction.CallbackContext context)
     {
-        
+        OnR_Click.Invoke();
     }
 }
