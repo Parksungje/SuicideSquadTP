@@ -22,9 +22,6 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private float groundCheckRadius = 0.15f;
         [SerializeField] private float groundCheckOffset = 0.05f;
 
-        [SerializeField] private Transform startPoint;
-        public float StartZ => startPoint ? startPoint.position.z : _startZ;
-
         [SerializeField] private float animMaxRunSpeed = 10f;
         [SerializeField] private float perfectMin = 0.55f;
         [SerializeField] private float perfectMax = 0.85f;
@@ -59,7 +56,6 @@ namespace SJ.Minigames.Hurdle
         bool _canJump = true;
         bool _isStumbling = false;
         float _stumbleTimer = 0f;
-        float _startZ;
 
         float _timingMul = 1f;
         Coroutine _timingCo;
@@ -72,6 +68,10 @@ namespace SJ.Minigames.Hurdle
         static readonly int HashRun = Animator.StringToHash("isRunning");
         static readonly int HashJump = Animator.StringToHash("isJumping");
 
+        Vector3 _startPos;
+        Quaternion _startRot;
+        public float StartZ => _startPos.z;
+
         void Awake()
         {
             _rb = GetComponent<Rigidbody>();
@@ -79,8 +79,13 @@ namespace SJ.Minigames.Hurdle
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
             _col = GetComponent<CapsuleCollider>();
-            _startZ = transform.position.z;
             if (animator == null) animator = GetComponentInChildren<Animator>();
+        }
+
+        public void InitStartPosition()
+        {
+            _startPos = transform.position;
+            _startRot = transform.rotation;
         }
 
         void FixedUpdate()
@@ -100,7 +105,8 @@ namespace SJ.Minigames.Hurdle
 
         public void ResetToStart()
         {
-            transform.position = startPoint ? startPoint.position : new Vector3(transform.position.x, transform.position.y, _startZ);
+            transform.position = _startPos;
+            transform.rotation = _startRot;
             _rb.linearVelocity = Vector3.zero;
             _canJump = true;
             _isStumbling = false;
@@ -115,9 +121,14 @@ namespace SJ.Minigames.Hurdle
         public void DashForward(float speed)
         {
             float mul = _isStumbling ? stumbleSlowMul : 1f;
-            float targetZVel = speed * baseSpeedMul * mul * _timingMul;
+            float targetZVel = speed * baseSpeedMul * mul * _timingMul + _burstAddZ;
+
             Vector3 vel = _rb.linearVelocity;
-            vel.z = IsGrounded() ? targetZVel + _burstAddZ : Mathf.Lerp(_rb.linearVelocity.z, targetZVel + _burstAddZ, Time.deltaTime * airControlMultiplier);
+            if (IsGrounded())
+                vel.z = targetZVel;
+            else
+                vel.z = Mathf.Max(_rb.linearVelocity.z, targetZVel);
+
             _rb.linearVelocity = vel;
         }
 
