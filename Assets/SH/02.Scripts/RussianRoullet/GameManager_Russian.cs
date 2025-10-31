@@ -1,51 +1,42 @@
-ï»¿using Code.Players;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
 
 public class GameManager_Russian : MonoBehaviour
 {
-    public static GameManager_Russian Instance;
-
-    [SerializeField] private List<Player> players;
+    [SerializeField] private List<Player_RussianRoulette> players;
     [SerializeField] private Revolver revolver;
 
-    private int currentPlayerIndex;
+    public int currentPlayerIndex;
     private int currentRound = 1;
     private bool roundActive = false;
 
-    void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
-
-    void Start()
+    private void Start()
     {
         StartRound();
     }
 
-    void StartRound()
+    private void StartRound()
     {
-        Debug.Log($"===== ROUND {currentRound} ì‹œì‘ =====");
+        Debug.Log($"===== ROUND {currentRound} ½ÃÀÛ =====");
         revolver.ReloadRandom();
         foreach (var p in players) p.Revive();
 
         currentPlayerIndex = Random.Range(0, players.Count);
         roundActive = true;
-        Debug.Log($"{players[currentPlayerIndex].playerName}ì´(ê°€) ë¨¼ì € ì‹œì‘í•©ë‹ˆë‹¤.");
+        Debug.Log($"{players[currentPlayerIndex].playerName}ÀÌ(°¡) ¸ÕÀú ½ÃÀÛÇÕ´Ï´Ù.");
     }
 
+    [ContextMenu("Shoot")]
     public void OnShootButton()
     {
         if (!roundActive) return;
 
-        Player current = players[currentPlayerIndex];
+        Player_RussianRoulette current = players[currentPlayerIndex];
         bool fired = revolver.Fire();
 
         if (fired)
         {
-            Debug.Log($"{current.playerName}ì´(ê°€) ì‚¬ë§í–ˆìŠµë‹ˆë‹¤!");
+            Debug.Log($"{current.playerName}ÀÌ(°¡) »ç¸ÁÇß½À´Ï´Ù!");
             current.Die();
 
             roundActive = false;
@@ -53,40 +44,40 @@ public class GameManager_Russian : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{current.playerName} ìƒì¡´. ë‹¤ìŒ í„´ìœ¼ë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.");
+            Debug.Log($"{current.playerName} »ıÁ¸. ´ÙÀ½ ÅÏÀ¸·Î ³Ñ¾î°©´Ï´Ù.");
             NextTurn();
         }
     }
 
-    void NextTurn()
+    private void NextTurn()
     {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
         if (!players[currentPlayerIndex].isAlive)
             NextTurn();
     }
 
-    void EndRound()
+    private void EndRound()
     {
-        Debug.Log($"===== ROUND {currentRound} ì¢…ë£Œ =====");
+        Debug.Log($"===== ROUND {currentRound} Á¾·á =====");
 
         currentRound++;
 
         if (currentRound <= 3)
-            Invoke(nameof(StartRound), 2f); // 2ì´ˆ í›„ ë‹¤ìŒ ë¼ìš´ë“œ
+            Invoke(nameof(StartRound), 2f); // 2ÃÊ ÈÄ ´ÙÀ½ ¶ó¿îµå
         else
             EndGame();
     }
 
-    void EndGame()
+    private void EndGame()
     {
-        Debug.Log("===== ê²Œì„ ì¢…ë£Œ =====");
+        Debug.Log("===== °ÔÀÓ Á¾·á =====");
 
         int minDeath = int.MaxValue;
-        Player winner = null;
+        Player_RussianRoulette winner = null;
 
         foreach (var p in players)
         {
-            Debug.Log($"{p.playerName}: ì‚¬ë§ {p.deathCount}íšŒ");
+            Debug.Log($"{p.playerName}: »ç¸Á {p.deathCount}È¸");
             if (p.deathCount < minDeath)
             {
                 minDeath = p.deathCount;
@@ -94,6 +85,6 @@ public class GameManager_Russian : MonoBehaviour
             }
         }
 
-        Debug.Log($"ğŸ† ìŠ¹ì: {winner.playerName}!");
+        Debug.Log($"½ÂÀÚ: {winner.playerName}!");
     }
 }
