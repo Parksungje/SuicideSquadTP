@@ -63,8 +63,8 @@ namespace Tild.Minigames.PoleGame
 
         private void FixedUpdate()
         {
-            _1PScore = rigid1P.transform.position.y;
-            _2PScore = rigid2P.transform.position.y;
+            _1PScore = (float)Math.Round(rigid1P.transform.position.y);
+            _2PScore = (float)Math.Round(rigid2P.transform.position.y);
             score1P.text = $"{_1PScore.ToString()}M";
             score2P.text = $"{_2PScore.ToString()}M";
         }

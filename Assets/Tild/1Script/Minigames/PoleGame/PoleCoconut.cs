@@ -7,7 +7,7 @@ namespace Tild.Minigames.PoleGame
     public class PoleCoconut : MonoBehaviour
     {
         private Rigidbody rigid;
-
+        private bool isTriggered = false;
         private void Awake()
         {
             rigid = GetComponent<Rigidbody>();
@@ -20,7 +20,9 @@ namespace Tild.Minigames.PoleGame
 
         private void OnTriggerEnter(Collider other)
         {
+            if (isTriggered) return;
             
+            isTriggered = true;
             if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Player"))
             {
                 transform.DOScale(Vector3.zero, 0.3f);
