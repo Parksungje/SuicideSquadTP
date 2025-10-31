@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using Tild.Menu;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Tild.Minigames.SpinGame
@@ -16,7 +18,9 @@ namespace Tild.Minigames.SpinGame
         [SerializeField] private Animator animator1P, animator2P;
         [SerializeField] private Transform jumpObstacle, HeadObstacle;
         [SerializeField] private Camera mainCamera;
-
+     
+        [SerializeField] private FallTrigger fallTrigger;
+        
         [Header("Speed Settings")]
         [SerializeField] private float baseSpeed = 30f;  
         [SerializeField] private float acceleration = 1f; 
@@ -26,6 +30,13 @@ namespace Tild.Minigames.SpinGame
         [SerializeField] private float jumpPower = 6f;
         [SerializeField] private float movePower = 8f;
         [SerializeField] private float jumpCooldown = 1f;
+        
+        [Header("Effects")]
+        [SerializeField] private ParticleSystem celebrationFX1P;
+        [SerializeField] private ParticleSystem celebrationFX2P;
+        [SerializeField] private CinemachineCamera TargetCamera;
+        [SerializeField] private CinemachineCamera celebCamera;
+     
 
         private float currentSpeed = 0f;
         private bool canJump1P = true;
@@ -33,13 +44,19 @@ namespace Tild.Minigames.SpinGame
 
         private bool wPressed, aPressed, sPressed, dPressed;
         private bool upPressed, downPressed, leftPressed, rightPressed;
-
+        private Vector3 _prev;
+        
         private void Awake()
         {
             if (instance == null)
                 instance = this;
             else if (instance != this)
                 Destroy(gameObject);
+
+            fallTrigger.onFall += Falled;
+            
+            _prev = Physics.gravity;
+            Physics.gravity = new Vector3(0f, -20f, 0f);
         }
 
         private void Start()
@@ -71,6 +88,14 @@ namespace Tild.Minigames.SpinGame
             fallingInputSO.OnDownArrowDown -= (pressed) => downPressed = pressed;
             fallingInputSO.OnLeftArrowDown -= (pressed) => leftPressed = pressed;
             fallingInputSO.OnRightArrowDown -= (pressed) => rightPressed = pressed;
+         
+        }
+
+        private void OnDestroy()
+        {
+            fallTrigger.onFall -= Falled;
+            
+            Physics.gravity = _prev; 
         }
 
         private void Update()
@@ -128,19 +153,7 @@ namespace Tild.Minigames.SpinGame
             Vector3 jumpVector = (Vector3.up * jumpPower) + (moveDir * movePower);
             rigid.AddForce(jumpVector, ForceMode.Impulse);
             
-            StartCoroutine(ExtraGravity(rigid));
-        }
-
-        private IEnumerator ExtraGravity(Rigidbody rigid)
-        {
-            float duration = 0.3f; 
-            float timer = 0f;
-            while (timer < duration)
-            {
-                rigid.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
-                timer += Time.deltaTime;
-                yield return null;
-            }
+          
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -156,14 +169,23 @@ namespace Tild.Minigames.SpinGame
 
         public void Falled(Rigidbody rigid)
         {
-            if (rigid == rigid1P)
-            {
-                MinigameManager.instance.Finish(false);
-            }
-            if (rigid == rigid2P)
-            {
-                MinigameManager.instance.Finish(true);
-            }
+            StartCoroutine(Celebration(rigid != rigid1P));
+            
+        }
+
+        IEnumerator Celebration(bool is1Pwin)
+        {
+            TargetCamera.gameObject.SetActive(false);
+            celebCamera.gameObject.SetActive(true);
+            celebCamera.Follow = is1Pwin ? rigid1P.transform : rigid2P.transform;
+            
+            if (is1Pwin)
+                celebrationFX1P.Play();
+            else 
+                celebrationFX2P.Play();
+            yield return new WaitForSeconds(3f);
+          
+            MinigameManager.instance.Finish(is1Pwin);
         }
     }
 }
