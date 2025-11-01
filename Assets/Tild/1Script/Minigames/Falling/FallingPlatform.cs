@@ -26,10 +26,10 @@ namespace Tild.Minigames.Falling
             _isTriggered = true;
                 
             meshRenderer.material.DOColor(Color.red, duration);
-            
+            SoundManager.Instance.Play("Fall_Tile");
             transform.DOPunchRotation(Vector3.down, duration,20,2).OnComplete(() =>
             {
-             
+                
                 rigidBody.useGravity = true;
                 rigidBody.isKinematic = false;
                 collider.enabled = false;

@@ -40,7 +40,7 @@ namespace Tild.MiscUI
                 .Replace("{2P}", _2PScore.ToString());
 
             Sequence sequence = DOTween.Sequence().SetUpdate(true);
-    
+            SoundManager.Instance.Play("ResultScreen");
             sequence.Append(resultGroup.DOFade(1, 0.2f));
             sequence.Join(finishText.DOFade(1, 0.2f).SetDelay(0.3f).SetEase(Ease.InQuart));
             sequence.Join(finishText.transform.DOScale(Vector3.one, 0.2f).SetDelay(0.3f).SetEase(Ease.InQuart));
@@ -84,7 +84,7 @@ namespace Tild.MiscUI
             {
                 _2PScore++;
             }
-            
+            SoundManager.Instance.Play("ShowScore");
             scoreText.text = originalScoreText.Replace("{1P}", _1PScore.ToString())
                 .Replace("{2P}", _2PScore.ToString());
         }

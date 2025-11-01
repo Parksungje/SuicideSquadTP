@@ -125,6 +125,8 @@ namespace Tild.Minigames.BalanceGame
         private int questionIndex = 0;
         private IEnumerator Start()
         {
+            SoundManager.Instance.Play("Balance_BGM");
+
             keyGuide.DOFade(1, 0.5f);
             yield return new WaitForSeconds(4f);
             keyGuide.DOFade(0, 0.5f);
@@ -145,7 +147,8 @@ namespace Tild.Minigames.BalanceGame
                 questionIndex++;
                 yield return new WaitForSeconds(1f);
                 notificationText.SetText("문제 등장!");
-                notificationGroup.DOFade(1f, fadeDur);
+               
+                notificationGroup.DOFade(1f, fadeDur); SoundManager.Instance.Play("Balance_Bell");
                 yield return new WaitForSeconds(0.8f);
                 notificationGroup.DOFade(0f, fadeDur);
 
@@ -157,7 +160,7 @@ namespace Tild.Minigames.BalanceGame
                 phase = Phase.Choose;
                 
                 notificationText.SetText("<size=70>정답 선택!");
-                notificationGroup.DOFade(1f, fadeDur);
+                notificationGroup.DOFade(1f, fadeDur); SoundManager.Instance.Play("Balance_Bell");
 
                 for (int t = chooseTime; t > 0; t--)
                 {
@@ -171,7 +174,7 @@ namespace Tild.Minigames.BalanceGame
                 checkedRight.DOFade(0f, 0.2f);
 
                 notificationText.SetText("<size=70>상대의 선택을 맞춰보세요!</size>");
-                notificationGroup.DOFade(1f, fadeDur);
+                notificationGroup.DOFade(1f, fadeDur); SoundManager.Instance.Play("Balance_Bell");
 
                 for (int t = guessTime; t > 0; t--)
                 {
@@ -193,30 +196,33 @@ namespace Tild.Minigames.BalanceGame
                 {
                     _score1P++;
                     _score2P++;
+                    SoundManager.Instance.Play("Balance_Correct");
                     correctParticle1P.Play();
                     correctParticle2P.Play();
                     notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>두 플레이어 모두 상대의 선택을 정확히 맞췄어요!</size>");
                 }
                 else if (p1Correct)
                 {
+                    SoundManager.Instance.Play("Balance_Correct");
                     correctParticle1P.Play();
                     _score1P++;
                     notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>1P가 상대의 선택을 맞췄어요.</size>");
                 }
                 else if (p2Correct)
                 {
+                    SoundManager.Instance.Play("Balance_Correct");
                     correctParticle2P.Play();
                     _score2P++;
                     notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>2P가 상대의 선택을 맞췄어요.</size>");
                 }
                 else
                 {
-                   
+                    SoundManager.Instance.Play("Balance_NoneCorrect");
                     notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>둘 다 상대의 선택을 틀렸어요.</size>");
                 }
 
-                notificationGroup.DOFade(1f, fadeDur);
-                
+                notificationGroup.DOFade(1f, fadeDur); SoundManager.Instance.Play("Balance_Bell");
+               
                 yield return new WaitForSeconds(resultHold);
                 if (_score1P == 5)
                 {
@@ -224,6 +230,8 @@ namespace Tild.Minigames.BalanceGame
                     celebCamera1P.SetActive(true);
                     notificationText.SetText("1P 승리!!");
                     yield return new WaitForSeconds(3);
+                    SoundManager.Instance.Stop("Balance_BGM");
+
                     MinigameManager.instance.Finish(true);
                    
                 }
@@ -233,6 +241,7 @@ namespace Tild.Minigames.BalanceGame
                     celebCamera2P.SetActive(true);
                     notificationText.SetText("2P 승리!!");
                     yield return new WaitForSeconds(3);
+                    SoundManager.Instance.Stop("Balance_BGM");
                     MinigameManager.instance.Finish(false);
                 }
                 
@@ -243,7 +252,7 @@ namespace Tild.Minigames.BalanceGame
 
             phase = Phase.Idle;
             
-            notificationGroup.DOFade(1f, fadeDur);
+            notificationGroup.DOFade(1f, fadeDur); SoundManager.Instance.Play("Balance_Bell");
         }
 
         private void ResetRoundVisuals()

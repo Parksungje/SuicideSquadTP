@@ -17,6 +17,7 @@ namespace Tild.Minigames.Boxing
         [SerializeField] private Image background;
         IEnumerator Start()
         {
+            SoundManager.Instance.Play("Boxing_BGM");
             keyGuideGroup.DOFade(1, 2);
             yield return new WaitForSeconds(5);
 

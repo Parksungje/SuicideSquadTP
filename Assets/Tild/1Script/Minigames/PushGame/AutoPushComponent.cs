@@ -37,6 +37,8 @@ public class AutoPushComponent : MonoBehaviour
     {
         if (!_isCharging) return;
         _isCharging = false;
+        SoundManager.Instance.Play("Push_Swing");
+
         _chargeSeq?.Kill();
 
         Sequence seq = DOTween.Sequence();
@@ -46,7 +48,6 @@ public class AutoPushComponent : MonoBehaviour
         seq.OnComplete(() => { Invoke(nameof(TurnCanpush), 2f); });
         seq.Play();
     }
-
     private void TurnCanpush()
     {
         _canPush = true;
@@ -67,7 +68,7 @@ public class AutoPushComponent : MonoBehaviour
             Vector3 dir = transform.right * side + transform.forward * 0.1f;
             dir.y = 0f;
             dir = dir.sqrMagnitude > 0f ? dir.normalized : transform.right;
-
+            SoundManager.Instance.Play("Push_Hit");
             targetRb.AddForce(dir * pushForce, ForceMode.Impulse);
             targetRb.AddTorque(Vector3.up * pushForce, ForceMode.Impulse);
 

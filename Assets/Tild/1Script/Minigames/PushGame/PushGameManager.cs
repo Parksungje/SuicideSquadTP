@@ -46,6 +46,8 @@ public class PushGameManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        SoundManager.Instance.Play("Push_BGM");
+
         DisableRigidbodies();
 
         keyGuideGroup.DOFade(1, 2);
@@ -91,9 +93,17 @@ public class PushGameManager : MonoBehaviour
         celebCamera.Follow = is1Pwin ? rigid1P.transform : rigid2P.transform;
         
         if (is1Pwin)
+        {
             celebParticle1P.Play();
+            SoundManager.Instance.Play("Confetti");
+
+        }
         else
+        {
             celebParticle2P.Play();
+            SoundManager.Instance.Play("Confetti");
+
+        }
 
         yield return new WaitForSeconds(4);
         DisableRigidbodies();
@@ -115,6 +125,7 @@ public class PushGameManager : MonoBehaviour
 
         if (_1PScore == 3 || _2PScore == 3)
         {
+            SoundManager.Instance.Stop("Push_BGM");
             MinigameManager.instance.Finish(is1Pwin);
             yield break;
         }
