@@ -30,8 +30,7 @@ public class AvoidBall : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Hit");
-
+            SoundManager.Instance.Play("AvoidBall_Hit");
             Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
             if (playerRb != null)
             {
