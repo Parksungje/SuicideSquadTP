@@ -9,6 +9,9 @@ public class AvoidMovementManager : MonoBehaviour
 {
     [SerializeField] private AvoidBallSO _avoidInput;
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _sprintMultiplier = 1.6f;
+    [SerializeField] private KeyCode _p1SprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode _p2SprintKey = KeyCode.RightShift;
     [SerializeField] private Rigidbody _p1Rb;
     [SerializeField] private Rigidbody _p2Rb;
     [SerializeField] private Animator _p1Animator;
@@ -38,9 +41,13 @@ public class AvoidMovementManager : MonoBehaviour
     private Vector3 _p2StartPos;
     private Quaternion _p1StartRot;
     private Quaternion _p2StartRot;
+    private bool _p1Sprint;
+    private bool _p2Sprint;
+    private bool _isRunningSoundPlaying;
 
     private void Start()
     {
+        SoundManager.Instance.Play("AvoidBall_BGM");
         _p1StartPos = _p1Rb.position;
         _p2StartPos = _p2Rb.position;
         _p1StartRot = _p1Rb.rotation;
@@ -113,10 +120,15 @@ public class AvoidMovementManager : MonoBehaviour
             if (rightPressed) _p2moveDir += Vector3.right;
         }
 
+        _p1Sprint = _p1Active && Input.GetKey(_p1SprintKey);
+        _p2Sprint = _p2Active && Input.GetKey(_p2SprintKey);
+
         ApplyMovement();
 
         _p1Animator.SetBool(IsRunningHash, _p1Active && _p1moveDir != Vector3.zero);
         _p2Animator.SetBool(IsRunningHash, _p2Active && _p2moveDir != Vector3.zero);
+
+        HandleRunningSound();
 
         if (!_roundOver)
         {
@@ -132,16 +144,34 @@ public class AvoidMovementManager : MonoBehaviour
     {
         if (_p1Active && _p1moveDir != Vector3.zero)
         {
-            _p1Rb.MovePosition(_p1Rb.position + _p1moveDir * _moveSpeed * Time.fixedDeltaTime);
+            float speed = _moveSpeed * (_p1Sprint ? _sprintMultiplier : 1f);
+            _p1Rb.MovePosition(_p1Rb.position + _p1moveDir * speed * Time.fixedDeltaTime);
             Quaternion targetRotation = Quaternion.LookRotation(_p1moveDir);
             _p1Rb.MoveRotation(Quaternion.Slerp(_p1Rb.rotation, targetRotation, Time.fixedDeltaTime * 10f));
         }
 
         if (_p2Active && _p2moveDir != Vector3.zero)
         {
-            _p2Rb.MovePosition(_p2Rb.position + _p2moveDir * _moveSpeed * Time.fixedDeltaTime);
+            float speed = _moveSpeed * (_p2Sprint ? _sprintMultiplier : 1f);
+            _p2Rb.MovePosition(_p2Rb.position + _p2moveDir * speed * Time.fixedDeltaTime);
             Quaternion targetRotation = Quaternion.LookRotation(_p2moveDir);
             _p2Rb.MoveRotation(Quaternion.Slerp(_p2Rb.rotation, targetRotation, Time.fixedDeltaTime * 10f));
+        }
+    }
+
+    private void HandleRunningSound()
+    {
+        bool anyRunning = (_p1Active && _p1moveDir != Vector3.zero) || (_p2Active && _p2moveDir != Vector3.zero);
+
+        if (anyRunning && !_isRunningSoundPlaying)
+        {
+            SoundManager.Instance.Play("AvoidBall_Run");
+            _isRunningSoundPlaying = true;
+        }
+        else if (!anyRunning && _isRunningSoundPlaying)
+        {
+            SoundManager.Instance.Stop("AvoidBall_Run");
+            _isRunningSoundPlaying = false;
         }
     }
 
@@ -238,5 +268,9 @@ public class AvoidMovementManager : MonoBehaviour
         _p2Animator.SetBool(IsRunningHash, false);
         wPressed = aPressed = sPressed = dPressed = false;
         upPressed = leftPressed = downPressed = rightPressed = false;
+        _p1Sprint = false;
+        _p2Sprint = false;
+        _isRunningSoundPlaying = false;
+        SoundManager.Instance.Stop("AvoidBall_Run");
     }
 }
