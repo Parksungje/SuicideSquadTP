@@ -2161,6 +2161,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 268152419}
   m_CullTransparentMesh: 1
+--- !u!1 &278954820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278954822}
+  - component: {fileID: 278954821}
+  m_Layer: 0
+  m_Name: CharacterImporter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &278954821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278954820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bce68e15dde586749a40312301aa2de5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  P1_Appearance: {fileID: 221887218489573699}
+  P2_Appearance: {fileID: 221887216929083897}
+--- !u!4 &278954822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278954820}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1418.3427, y: -373.94943, z: -1417.2986}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 575378993}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &284824304
 GameObject:
   m_ObjectHideFlags: 0
@@ -3145,6 +3191,7 @@ Transform:
   - {fileID: 1903941599}
   - {fileID: 1983974790}
   - {fileID: 1568467371}
+  - {fileID: 278954822}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &576126687
@@ -6047,6 +6094,10 @@ PrefabInstance:
     - target: {fileID: 2381165996383040989, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2786121604613331779, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
+      propertyPath: m_ScaleFactor
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 5246090575122514917, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_text
