@@ -85,6 +85,7 @@ namespace Code.PK
             _currentBall = _startBall;
             _currentBall.SetActive(true);
             InitializeGame();
+            SoundManager.Instance.Play("PK_BGM");
         }
 
         private void InitializeGame()
@@ -121,6 +122,7 @@ namespace Code.PK
         private void ShootBall()
         {
             if (!_currentBall.TryGetComponent(out Rigidbody rb)) return;
+            SoundManager.Instance.Play("PK_Kick");
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.AddForce(ShooterDir.normalized * _shootPower, ForceMode.VelocityChange);
@@ -209,6 +211,7 @@ namespace Code.PK
         private IEnumerator DelayShowResult(bool shooterScored)
         {
             yield return new WaitForSeconds(0.8f);
+            SoundManager.Instance.Play("PK_Cheer");
             if (shooterScored)
                 _uiManager.ShowGoalUI();
             else
