@@ -1,11 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
-
-    public Sound[] sounds;
+    [SerializeField] private SoundDataSO[] sounds;
+    private readonly Dictionary<string, AudioSource> sources = new Dictionary<string, AudioSource>();
 
     private void Awake()
     {
@@ -20,42 +20,45 @@ public class SoundManager : MonoBehaviour
             return;
         }
 
-        foreach (Sound s in sounds)
+        if (sounds == null) return;
+
+        foreach (var s in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            s.source.volume = s.volume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
+            if (s == null || s.clip == null) continue;
+            var key = s.name;
+            if (sources.ContainsKey(key)) continue;
+            var src = gameObject.AddComponent<AudioSource>();
+            src.clip = s.clip;
+            src.volume = s.volume;
+            src.pitch = s.pitch;
+            src.loop = s.loop;
+            sources[key] = src;
         }
     }
 
     public void Play(string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null)
+        if (!sources.TryGetValue(name, out var src))
         {
             Debug.LogWarning("Sound not found: " + name);
             return;
         }
-        s.source.Play();
+        src.Play();
     }
 
     public void Stop(string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null)
+        if (!sources.TryGetValue(name, out var src))
         {
             Debug.LogWarning("Sound not found: " + name);
             return;
         }
-        s.source.Stop();
+        src.Stop();
     }
 
     public void SetVolume(string name, float volume)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null) return;
-        s.source.volume = Mathf.Clamp01(volume);
+        if (!sources.TryGetValue(name, out var src)) return;
+        src.volume = Mathf.Clamp01(volume);
     }
 }

@@ -54,6 +54,10 @@ public class TransitionManager : MonoBehaviour
         _mat.SetFloat(_scrollId, 0f);
         _mat.SetFloat(_alphaId, 0f);
     }
+    private void Start()
+    {
+        StartCoroutine(Co_InitialFadeIn());
+    }
 
     public static void Go(string sceneName)
     {
@@ -162,4 +166,29 @@ public class TransitionManager : MonoBehaviour
                 return Shader.PropertyToID(n);
         return 0;
     }
+
+
+    private IEnumerator Co_InitialFadeIn()
+    {
+        if (overlayImage == null)
+        {
+            EnsureOverlay();
+            BuildMaterialInstance();
+        }
+
+        overlayImage.gameObject.SetActive(true);
+        _mat.SetFloat(_scrollId, 0f);
+        _mat.SetFloat(_alphaId, 1f);
+
+        _scrollTween?.Kill();
+        _alphaTween?.Kill();
+
+        _alphaTween = DOTween.To(() => _mat.GetFloat(_alphaId), v => _mat.SetFloat(_alphaId, v), 0f, fadeDuration)
+            .SetEase(fadeEase)
+            .SetUpdate(true);
+
+        yield return _alphaTween.WaitForCompletion();
+        overlayImage.gameObject.SetActive(false);
+    }
+
 }

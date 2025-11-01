@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Tild.Menu;
 
 public class GreenLightRedLight : MonoBehaviour
 {
@@ -9,35 +10,27 @@ public class GreenLightRedLight : MonoBehaviour
     [SerializeField] private float maxGreenTime;
     [SerializeField] private float minRedTime;
     [SerializeField] private float maxRedTime;
-
     [SerializeField] private float checkInterval;
     [SerializeField] private float redCheckDelay;
-
     [SerializeField] private Transform player1;
     [SerializeField] private Transform player2;
     [SerializeField] private float moveThreshold;
     [SerializeField] private float tolerance;
-
     [SerializeField] private AvoidMovementManager movementManager;
     [SerializeField] private Light lightRenderer;
     [SerializeField] private Color greenColor = Color.green;
     [SerializeField] private Color redColor = Color.red;
-
     [SerializeField] private Vector3 zoneMin;
     [SerializeField] private Vector3 zoneMax;
-
     [SerializeField] private float pushBackDistance;
     [SerializeField] private float pushBackDuration;
     [SerializeField] private Ease pushBackEase = Ease.OutBack;
     [SerializeField] private float pushBackOvershoot;
-
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private CanvasGroup finishPanel;
     [SerializeField] private TMP_Text finishText;
-
     [SerializeField] private Collider finishTrigger;
     [SerializeField] private float totalRoundTime;
-
     [SerializeField] private float flashDuration;
     [SerializeField] private float flashIntensityMul;
 
@@ -56,9 +49,10 @@ public class GreenLightRedLight : MonoBehaviour
     private bool someoneFinished;
     private Transform winner;
     private float baseIntensity;
-
     private bool lockedP1;
     private bool lockedP2;
+    private bool is1Pwin;
+    private bool is2Pwin;
 
     private struct ForwardClamp
     {
@@ -320,6 +314,9 @@ public class GreenLightRedLight : MonoBehaviour
             string name = winner == player1 ? "Player 1" : "Player 2";
             finishText.text = name + " WIN!";
         }
+        is1Pwin = winner == player1;
+        is2Pwin = winner == player2;
+        MinigameManager.instance?.Finish(is1Pwin);
     }
 
     private void PlayFlashFX()
@@ -345,5 +342,3 @@ public class GreenLightRedLight : MonoBehaviour
         Gizmos.DrawWireCube(center, size);
     }
 }
-
-
