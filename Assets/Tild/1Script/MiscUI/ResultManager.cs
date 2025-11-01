@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -55,10 +56,21 @@ namespace Tild.MiscUI
 
             sequence.OnComplete(() =>
             {
-                Invoke(nameof(DelayScoring), 2);
-                Invoke(nameof(DelayInvoke), 4.5f);
-                Invoke(nameof(ResetValues), 5.5f);
+                StartCoroutine(UnscaledInvokeRoutine());
             });
+
+         
+        }
+        private IEnumerator UnscaledInvokeRoutine()
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            DelayScoring();
+
+            yield return new WaitForSecondsRealtime(4.5f);
+            DelayInvoke();
+
+            yield return new WaitForSecondsRealtime(5.5f);
+            ResetValues();
         }
 
         public void DelayScoring()

@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Tild.Menu;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = System.Random;
 
 namespace Tild.Minigames.BalanceGame
 {
@@ -12,8 +14,6 @@ namespace Tild.Minigames.BalanceGame
     {
         [SerializeField] private BalanceGameInputSO balanceGameInputSO;
         [SerializeField] private BalanceQuestionSO balanceQuestionSO;
-        
-        private List<Question> questions;
 
         [SerializeField] private TMP_Text questionLeft;
         [SerializeField] private TMP_Text questionRight;
@@ -21,49 +21,95 @@ namespace Tild.Minigames.BalanceGame
         [SerializeField] private TMP_Text answerRight;
         [SerializeField] private TMP_Text timerText;
         [SerializeField] private TMP_Text notificationText;
+        [SerializeField] private CanvasGroup notificationGroup;
         [SerializeField] private Image checkedLeft;
         [SerializeField] private Image checkedRight;
         [SerializeField] private CanvasGroup controlGuide;
         [SerializeField] private CanvasGroup questionGroup;
-       
+
+        [SerializeField] private int roundCount = 10;
+        [SerializeField] private int chooseTime = 10;
+        [SerializeField] private int guessTime = 10;
+        [SerializeField] private float fadeDur = 0.2f;
+        [SerializeField] private float resultHold = 3.0f;
+
+        [SerializeField] private ParticleSystem correctParticle1P;
+        [SerializeField] private ParticleSystem correctParticle2P;
+        [SerializeField] private ParticleSystem celebParticle1P;
+        [SerializeField] private ParticleSystem celebParticle2P;
+        [SerializeField] private GameObject celebCamera1P;
+        [SerializeField] private GameObject celebCamera2P;
+
+        private List<Question> questions;
+
+        private enum Phase { Idle, ShowQuestion, Choose, Guess, Result }
+        private Phase phase = Phase.Idle;
+
+        private bool _1PChoiceLeft;
+        private bool _2PChoiceLeft;
+        private bool _1PGuessLeft;
+        private bool _2PGuessLeft;
+
+        private int _score1P = 0;
+        private int _score2P = 0;
         
-        private int roundCount = 5;
-        private int waitTime = 5;
-        private bool _isPlaying;
-        private bool _1PLeft;
-        private bool _1PRight;
-        private bool _2PLeft;
-        private bool _2PRight;
+
         private void OnEnable()
         {
             balanceGameInputSO.AKeyPressed = () =>
             {
-                
-                if (!_isPlaying) return;
-                checkedLeft.DOFade(1, 1f);
-                    _1PLeft = true;
-                    _1PRight = false;
+                if (phase == Phase.Choose)
+                {
+                    _1PChoiceLeft = true;
+                    checkedLeft.DOFade(1f, 0.2f);
+                }
+                else if (phase == Phase.Guess)
+                {
+                    _1PGuessLeft = true;
+                    checkedLeft.DOFade(1f, 0.2f);
+                }
             };
+
             balanceGameInputSO.DKeyPressed = () =>
             {
-                if (!_isPlaying) return;
-                checkedLeft.DOFade(1, 1f);
-                _1PLeft = false;
-                _1PRight = true;
+                if (phase == Phase.Choose)
+                {
+                    _1PChoiceLeft = false;
+                    checkedLeft.DOFade(1f, 0.2f);
+                }
+                else if (phase == Phase.Guess)
+                {
+                    _1PGuessLeft = false;
+                    checkedLeft.DOFade(1f, 0.2f);
+                }
             };
+
             balanceGameInputSO.LeftKeyPressed = () =>
             {
-                if (!_isPlaying) return;
-                checkedRight.DOFade(1, 1f);
-                _2PLeft = true;
-                _2PRight = false;
+                if (phase == Phase.Choose)
+                {
+                    _2PChoiceLeft = true;
+                    checkedRight.DOFade(1f, 0.2f);
+                }
+                else if (phase == Phase.Guess)
+                {
+                    _2PGuessLeft = true;
+                    checkedRight.DOFade(1f, 0.2f);
+                }
             };
+
             balanceGameInputSO.RightKeyPressed = () =>
             {
-                if (!_isPlaying) return;
-                checkedRight.DOFade(1, 1f);
-                _2PLeft = false;
-                _2PRight = true;
+                if (phase == Phase.Choose)
+                {
+                    _2PChoiceLeft = false;
+                    checkedRight.DOFade(1f, 0.2f);
+                }
+                else if (phase == Phase.Guess)
+                {
+                    _2PGuessLeft = false;
+                    checkedRight.DOFade(1f, 0.2f);
+                }
             };
         }
 
@@ -72,57 +118,138 @@ namespace Tild.Minigames.BalanceGame
             questions = balanceQuestionSO.GetRandomQuestions(roundCount);
         }
 
-        IEnumerator Start()
+        private int questionIndex = 0;
+        private IEnumerator Start()
         {
-            WaitForSeconds oneSecond = new WaitForSeconds(1);
-            WaitForSeconds notificationTime = new WaitForSeconds(3);
+            var oneSec = new WaitForSeconds(1f);
+
             for (int i = 0; i < roundCount; i++)
             {
-             
-                notificationText.DOFade(1, 0.5f);
-                Question question = questions[i];
-                notificationText.SetText("3초 뒤에\n문제가\n등장합니다.");
-                notificationText.SetText("");
-                yield return notificationTime;
-                notificationText.DOFade(0, 0.5f);
+                phase = Phase.ShowQuestion;
+                ResetRoundVisuals();
+                
+                var q = questions[questionIndex];
+                questionIndex++;
+                
+                notificationText.SetText("문제 등장!");
+                notificationGroup.DOFade(1f, fadeDur);
+                yield return new WaitForSeconds(0.8f);
+                notificationGroup.DOFade(0f, fadeDur);
+
+                questionLeft.SetText(q.left);
+                questionRight.SetText(q.right);
                 questionGroup.DOFade(1f, 0.3f);
-                controlGuide.DOFade(1, 0.5f);
-                _isPlaying = true;
-                questionLeft.SetText(question.left);
-                questionRight.SetText(question.right);
+                controlGuide.DOFade(1f, 0.3f);
+
+                phase = Phase.Choose;
                 
-                
-                
-                for (int time = waitTime; time > 0; time--)
+                notificationText.SetText("<size=70>정답 선택!");
+                notificationGroup.DOFade(1f, fadeDur);
+
+                for (int t = chooseTime; t > 0; t--)
                 {
-                    timerText.SetText(time.ToString());
-                    yield return oneSecond;
+                    timerText.SetText(t.ToString());
+                    yield return oneSec;
                 }
-                questionGroup.DOFade(0f, 0.3f);
-                controlGuide.DOFade(0, 0.5f);
-                notificationText.DOFade(1, 0.5f);
-                if (_1PLeft == _2PLeft && _1PRight == _2PRight)
+                notificationGroup.DOFade(0f, fadeDur);
+
+                phase = Phase.Guess;
+                checkedLeft.DOFade(0f, 0.2f);
+                checkedRight.DOFade(0f, 0.2f);
+
+                notificationText.SetText("<size=70>상대의 선택을 맞춰보세요!</size>");
+                notificationGroup.DOFade(1f, fadeDur);
+
+                for (int t = guessTime; t > 0; t--)
                 {
-                    notificationText.SetText("성공!\n<size=70>같은 답을 선택했어요!");
+                    timerText.SetText(t.ToString());
+                    yield return oneSec;
+                }
+                notificationGroup.DOFade(0f, fadeDur);
+
+                phase = Phase.Result;
+
+                bool p1Correct = (_1PGuessLeft == _2PChoiceLeft);
+                bool p2Correct = (_2PGuessLeft == _1PChoiceLeft);
+                bool bothCorrect = p1Correct && p2Correct;
+
+                questionGroup.DOFade(0f, 0.3f);
+                controlGuide.DOFade(0f, 0.3f);
+
+                if (bothCorrect)
+                {
+                    _score1P++;
+                    _score2P++;
+                    correctParticle1P.Play();
+                    correctParticle2P.Play();
+                    notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>두 플레이어 모두 상대의 선택을 정확히 맞췄어요!</size>");
+                }
+                else if (p1Correct)
+                {
+                    correctParticle1P.Play();
+                    _score1P++;
+                    notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>1P가 상대의 선택을 맞췄어요.</size>");
+                }
+                else if (p2Correct)
+                {
+                    correctParticle2P.Play();
+                    _score2P++;
+                    notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>2P가 상대의 선택을 맞췄어요.</size>");
                 }
                 else
                 {
-                    notificationText.SetText("실패!\n<size=70>다른 답을 선택했어요.");
+                   
+                    notificationText.SetText($"{_score1P} : {_score2P}\n<size=70>둘 다 상대의 선택을 틀렸어요.</size>");
+                }
+
+                notificationGroup.DOFade(1f, fadeDur);
+                
+                yield return new WaitForSeconds(resultHold);
+                if (_score1P == 5)
+                {
+                    celebParticle1P.Play();
+                    celebCamera1P.SetActive(true);
+                    notificationText.SetText("1P 승리!!");
+                    yield return new WaitForSeconds(3);
+                    MinigameManager.instance.Finish(true);
+                   
+                }
+                else if (_score2P == 5)
+                {
+                    celebParticle2P.Play();
+                    celebCamera2P.SetActive(true);
+                    notificationText.SetText("2P 승리!!");
+                    yield return new WaitForSeconds(3);
+                    MinigameManager.instance.Finish(false);
                 }
                 
-                yield return notificationTime;
-                notificationText.DOFade(0, 0.5f);
-                _isPlaying = false;
-                
-                checkedLeft.DOFade(0, 1f);
-                checkedRight.DOFade(0, 1f);
-                
-                _1PLeft = false;
-                _1PRight = false;
-                _2PLeft = false;
-                _2PRight = false;
-                
+                notificationGroup.DOFade(0f, fadeDur);
+
+                ClearFlags();
             }
+
+            phase = Phase.Idle;
+            
+            notificationGroup.DOFade(1f, fadeDur);
+        }
+
+        private void ResetRoundVisuals()
+        {
+            timerText.SetText("");
+            notificationGroup.DOFade(0f, 0f);
+            questionGroup.DOFade(0f, 0f);
+            controlGuide.DOFade(0f, 0f);
+            checkedLeft.DOFade(0f, 0f);
+            checkedRight.DOFade(0f, 0f);
+            ClearFlags();
+        }
+
+        private void ClearFlags()
+        {
+            _1PChoiceLeft = false;
+            _2PChoiceLeft = false;
+            _1PGuessLeft = false;
+            _2PGuessLeft = false;
         }
     }
 }
