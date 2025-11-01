@@ -30,6 +30,8 @@ public class PushGameManager : MonoBehaviour
     [SerializeField] private ParticleSystem celebParticle2P;
     
     [SerializeField] private GroundShrink groundShrinker;
+    [SerializeField] private Movement1Component movement1Component;
+    [SerializeField] private Movement2Component movement2Component;
 
     private int _1PScore;
     private int _2PScore;
@@ -123,6 +125,9 @@ public class PushGameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
+        movement1Component._isBeingPushed = false;
+        movement2Component._isBeingPushed = false;
+        
         timeCountText.text = "";
         background.DOFade(0, 0.2f);
         groundShrinker.Shrink();
