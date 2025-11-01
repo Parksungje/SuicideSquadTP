@@ -32,7 +32,7 @@ namespace Tild.Minigames.TagMatch
                 timeCountText.text = i.ToString();
                 yield return new WaitForSeconds(1);
             }
-
+            SoundManager.Instance.Play("Tag_BGM");
             timeCountText.text = "";
             manager.SetActive(true);
             background.DOFade(0, 0.2f);

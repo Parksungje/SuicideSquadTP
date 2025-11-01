@@ -71,6 +71,9 @@ namespace Tild.Minigames.PoleGame
 
         private IEnumerator Start()
         {
+            SoundManager.Instance.Play("Pole_BGM");
+
+            
             while (true)
             {
                 Transform spawnPoint;
@@ -126,7 +129,7 @@ namespace Tild.Minigames.PoleGame
             if (_canRotate1P)
             {
                 _canRotate1P = false;
-
+                SoundManager.Instance.Play("Pole_Rotate");
                 if (_isLeft1P)
                 {
                     rigid1P.transform.DORotate(new Vector3(0, 180, 0), 0.5f, RotateMode.Fast)
@@ -154,6 +157,7 @@ namespace Tild.Minigames.PoleGame
             
             if (_canClimb1P)
             {
+                SoundManager.Instance.Play("Pole_Climb");
                 _canClimb1P = false;
                 rigid1P.linearVelocity += (Vector3.up * 15f);
                 animator1P.SetTrigger("Climb");
@@ -170,6 +174,7 @@ namespace Tild.Minigames.PoleGame
             if (_canRotate2P)
             {
                 _canRotate2P = false;
+                SoundManager.Instance.Play("Pole_Rotate");
 
                 if (_isLeft2P)
                 {
@@ -198,6 +203,7 @@ namespace Tild.Minigames.PoleGame
             
             if (_canClimb2P)
             {
+                SoundManager.Instance.Play("Pole_Climb");
                 _canClimb2P = false;
                 rigid2P.linearVelocity += (Vector3.up * 15f);
                 animator2P.SetTrigger("Climb");

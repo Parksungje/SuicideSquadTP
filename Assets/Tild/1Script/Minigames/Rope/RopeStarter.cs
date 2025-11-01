@@ -34,7 +34,7 @@ namespace Tild.Minigames.Rope
                 timeCountText.text = i.ToString();
                 yield return new WaitForSeconds(1);
             }
-
+            SoundManager.Instance.Play("Rope_BGM");
             timeCountText.text = "";
             boxingManager.enabled = true;
             cameras.gameObject.SetActive(true);
