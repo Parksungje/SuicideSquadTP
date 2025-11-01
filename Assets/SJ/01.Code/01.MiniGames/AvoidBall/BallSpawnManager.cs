@@ -13,7 +13,6 @@ public class BallSpawnManager : MonoBehaviour
     {
         _timer += Time.deltaTime;
 
-        // 첫 번째 공은 2초 후
         if (!_firstSpawnDone)
         {
             if (_timer >= 2f)
@@ -25,7 +24,6 @@ public class BallSpawnManager : MonoBehaviour
         }
         else
         {
-            // 이후는 기존 쿨타임
             if (_timer >= spawnInterval)
             {
                 SpawnBall();
