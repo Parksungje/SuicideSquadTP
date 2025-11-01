@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Tild.Menu;
 
 namespace SJ.Minigames.Hurdle
 {
@@ -7,27 +8,16 @@ namespace SJ.Minigames.Hurdle
 
     public class HurdleGameManager : MonoBehaviour
     {
-        [Header("Input (SO)")]
         [SerializeField] private HurddleGameSO inputSO;
-
-        [Header("Players")]
         [SerializeField] private HurdlePlayerController player1;
         [SerializeField] private HurdlePlayerController player2;
         [SerializeField] private Transform finishLine;
-
-        [Header("Run Settings")]
         [SerializeField] private float baseSpeed = 6f;
         [SerializeField] private float acceleration = 0.2f;
         [SerializeField] private float maxSpeed = 12f;
-
-        [Header("Round Settings")]
         [SerializeField] private int totalRounds = 3;
         private int currentRound = 1;
-
-        [Header("Countdown")]
         [SerializeField] private float countdownSeconds = 3f;
-
-        [Header("UI (Optional)")]
         [SerializeField] private TMPro.TextMeshProUGUI countdownText;
         [SerializeField] private TMPro.TextMeshProUGUI winnerText;
         [SerializeField] private TMPro.TextMeshProUGUI roundText;
@@ -36,12 +26,13 @@ namespace SJ.Minigames.Hurdle
         public HurdleGameState State { get; private set; } = HurdleGameState.Ready;
 
         private Vector3 _startPosFinish;
+        private int _p1RoundWins;
+        private int _p2RoundWins;
 
         private void Start()
         {
             player1.InitStartPosition();
             player2.InitStartPosition();
-
             StartCoroutine(Co_StartRound());
         }
 
@@ -118,6 +109,9 @@ namespace SJ.Minigames.Hurdle
             player1.EnableControl(false);
             player2.EnableControl(false);
 
+            if (winner == 1) _p1RoundWins++;
+            else _p2RoundWins++;
+
             winnerText?.SetText($"Player {winner} WIN!");
 
             StartCoroutine(Co_NextRound());
@@ -130,13 +124,12 @@ namespace SJ.Minigames.Hurdle
             if (currentRound < totalRounds)
             {
                 currentRound++;
-
                 yield return StartCoroutine(Co_StartRound());
             }
             else
             {
-                roundText?.SetText("All Rounds Finished!");
-                winnerText?.SetText("Game Over!");
+                bool is1Pwin = _p1RoundWins > _p2RoundWins;
+                MinigameManager.instance?.Finish(is1Pwin);
             }
         }
 
@@ -151,7 +144,6 @@ namespace SJ.Minigames.Hurdle
 
             finishLine.position = _startPosFinish;
         }
-
 
         private void OnP1Jump(bool isDown)
         {

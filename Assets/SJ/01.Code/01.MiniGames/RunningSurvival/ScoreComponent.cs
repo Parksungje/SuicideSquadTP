@@ -18,7 +18,6 @@ public class ScoreComponent : MonoBehaviour
 
     private bool _p1Used = false;
     private bool _p2Used = false;
-    private bool _consumed = false;
 
     private void Start()
     {

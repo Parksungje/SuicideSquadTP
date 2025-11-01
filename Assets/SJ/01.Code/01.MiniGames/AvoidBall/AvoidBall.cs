@@ -26,16 +26,6 @@ public class AvoidBall : MonoBehaviour
         {
             Debug.Log("Hit");
 
-            if (TransitionManager.Instance != null)
-            {
-                Debug.Log("씬 전환 실행");
-                TransitionManager.Go("Shooting");
-            }
-            else
-            {
-                Debug.LogError("TransitionManager.Instance가 null임!");
-            }
-
             Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
             if (playerRb != null)
             {
