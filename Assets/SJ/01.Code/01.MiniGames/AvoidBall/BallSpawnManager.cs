@@ -35,7 +35,7 @@ public class BallSpawnManager : MonoBehaviour
     void SpawnBall()
     {
         float randomX = Random.Range(-spawnRangeX, spawnRangeX);
-        Vector3 spawnPos = new Vector3(randomX, 11f, 42f);
-        Instantiate(ballPrefab, spawnPos, Quaternion.identity);
+        Vector3 spawnPos = new Vector3(randomX, 12f, 40f);
+        Instantiate(ballPrefab, spawnPos, Quaternion.Euler(0, 90, 0));
     }
 }
