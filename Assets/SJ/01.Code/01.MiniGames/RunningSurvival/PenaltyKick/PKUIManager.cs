@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using TMPro;
 using System;
+using DG.Tweening;
 
 public class PKUIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _goalUI;
-    [SerializeField] private GameObject _saveUI;
+    [SerializeField] private CanvasGroup _goalUI;
+    [SerializeField] private Transform _goalText;
+    [SerializeField] private CanvasGroup _saveUI;
+    [SerializeField] private Transform _saveText;
     [SerializeField] private GameObject _p1WinUI;
     [SerializeField] private GameObject _p2WinUI;
 
-    [SerializeField] private TextMeshProUGUI _p1ScoreText;
-    [SerializeField] private TextMeshProUGUI _p2ScoreText;
+    [SerializeField] private TextMeshProUGUI _scoreText;
 
     private int _p1Score;
     private int _p2Score;
@@ -22,23 +24,43 @@ public class PKUIManager : MonoBehaviour
     public void ShowGoalUI()
     {
         if (IsGameEnded) return;
-        _goalUI.SetActive(true);
-        _saveUI.SetActive(false);
+        _goalText.localScale = Vector3.zero;
+
+        _goalUI.DOFade(1, .5f).OnComplete(() =>
+        {
+            _goalText.localScale = Vector3.one * 70f;
+
+            Sequence seq = DOTween.Sequence();
+            seq.Join(_goalText.DOScale(10f, .25f).SetEase(Ease.OutExpo));
+            seq.Join(_goalText.DORotate(new Vector3(0f, 0f, 1080f), 1f, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutCubic));
+        });
+        _saveUI.alpha = 0;
         HideConfirmationUI();
     }
 
     public void ShowSaveUI()
     {
         if (IsGameEnded) return;
-        _saveUI.SetActive(true);
-        _goalUI.SetActive(false);
+        _saveText.localScale = Vector3.zero;
+
+        _saveUI.DOFade(1, .5f).OnComplete(() =>
+        {
+            _saveText.localScale = Vector3.one * 70f;
+
+            Sequence seq = DOTween.Sequence();
+            seq.Join(_saveText.DOScale(10f, .25f).SetEase(Ease.OutExpo));
+            seq.Join(_saveText.DORotate(new Vector3(0f, 0f, 1080f), 1f, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutCubic));
+        });
+        _goalUI.alpha = 0;
         HideConfirmationUI();
     }
 
     public void HideResultUI()
     {
-        _goalUI.SetActive(false);
-        _saveUI.SetActive(false);
+        _saveUI.DOFade(0, 1f);
+        _goalUI.DOFade(0, 1f);
     }
 
     public void ShowConfirmationUI()
@@ -66,8 +88,7 @@ public class PKUIManager : MonoBehaviour
 
     private void UpdateScoreUI()
     {
-        _p1ScoreText.text = _p1Score.ToString();
-        _p2ScoreText.text = _p2Score.ToString();
+        _scoreText.text = $"{_p1Score}:{_p2Score}";
     }
 
     private void CheckWinner()
