@@ -61,8 +61,8 @@ namespace Tild.MiscUI
             }));
             
             
-            canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
-            {
+                canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
+                {
                 Time.timeScale = 1f;
                 TransitionManager.Go("Choice_Scene");
             }));
