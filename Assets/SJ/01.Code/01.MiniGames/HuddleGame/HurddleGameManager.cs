@@ -19,7 +19,6 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private float baseSpeed = 6f;
         [SerializeField] private float acceleration = 0.2f;
         [SerializeField] private float maxSpeed = 12f;
-        [SerializeField] private float trackLength = 120f;
 
         [Header("Round Settings")]
         [SerializeField] private int totalRounds = 3;
