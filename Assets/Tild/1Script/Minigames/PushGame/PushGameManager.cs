@@ -75,6 +75,8 @@ public class PushGameManager : MonoBehaviour
         if (is1Pwin) _1PScore++;
         else _2PScore++;
         
+        score.text = _1PScore.ToString() + " : " + _2PScore.ToString() ;
+        
         StartCoroutine(Celebration(is1Pwin));
     }
 
