@@ -44,13 +44,13 @@ namespace Tild.MiscUI
             sequence.Append(resultGroup.DOFade(1, 0.2f));
             sequence.Join(finishText.DOFade(1, 0.2f).SetDelay(0.3f).SetEase(Ease.InQuart));
             sequence.Join(finishText.transform.DOScale(Vector3.one, 0.2f).SetDelay(0.3f).SetEase(Ease.InQuart));
-            sequence.Append(barGroup.DOFade(1, 0.5f).SetDelay(3));
-            sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 0f), 0.5f).SetEase(Ease.InExpo));
-            sequence.Join(finishText.DOFade(0, 0.5f).SetEase(Ease.OutQuart));
-            sequence.Join(finishText.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutQuart));
+            sequence.Append(barGroup.DOFade(1, 0.3f).SetDelay(3));
+            sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 0f), 0.3f).SetEase(Ease.InExpo));
+            sequence.Join(finishText.DOFade(0, 0.2f).SetEase(Ease.OutQuart));
+            sequence.Join(finishText.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.OutQuart));
             sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 600f), 0.5f).SetDelay(0.3f).SetEase(Ease.OutExpo));
-            sequence.Join(scoreText.transform.DOScale(new Vector3(1.3f,1,1), 0.5f).SetEase(Ease.InQuart));
-            sequence.Join(titleText.transform.DOScale(new Vector3(1.3f,1,1), 0.5f).SetEase(Ease.InQuart));
+            sequence.Join(scoreText.transform.DOScale(new Vector3(1.3f,1,1), 0.3f).SetEase(Ease.InQuart));
+            sequence.Join(titleText.transform.DOScale(new Vector3(1.3f,1,1), 0.3f).SetEase(Ease.InQuart));
             sequence.Join(scoreText.DOFade(1, 0.3f).SetEase(Ease.InQuart));
             sequence.Join(titleText.DOFade(1, 0.3f).SetEase(Ease.InQuart));
 
