@@ -1,90 +1,176 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using Tild.Menu;
+using UnityEditor;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameManager_Russian : MonoBehaviour
 {
-    [SerializeField] private List<Player_RussianRoulette> players;
-    [SerializeField] private Revolver revolver;
+    [SerializeField] private RussianRoulletSO inputSO;
+    [SerializeField] private int targetScore = 3;
+    [SerializeField, Range(0f, 1f)] private float twoBulletProbability = 2f / 3f;
 
-    public int currentPlayerIndex;
-    private int currentRound = 1;
+    public event Action<bool> TurnChanged;
+    public event Action<int, int> ScoreChanged;
+    public event Action<int> RoundStarted;
+    public event Action RoundEnded;
+    public event Action<int> ShowChance;
+    public event Action<int> GuidUI;
+    public event Action HideGuid;
+
+    private Polishing_RussianRoulette polishing;
+
+    public int ScoreP1 => scoreP1;
+    public int ScoreP2 => scoreP2;
+    public bool IsP1Turn => isP1Turn;
+
+    private int scoreP1;
+    private int scoreP2;
+    private int roundIndex;
+    private readonly bool[] cylinder = new bool[6];
+    private int chamberIndex;
+    private bool isP1Turn;
     private bool roundActive = false;
+    private bool inputBusy;
 
     private void Start()
     {
+        polishing = GetComponent<Polishing_RussianRoulette>();
+    }
+
+    public void GameStart()
+    {
+        StartNewMatch();
+    }
+
+    private void OnEnable()
+    {
+        if (inputSO != null)
+        {
+            inputSO.OnL_Click += OnP1Click;
+            inputSO.OnR_Click += OnP2Click;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (inputSO != null)
+        {
+            inputSO.OnL_Click -= OnP1Click;
+            inputSO.OnR_Click -= OnP2Click;
+        }
+    }
+
+    private void StartNewMatch()
+    {
+        scoreP1 = 0;
+        scoreP2 = 0;
+        roundIndex = 0;
+        Debug.Log($"[Russian] New Match started. Target Score = {targetScore}");
+        ScoreChanged?.Invoke(scoreP1, scoreP2);
         StartRound();
     }
 
     private void StartRound()
     {
-        Debug.Log($"===== ROUND {currentRound} 시작 =====");
-        revolver.ReloadRandom();
-        foreach (var p in players) p.Revive();
+        polishing.SetAnimationToIdle();
 
-        currentPlayerIndex = Random.Range(0, players.Count);
-        roundActive = true;
-        Debug.Log($"{players[currentPlayerIndex].playerName}이(가) 먼저 시작합니다.");
-    }
+        roundIndex++;
+        Array.Clear(cylinder, 0, cylinder.Length);
 
-    [ContextMenu("Shoot")]
-    public void OnShootButton()
-    {
-        if (!roundActive) return;
-
-        Player_RussianRoulette current = players[currentPlayerIndex];
-        bool fired = revolver.Fire();
-
-        if (fired)
+        int bulletCount = UnityEngine.Random.value < twoBulletProbability ? 2 : 1;
+        int placed = 0;
+        while (placed < bulletCount)
         {
-            Debug.Log($"{current.playerName}이(가) 사망했습니다!");
-            current.Die();
-
-            roundActive = false;
-            EndRound();
-        }
-        else
-        {
-            Debug.Log($"{current.playerName} 생존. 다음 턴으로 넘어갑니다.");
-            NextTurn();
-        }
-    }
-
-    private void NextTurn()
-    {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
-        if (!players[currentPlayerIndex].isAlive)
-            NextTurn();
-    }
-
-    private void EndRound()
-    {
-        Debug.Log($"===== ROUND {currentRound} 종료 =====");
-
-        currentRound++;
-
-        if (currentRound <= 3)
-            Invoke(nameof(StartRound), 2f); // 2초 후 다음 라운드
-        else
-            EndGame();
-    }
-
-    private void EndGame()
-    {
-        Debug.Log("===== 게임 종료 =====");
-
-        int minDeath = int.MaxValue;
-        Player_RussianRoulette winner = null;
-
-        foreach (var p in players)
-        {
-            Debug.Log($"{p.playerName}: 사망 {p.deathCount}회");
-            if (p.deathCount < minDeath)
+            int idx = UnityEngine.Random.Range(0, 6);
+            if (!cylinder[idx])
             {
-                minDeath = p.deathCount;
-                winner = p;
+                cylinder[idx] = true;
+                placed++;
             }
         }
 
-        Debug.Log($"승자: {winner.playerName}!");
+        chamberIndex = UnityEngine.Random.Range(0, 6);
+        isP1Turn = UnityEngine.Random.value < 0.5f;
+        roundActive = true;
+        inputBusy = false;
+
+        polishing.SetCamera(isP1Turn ? 1 : 2);
+        polishing.SetAnimatorHolding(isP1Turn ? 1 : 2);
+        polishing.SetAnimatorScaring(isP1Turn ? 2 : 1);
+
+        GuidUI?.Invoke(isP1Turn ? 1 : 2);
+        ShowChance?.Invoke(bulletCount);
+
+        RoundStarted?.Invoke(roundIndex);
+        TurnChanged?.Invoke(isP1Turn);
+    }
+
+    private void OnP1Click()
+    {
+        if (!roundActive || inputBusy) return;
+        if (!isP1Turn) { return; }
+        StartCoroutine(ResolveTrigger("P1"));
+    }
+
+    private void OnP2Click()
+    {
+        if (!roundActive || inputBusy) return;
+        if (isP1Turn) { return; }
+        StartCoroutine(ResolveTrigger("P2"));
+    }
+
+    private IEnumerator ResolveTrigger(string who)
+    {
+        inputBusy = true;
+        HideGuid?.Invoke();
+
+        bool fire = cylinder[chamberIndex];
+        RoundEnded?.Invoke();
+
+        if (fire)
+        {
+            //발사
+            polishing.SetAnimatorFire(isP1Turn ? 1 : 2);
+            polishing.SetAnimatorDeath(isP1Turn ? 2 : 1);
+            polishing.GunLight();
+
+            if (who == "P1") scoreP1++; else scoreP2++;
+            ScoreChanged?.Invoke(scoreP1, scoreP2);
+
+            if (scoreP1 >= targetScore || scoreP2 >= targetScore)
+            {
+                string winner = scoreP1 > scoreP2 ? "P1" : "P2";
+                roundActive = false;
+
+                yield return new WaitForSeconds(3f);
+                MinigameManager.instance.Finish(scoreP1 > scoreP2);
+                yield break;
+            }
+
+            roundActive = false;
+            yield return new WaitForSeconds(3f);
+            StartRound();
+        }
+        else
+        {
+            chamberIndex = (chamberIndex + 1) % 6;
+            isP1Turn = !isP1Turn;
+
+            //안발사
+            yield return new WaitForSeconds(3f);
+
+            TurnChanged?.Invoke(isP1Turn);
+
+            polishing.SetCamera(isP1Turn ? 1 : 2);
+            polishing.SetAnimatorHolding(isP1Turn ? 1 : 2);
+            polishing.SetAnimatorScaring(isP1Turn ? 2 : 1);
+
+            GuidUI?.Invoke(isP1Turn ? 1 : 2);
+
+            inputBusy = false;
+        }
     }
 }

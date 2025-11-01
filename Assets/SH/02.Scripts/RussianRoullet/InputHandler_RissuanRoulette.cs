@@ -4,12 +4,6 @@ using UnityEngine;
 public class InputHandler_RissuanRoulette : MonoBehaviour
 {
     [SerializeField] private RussianRoulletSO russianRouletteInput;
-    private GameManager_Russian gameManager;
-
-    private void Start()
-    {
-        gameManager = GetComponent<GameManager_Russian>();
-    }
 
     private void OnEnable()
     {
@@ -23,19 +17,11 @@ public class InputHandler_RissuanRoulette : MonoBehaviour
         russianRouletteInput.OnR_Click -= HandleR_Click;
     }
 
-    private void HandleR_Click()
-    {
-        if (gameManager.currentPlayerIndex == 0)
-        {
-            gameManager.OnShootButton();
-        }
-    }
-
     private void HandleL_Click()
     {
-        if (gameManager.currentPlayerIndex == 1)
-        {
-            gameManager.OnShootButton();
-        }
+    }
+
+    private void HandleR_Click()
+    {
     }
 }
