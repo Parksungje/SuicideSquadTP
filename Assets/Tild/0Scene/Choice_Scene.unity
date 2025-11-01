@@ -2871,7 +2871,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigame:
-  - {fileID: 11400000, guid: 5b358c9550fc2f14cb40b29382a403ac, type: 2}
+  - {fileID: 11400000, guid: 2e7c7984cd73bd2439481a16a028cf0b, type: 2}
+  - {fileID: 11400000, guid: 1a70ab8dc9abdba49a11db9934b30678, type: 2}
+  - {fileID: 11400000, guid: 9a45b783de61aea4dabeb161f3e54cb2, type: 2}
+  - {fileID: 11400000, guid: 475a44b455a7cd84890cd6c8e921e00f, type: 2}
   inputSO: {fileID: 11400000, guid: 1363783125641f34c87855465353b640, type: 2}
   canvasGroup: {fileID: 0}
   minigameName: {fileID: 1621361045}
@@ -2880,6 +2883,7 @@ MonoBehaviour:
   minigameBackground: {fileID: 400954508}
   spaceText: {fileID: 970257329}
   IsPopuped: 0
+  ranndomMinigameWindow: {fileID: 1744518352}
   scroller: {fileID: 1785804698}
   namePrefab: {fileID: 2044114469232792948, guid: 7829d9e71cc01934a9b844d6551cfda0, type: 3}
   finalMinigame: {fileID: 1770812050}
@@ -3667,7 +3671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1744518353
 RectTransform:
   m_ObjectHideFlags: 0

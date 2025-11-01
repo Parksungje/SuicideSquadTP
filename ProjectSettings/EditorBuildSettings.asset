@@ -15,19 +15,25 @@ EditorBuildSettings:
     path: Assets/Tild/0Scene/Choice_Scene.unity
     guid: 36c45066974215b42b7955abc626a957
   - enabled: 1
-    path: Assets/Tild/0Scene/Minigames/BalanceGame.unity
+    path: Assets/Tild/0Scene/Minigames/Balance.unity
     guid: 0eeba98408f8aa74c99d561ac99b44a2
   - enabled: 1
-    path: Assets/Tild/0Scene/Minigames/SpinGame.unity
+    path: Assets/Tild/0Scene/Minigames/Spin.unity
     guid: c8f5ef2d3e03f1d4088b17f8f9d30657
   - enabled: 1
-    path: Assets/Tild/0Scene/Minigames/RopeGame.unity
+    path: Assets/Tild/0Scene/Minigames/Rope.unity
     guid: a17b4d099b6b2ad43970600e070dedb0
   - enabled: 1
     path: Assets/SJ/00.Scene/PenaltyKick.unity
     guid: 6a5a52811e942d24388ecc95df47cec0
   - enabled: 1
-    path: Assets/Tild/0Scene/Minigames/PoleGame.unity
+    path: Assets/Tild/0Scene/Minigames/Fall.unity
+    guid: 2212e17224d84a14fbe0ab2a89ff88ea
+  - enabled: 1
+    path: Assets/Tild/0Scene/Minigames/Push.unity
+    guid: c2f560a04f70a0343a406c042ef02bfa
+  - enabled: 1
+    path: Assets/Tild/0Scene/Minigames/Pole.unity
     guid: 28f07a72eb31cd64eaac332933c161e0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

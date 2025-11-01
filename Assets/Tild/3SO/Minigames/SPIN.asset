@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
-  m_Name: SpinGame 1
+  m_Name: SPIN
   m_EditorClassIdentifier: 
   gameName: "\uB098\uD0DC \uC9C0\uC625"
-  description: "\uBC15\uC138\uD604 \uC5C9\uB315\uC774"
-  playScreen: {fileID: 21300000, guid: 0e8eeb265543fea48a5ae447311cbb12, type: 3}
-  scene: SpinGame
-  backgroundColor: {r: 0.23064259, g: 0.548725, b: 0.6886792, a: 1}
+  description: "\uBB34\uD55C\uD788 \uB3CC\uC544\uAC00\uB294 \uB450 \uAC1C\uC758 \uC7A5\uC560\uBB3C\uC744
+    \uD53C\uD574 \uCD5C\uB300\uD55C \uC624\uB798 \uC0B4\uC544\uB0A8\uC73C\uC138\uC694!"
+  playScreen: {fileID: 0}
+  scene: Spin
+  backgroundColor: {r: 0.7264151, g: 0.20901564, b: 0.20901564, a: 1}
