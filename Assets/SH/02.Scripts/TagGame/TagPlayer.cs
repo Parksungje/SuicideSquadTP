@@ -23,6 +23,7 @@ public class TagPlayer : MonoBehaviour
         {
             manager.collisionDebounce = false;
             print(_is1P);
+            SoundManager.Instance.Play("Tag_Switch");
 
             manager.OnPlayerTagged(_is1P);
             Invoke("DebounceDelay", 0.5f);

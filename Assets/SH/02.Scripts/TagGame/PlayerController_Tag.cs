@@ -74,7 +74,7 @@ public class PlayerController_Tag : MonoBehaviour
         {
             isJumpingP1 = true;
             animator_P1.SetBool(IsJumpingHash, true);
-
+            SoundManager.Instance.Play("Tag_Jump");
             Vector3 v = rigidbody_P1.linearVelocity;
             v.y = 0f;
             rigidbody_P1.linearVelocity = v;
@@ -99,6 +99,7 @@ public class PlayerController_Tag : MonoBehaviour
     {
         if (IsGrounded(rigidbody_P2))
         {
+            SoundManager.Instance.Play("Tag_Jump");
             isJumpingP2 = true;
             animator_P2.SetBool(IsJumpingHash, true);
 

@@ -25,6 +25,8 @@ namespace Tild.Minigames.PoleGame
             isTriggered = true;
             if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Player"))
             {
+                SoundManager.Instance.Play("Pole_Bonk");
+              
                 transform.DOScale(Vector3.zero, 0.3f);
                 transform.DOShakePosition(0.6f, 5, 3, 3).OnComplete(
                     () =>

@@ -147,7 +147,7 @@ namespace Tild.Minigames.SpinGame
                 Quaternion targetRotation = Quaternion.LookRotation(moveDir, Vector3.up);
                 rigid.transform.rotation = targetRotation;
             }
-
+            SoundManager.Instance.Play("Spin_Jump");
             animator.SetTrigger("JUMP");
             
             Vector3 jumpVector = (Vector3.up * jumpPower) + (moveDir * movePower);
@@ -178,11 +178,17 @@ namespace Tild.Minigames.SpinGame
             TargetCamera.gameObject.SetActive(false);
             celebCamera.gameObject.SetActive(true);
             celebCamera.Follow = is1Pwin ? rigid1P.transform : rigid2P.transform;
-            
+
             if (is1Pwin)
-                celebrationFX1P.Play();
-            else 
-                celebrationFX2P.Play();
+            {
+                celebrationFX1P.Play();   SoundManager.Instance.Play("Confetti");
+                
+            }
+            else
+            {
+                celebrationFX2P.Play();   SoundManager.Instance.Play("Confetti");
+                
+            }
             yield return new WaitForSeconds(3f);
           
             MinigameManager.instance.Finish(is1Pwin);

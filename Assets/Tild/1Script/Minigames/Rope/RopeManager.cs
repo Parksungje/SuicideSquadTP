@@ -86,7 +86,9 @@ namespace Tild._1Script.Minigames.Rope
             if (pos.x == minX || pos.x == maxX)
             {
                 StartCoroutine(FinishGame());
+                SoundManager.Instance.Play("Rope_Fall");
             }
+            SoundManager.Instance.Stop("Rope_Pull");
             pos.x = Mathf.Lerp(minX, maxX, (percentage - minPercentage) / (maxPercentage - minPercentage));
             rope.localPosition = pos;
         }
@@ -102,7 +104,9 @@ namespace Tild._1Script.Minigames.Rope
                 yield return new WaitForSeconds(2);
                 _celebCamera1P.gameObject.SetActive(true);
                 celebrateImpact1P.Play();
+                SoundManager.Instance.Play("Confetti");
                 yield return new WaitForSeconds(3);
+                SoundManager.Instance.Stop("Rope_BGM");
                 MinigameManager.instance.Finish(true);
             }
             else
@@ -111,8 +115,12 @@ namespace Tild._1Script.Minigames.Rope
                 yield return new WaitForSeconds(2);
                 _celebCamera2P.gameObject.SetActive(true);
                 celebrateImpact1P.Play();
+                SoundManager.Instance.Play("Confetti");
+
                 yield return new WaitForSeconds(3);
+                SoundManager.Instance.Stop("Rope_BGM");
                 MinigameManager.instance.Finish(false);
+               
             }
         }
 
@@ -130,6 +138,7 @@ namespace Tild._1Script.Minigames.Rope
                     percentage -= SPECIAL_PULL_BONUS;
                     percentage = Mathf.Clamp(percentage, -100, 100);
                     specialImpact1P.Play();
+                    SoundManager.Instance.Stop("Rope_StrongPull");
                 }
                 player1P.DOPunchPosition(Vector3.zero, 0.5f, 10, 1);
                 pullImpact1P.Play();
@@ -158,6 +167,7 @@ namespace Tild._1Script.Minigames.Rope
                     percentage += SPECIAL_PULL_BONUS;
                     percentage = Mathf.Clamp(percentage, -100, 100);
                     specialImpact2P.Play();
+                    SoundManager.Instance.Stop("Rope_StrongPull");
                 }
                 UpdateRopePosition();
             }
