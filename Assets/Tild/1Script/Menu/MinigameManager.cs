@@ -16,8 +16,8 @@ namespace Tild.Menu
         
         private int amount;
         private int round;
-        private int _1PScore;
-        private int _2PScore;
+        public int _1PScore;
+        public int _2PScore;
         
         private ResultUI resultUI;
         
