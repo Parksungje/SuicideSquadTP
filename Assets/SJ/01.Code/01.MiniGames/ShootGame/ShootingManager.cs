@@ -152,15 +152,22 @@ public class ShootingManager : MonoBehaviour
     private void AttemptShoot(CrossHairComponent crossHair, Animator animator, int playerNumber)
     {
         if (crossHair == null || _roundOver || _gameEnded) return;
+
+        SoundManager.Instance.Play("Shooting_Fire");
+
         if (animator != null)
         {
             animator.SetBool("isFire", true);
             Invoke(nameof(ResetFireFlags), 0.1f);
         }
+
         TargetComponent target = crossHair.GetCurrentTarget();
         if (target != null)
         {
             target.OnHit();
+
+            SoundManager.Instance.Play("Shooting_Target");
+
             if (playerNumber == 1)
             {
                 _p1Score += 20;

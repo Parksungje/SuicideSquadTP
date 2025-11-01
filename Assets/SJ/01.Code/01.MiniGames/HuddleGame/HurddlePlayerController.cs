@@ -45,7 +45,7 @@ namespace SJ.Minigames.Hurdle
 
         [SerializeField] private float baseSpeedMul = 1.35f;
         [SerializeField] private float fallMultiplier = 2.5f;
-            
+
         Rigidbody _rb;
         CapsuleCollider _col;
         bool _canControl = false;
@@ -131,15 +131,27 @@ namespace SJ.Minigames.Hurdle
         public void TryJump()
         {
             if (!_canControl || !_canJump || !IsGrounded()) return;
-            EvaluateJumpTiming();
+
+            // 점프 사운드
+            SoundManager.Instance.Play("Hurdle_Jump");
+
+            TimingGrade grade = EvaluateJumpTiming();
             _canJump = false;
-            Vector3 v = _rb.linearVelocity; v.y = 0f; _rb.linearVelocity = v;
+
+            Vector3 v = _rb.linearVelocity;
+            v.y = 0f;
+            _rb.linearVelocity = v;
+
             _rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
             animator?.SetTrigger(HashJump);
             StartCoroutine(Co_JumpCooldown());
+
+            // 퍼펙트 사운드
+            if (grade == TimingGrade.Perfect)
+                SoundManager.Instance.Play("Hurdle_Perfact");
         }
 
-        void EvaluateJumpTiming()
+        TimingGrade EvaluateJumpTiming()
         {
             Vector3 fwd = transform.forward.normalized;
             Vector3 up = Vector3.up;
@@ -167,7 +179,7 @@ namespace SJ.Minigames.Hurdle
                 if (forwardDist < bestForwardDist) { bestForwardDist = forwardDist; best = c; }
             }
             _lastBest = best;
-            if (best == null) { ApplyTimingEffect(TimingGrade.None); return; }
+            if (best == null) { ApplyTimingEffect(TimingGrade.None); return TimingGrade.None; }
 
             float pMin = Mathf.Max(0f, perfectMin - timingLeniency);
             float pMax = perfectMax + timingLeniency;
@@ -175,6 +187,7 @@ namespace SJ.Minigames.Hurdle
             TimingGrade grade = (snapPerfect || (bestForwardDist >= pMin && bestForwardDist <= pMax)) ? TimingGrade.Perfect :
                                 (bestForwardDist > pMax) ? TimingGrade.Early : TimingGrade.Late;
             ApplyTimingEffect(grade);
+            return grade;
         }
 
         enum TimingGrade { None, Early, Perfect, Late }
@@ -227,13 +240,20 @@ namespace SJ.Minigames.Hurdle
         {
             if (_isStumbling) return;
             if (!other.collider.CompareTag("Hurdle")) return;
+
+            SoundManager.Instance.Play("Hurdle_Stum");
+
             StartCoroutine(Co_Stumble());
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Hurdle") || _rb.linearVelocity.y > 0.1f) return;
-            if (!_isStumbling) StartCoroutine(Co_Stumble());
+            if (!_isStumbling)
+            {
+                SoundManager.Instance.Play("Hurdle_Stum");
+                StartCoroutine(Co_Stumble());
+            }
             Vector3 vel = _rb.linearVelocity; vel.z *= stumbleSlowMul; _rb.linearVelocity = vel;
         }
 

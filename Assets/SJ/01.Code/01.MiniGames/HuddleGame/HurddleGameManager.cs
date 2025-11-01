@@ -29,19 +29,19 @@ namespace SJ.Minigames.Hurdle
         private int _p1RoundWins;
         private int _p2RoundWins;
 
-        private void Start()
-        {
-            player1.InitStartPosition();
-            player2.InitStartPosition();
-            StartCoroutine(Co_StartRound());
-        }
-
         private void Awake()
         {
             _startPosFinish = finishLine.position;
             winnerText?.SetText("");
             countdownText?.SetText("");
             roundText?.SetText("");
+        }
+
+        private void Start()
+        {
+            player1.InitStartPosition();
+            player2.InitStartPosition();
+            StartCoroutine(Co_StartRound());
         }
 
         private void OnEnable()
@@ -74,6 +74,7 @@ namespace SJ.Minigames.Hurdle
         private IEnumerator Co_StartRound()
         {
             ResetRace();
+            yield return new WaitForSeconds(0.3f);
             roundText?.SetText($"Round {currentRound}/{totalRounds}");
             yield return Co_CountdownThenStart();
         }
