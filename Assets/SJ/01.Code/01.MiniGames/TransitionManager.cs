@@ -27,7 +27,7 @@ public class TransitionManager : MonoBehaviour
 
     [SerializeField] private Image overlayImage;
     [SerializeField] private Material materialTemplate;
-    [SerializeField] private float fadeDuration = 0.7f;
+    [SerializeField] private float fadeDuration = 2f;
     [SerializeField] private Ease fadeEase = Ease.InOutQuad;
 
     private Material _mat;
@@ -54,6 +54,7 @@ public class TransitionManager : MonoBehaviour
         _mat.SetFloat(_scrollId, 0f);
         _mat.SetFloat(_alphaId, 0f);
     }
+
     private void Start()
     {
         StartCoroutine(Co_InitialFadeIn());
@@ -82,6 +83,7 @@ public class TransitionManager : MonoBehaviour
 
         overlayImage.gameObject.SetActive(true);
 
+        overlayImage.color = Color.white;
         _mat.SetFloat(_scrollId, 0f);
         _mat.SetFloat(_alphaId, 0f);
 
@@ -103,6 +105,7 @@ public class TransitionManager : MonoBehaviour
             BuildMaterialInstance();
         }
 
+        overlayImage.color = Color.black;
         _mat.SetFloat(_scrollId, 3f);
         _mat.SetFloat(_alphaId, 1f);
 
@@ -141,7 +144,7 @@ public class TransitionManager : MonoBehaviour
         rt.offsetMax = Vector2.zero;
 
         overlayImage = overlayGO.GetComponent<Image>();
-        overlayImage.color = Color.white;
+        overlayImage.color = Color.black;
         overlayImage.raycastTarget = false;
     }
 
@@ -149,7 +152,6 @@ public class TransitionManager : MonoBehaviour
     {
         if (materialTemplate == null)
         {
-            Debug.LogWarning("No transition material assigned. Using default UI material.");
             materialTemplate = new Material(Shader.Find("UI/Default"));
         }
 
@@ -167,7 +169,6 @@ public class TransitionManager : MonoBehaviour
         return 0;
     }
 
-
     private IEnumerator Co_InitialFadeIn()
     {
         if (overlayImage == null)
@@ -177,6 +178,7 @@ public class TransitionManager : MonoBehaviour
         }
 
         overlayImage.gameObject.SetActive(true);
+        overlayImage.color = Color.black;
         _mat.SetFloat(_scrollId, 0f);
         _mat.SetFloat(_alphaId, 1f);
 
@@ -190,5 +192,4 @@ public class TransitionManager : MonoBehaviour
         yield return _alphaTween.WaitForCompletion();
         overlayImage.gameObject.SetActive(false);
     }
-
 }
