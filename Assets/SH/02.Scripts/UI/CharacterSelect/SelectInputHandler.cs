@@ -14,7 +14,10 @@ public class SelectInputHandler : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private Image flash;
-    [SerializeField] private GameObject cats;
+    [SerializeField] private Image fade;
+    [SerializeField] private GameObject gameSetting;
+
+    [SerializeField] private GameObject characterSelect;
 
     private void OnEnable()
     {
@@ -42,11 +45,6 @@ public class SelectInputHandler : MonoBehaviour
         selectInput.OnR_Next -= HandleR_Next;
         selectInput.OnR_Confirm -= HandleR_Confirm;
         selectInput.OnR_Cancel -= Cancel;
-    }
-
-    private void Update()
-    {
-        CheckBothReady();
     }
 
     private void HandleL_Previous(bool isholding)
@@ -104,7 +102,17 @@ public class SelectInputHandler : MonoBehaviour
             bothReady = true;
             flash.gameObject.SetActive(true);
             flash.DOFade(0, 2);
-            //트렌지션 매니저 후 게임 설정창으로 ㄱㄱ
+
+            fade.raycastTarget = true;
+            fade.DOFade(1, 1).OnComplete(() =>
+            {
+                gameSetting.SetActive(true);
+                characterSelect.SetActive(false);
+                fade.DOFade(0, 1).SetDelay(3).OnComplete(() =>
+                {
+                    fade.raycastTarget = false;
+                });
+            });
         }
     }
 }
