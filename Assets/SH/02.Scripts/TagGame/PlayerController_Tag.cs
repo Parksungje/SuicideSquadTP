@@ -5,6 +5,8 @@ public class PlayerController_Tag : MonoBehaviour
     [SerializeField] private TagGameSO tagGameInput;
     [SerializeField] private Rigidbody rigidbody_P1;
     [SerializeField] private Rigidbody rigidbody_P2;
+    [SerializeField] private Transform nameTag_P1;
+    [SerializeField] private Transform nameTag_P2;
 
     [Header("PlayerSetting")]
     [SerializeField] private float walkSpeed = 5f;
@@ -84,6 +86,7 @@ public class PlayerController_Tag : MonoBehaviour
     {
         dirP2 = isHolding ? -1 : (dirP2 == -1 ? 0 : dirP2);
         animator_P2.SetBool(IsRunninwgHash, isHolding);
+        
     }
 
     private void HandleR_RightDir(bool isHolding)
@@ -139,14 +142,29 @@ public class PlayerController_Tag : MonoBehaviour
     private void CalcRot()
     {
         if (dirP1 < 0)
+        {
             rigidbody_P1.transform.rotation = Quaternion.Euler(0f, -110f, 0f);
+            nameTag_P1.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        }
+                
         else if (dirP1 > 0)
+        {
             rigidbody_P1.transform.rotation = Quaternion.Euler(0f, 110f, 0f);
+            nameTag_P1.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+         
+        }
 
         if (dirP2 < 0)
+        {
             rigidbody_P2.transform.rotation = Quaternion.Euler(0f, -110f, 0f);
+            nameTag_P2.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+            
+        }
         else if (dirP2 > 0)
+        {
             rigidbody_P2.transform.rotation = Quaternion.Euler(0f, 110f, 0f);
+            nameTag_P2.transform.localRotation= Quaternion.Euler(0f, -90f, 0f);
+        }
     }
 
     private void UpdateAnimatorStates()

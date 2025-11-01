@@ -23,11 +23,10 @@ namespace Tild.Minigames.Boxing
         [SerializeField] private float parryWindow = 0.2f;
         [SerializeField] private float parryStunDuration = 2f;
 
-    
-        [SerializeField] private float hitstunDuration = 0.3f;  
-        [SerializeField] private int hitsToKnockback = 3;        
-        [SerializeField] private float heavyKnockbackForce = 6f; 
-        [SerializeField] private float comboResetTime = 0.3f;   
+        [SerializeField] private float hitstunDuration = 0.3f;
+        [SerializeField] private int hitsToKnockback = 3;
+        [SerializeField] private float heavyKnockbackForce = 6f;
+        [SerializeField] private float comboResetTime = 0.3f;
 
         private int health1P = 100, health2P = 100;
         private bool debounce1P, debounce2P;
@@ -36,12 +35,13 @@ namespace Tild.Minigames.Boxing
         private int guardHits1P, guardHits2P;
         private float guardStartTime1P, guardStartTime2P;
         private float stunUntil1P, stunUntil2P;
+        private bool _isFinished;
 
-       
         private int hitComboOn1P, hitComboOn2P;
         private float lastHitTimeOn1P, lastHitTimeOn2P;
 
-        [Header("UI&Effects")] [Space] [SerializeField] private RectTransform healthBar1P, healthBar2P;
+        [Header("UI&Effects")] [Space]
+        [SerializeField] private RectTransform healthBar1P, healthBar2P;
         [SerializeField] private ParticleSystem hitImpact1P, hitImpact2P;
         [SerializeField] private ParticleSystem stunImpact1P, stunImpact2P;
         [SerializeField] private ParticleSystem shieldImpact1P, shieldImpact2P;
@@ -70,18 +70,14 @@ namespace Tild.Minigames.Boxing
 
         private void Handle1PGuardState(bool pressed)
         {
-            if (Time.time < stunUntil1P) return; 
+            if (Time.time < stunUntil1P) return;
             isDefending1P = pressed;
             animator1P.SetBool("isGuarding", pressed);
+            shieldImpact1P.gameObject.SetActive(pressed);
             if (pressed)
             {
                 guardStartTime1P = Time.time;
                 guardHits1P = 0;
-                shieldImpact1P.gameObject.SetActive(true);
-            }
-            else
-            {
-                shieldImpact1P.gameObject.SetActive(false);
             }
         }
 
@@ -90,22 +86,17 @@ namespace Tild.Minigames.Boxing
             if (Time.time < stunUntil2P) return;
             isDefending2P = pressed;
             animator2P.SetBool("isGuarding", pressed);
-            
+            shieldImpact2P.gameObject.SetActive(pressed);
             if (pressed)
             {
                 guardStartTime2P = Time.time;
                 guardHits2P = 0;
-                shieldImpact2P.gameObject.SetActive(true);
-            }
-            else
-            {
-                shieldImpact2P.gameObject.SetActive(false);
             }
         }
 
         private void Handle1PBack()
         {
-            if (debounce1P || Time.time < stunUntil1P) return; 
+            if (debounce1P || Time.time < stunUntil1P || isDefending1P) return;
             debounce1P = true;
             backDefend1P = true;
             rigid1P.linearVelocity = Vector3.right * backForce;
@@ -116,7 +107,7 @@ namespace Tild.Minigames.Boxing
 
         private void Handle1PDashAttack()
         {
-            if (debounce1P || Time.time < stunUntil1P) return; 
+            if (debounce1P || Time.time < stunUntil1P || isDefending1P) return;
             debounce1P = true;
             animator1P.SetTrigger("Punch");
             rigid1P.linearVelocity = Vector3.left * dashForce;
@@ -125,7 +116,7 @@ namespace Tild.Minigames.Boxing
                 bool guardActive = isDefending2P || backDefend2P;
                 bool parry = isDefending2P && Time.time - guardStartTime2P <= parryWindow;
                 TakeDamage(ref health2P, hitImpact2P, rigid2P, animator2P, Vector3.right, guardActive, parry,
-                    ref guardHits2P, ref stunUntil2P, rigid1P, animator1P, ref stunUntil1P, isTarget1P:false);
+                    ref guardHits2P, ref stunUntil2P, rigid1P, animator1P, ref stunUntil1P, false);
             }
 
             Invoke(nameof(Stop1PMove), 0.25f);
@@ -142,7 +133,7 @@ namespace Tild.Minigames.Boxing
 
         private void Handle2PBack()
         {
-            if (debounce2P || Time.time < stunUntil2P) return;
+            if (debounce2P || Time.time < stunUntil2P || isDefending2P) return;
             debounce2P = true;
             backDefend2P = true;
             rigid2P.linearVelocity = Vector3.left * backForce;
@@ -153,7 +144,7 @@ namespace Tild.Minigames.Boxing
 
         private void Handle2PDashAttack()
         {
-            if (debounce2P || Time.time < stunUntil2P) return; 
+            if (debounce2P || Time.time < stunUntil2P || isDefending2P) return;
             debounce2P = true;
             animator2P.SetTrigger("Punch");
             rigid2P.linearVelocity = Vector3.right * dashForce;
@@ -162,7 +153,7 @@ namespace Tild.Minigames.Boxing
                 bool guardActive = isDefending1P || backDefend1P;
                 bool parry = isDefending1P && Time.time - guardStartTime1P <= parryWindow;
                 TakeDamage(ref health1P, hitImpact1P, rigid1P, animator1P, Vector3.left, guardActive, parry,
-                    ref guardHits1P, ref stunUntil1P, rigid2P, animator2P, ref stunUntil2P, isTarget1P:true);
+                    ref guardHits1P, ref stunUntil1P, rigid2P, animator2P, ref stunUntil2P, true);
             }
 
             Invoke(nameof(Stop2PMove), 0.25f);
@@ -197,9 +188,8 @@ namespace Tild.Minigames.Boxing
                 attackerStunUntil = Time.time + parryStunDuration;
                 attackerRigid.linearVelocity = Vector3.zero;
                 targetRigid.linearVelocity = Vector3.zero;
-                
                 ResetHitCombo(isTarget1P);
-                SetText(isTarget1P,"PARRY 피해! 몇 초동안 경직 상태.");
+                SetText(isTarget1P, "PARRY 피해! 몇 초동안 경직 상태.");
                 if (isTarget1P) stunImpact1P.Play();
                 else stunImpact2P.Play();
                 return;
@@ -214,12 +204,10 @@ namespace Tild.Minigames.Boxing
                     defenderStunUntil = Time.time + guardBreakStunDuration;
                     if (targetAnimator == animator1P) { isDefending1P = false; animator1P.SetBool("isGuarding", false); }
                     if (targetAnimator == animator2P) { isDefending2P = false; animator2P.SetBool("isGuarding", false); }
-                    // 연타 초기화
                     if (isTarget1P) guardBreakImpact1P.Play();
-                    else guardBreakImpact1P.Play();
-                    
+                    else guardBreakImpact2P.Play();
                     ResetHitCombo(isTarget1P);
-                    SetText(isTarget1P,"가드 브레이크! 몇 초동안 움직이지 못합니다.");
+                    SetText(isTarget1P, "가드 브레이크! 몇 초동안 움직이지 못합니다.");
                 }
                 return;
             }
@@ -230,22 +218,17 @@ namespace Tild.Minigames.Boxing
             targetAnimator.SetTrigger("Damaged");
             UpdateUI();
 
-   
             int combo = GetAndBumpHitCombo(isTarget1P);
-
-      
 
             if (combo >= hitsToKnockback)
             {
-             
-                defenderStunUntil = Time.time; 
+                defenderStunUntil = Time.time;
                 targetRigid.linearVelocity = -knockDir * heavyKnockbackForce;
                 ResetHitCombo(isTarget1P);
-                SetText(isTarget1P,"3연타! 강한 넉백 발생, 반격 기회!");
+                SetText(isTarget1P, "3연타! 강한 넉백 발생, 반격 기회!");
             }
             else
             {
-            
                 defenderStunUntil = Time.time + hitstunDuration;
                 targetRigid.linearVelocity = knockDir * knockbackForce;
             }
@@ -264,18 +247,19 @@ namespace Tild.Minigames.Boxing
             healthBar1P.localScale = new Vector3(Mathf.Max(health1P / 100f, 0f), 1, 1);
             healthBar2P.localScale = new Vector3(Mathf.Max(health2P / 100f, 0f), 1, 1);
 
-            if (health1P == 0 || health2P == 0)
+            if (_isFinished) return;
+            if (health1P <= 0 || health2P <= 0)
             {
-                MinigameManager.instance.Finish(health1P > health2P);
+                _isFinished = true;
+                bool is1PWin = health1P > health2P;
+                MinigameManager.instance.Finish(is1PWin);
             }
         }
 
-  
         private int GetAndBumpHitCombo(bool isTarget1P)
         {
             if (isTarget1P)
             {
-         
                 if (Time.time - lastHitTimeOn1P > comboResetTime) hitComboOn1P = 0;
                 hitComboOn1P++;
                 lastHitTimeOn1P = Time.time;
@@ -292,11 +276,11 @@ namespace Tild.Minigames.Boxing
 
         private void SetText(bool isTarget1P, string text)
         {
-            
             infos.color = !isTarget1P ? Color.red : Color.blue;
-            infos.text = (!isTarget1P ? "1P의 " : "2P의 " )+ text;
-            infos.transform.DOPunchPosition(Vector3.one,0.5f,10,1);
+            infos.text = (!isTarget1P ? "1P의 " : "2P의 ") + text;
+            infos.transform.DOPunchPosition(Vector3.one, 0.5f, 10, 1);
         }
+
         private void ResetHitCombo(bool isTarget1P)
         {
             if (isTarget1P) { hitComboOn1P = 0; lastHitTimeOn1P = 0f; }

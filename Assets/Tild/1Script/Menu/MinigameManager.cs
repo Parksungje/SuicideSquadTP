@@ -53,13 +53,13 @@ namespace Tild.Menu
         public void Finish(bool is1Pwin)
         {
             Time.timeScale = 0;
-            if (is1Pwin) _1PScore++;
-            else _2PScore++;
-
+            
             resultUI.ViewResult(_1PScore, _2PScore, is1Pwin, (() =>
             {
                 Time.timeScale = 1;
                 SceneManager.LoadScene("Choice_Scene");
+                if (is1Pwin) _1PScore++;
+                else _2PScore++;
             }));
           
         }
