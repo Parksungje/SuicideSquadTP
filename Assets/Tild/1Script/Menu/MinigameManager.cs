@@ -15,6 +15,7 @@ namespace Tild.Menu
         public bool isRandomMode { get; set; }
         
         private int amount;
+        private int round;
         private int _1PScore;
         private int _2PScore;
         
@@ -47,7 +48,7 @@ namespace Tild.Menu
 
         public void NextMinigame(string scene)
         {
-            SceneManager.LoadScene(scene);
+            TransitionManager.Go(scene);
         }
 
         public void Finish(bool is1Pwin)
@@ -56,10 +57,28 @@ namespace Tild.Menu
             
             resultUI.ViewResult(_1PScore, _2PScore, is1Pwin, (() =>
             {
-                Time.timeScale = 1;
-                SceneManager.LoadScene("Choice_Scene");
                 if (is1Pwin) _1PScore++;
                 else _2PScore++;
+                
+                Time.timeScale = 1;
+                if (gameType == GameType.Round)
+                {
+                    round++;
+                    if (round == amount) ;
+                    {
+                        TransitionManager.Go("ResultScene");
+                    }
+                }
+                else if (gameType == GameType.Score)
+                {
+                    if (_1PScore == amount || _2PScore == amount)
+                    {
+                        TransitionManager.Go("ResultScene");
+                    };
+                }
+                
+                TransitionManager.Go("Choice_Scene");
+              
             }));
           
         }
