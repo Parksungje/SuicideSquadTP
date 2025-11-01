@@ -16,40 +16,13 @@ public class TagGameSO : BaseInputSO
     public Action OnR_Jump;
     public Action OnR_Dash;
 
-    public override void OnWKey(InputAction.CallbackContext context)
-    {
-        OnL_Jump.Invoke();
-    }
+    public override void OnWKey(InputAction.CallbackContext context) => OnL_Jump.Invoke();
+    public override void OnAKey(InputAction.CallbackContext context) => OnL_LeftDir.Invoke(context.performed);
+    public override void OnSKey(InputAction.CallbackContext context) => base.OnSKey(context);
+    public override void OnDkey(InputAction.CallbackContext context) => OnL_RightDir.Invoke(context.performed);
 
-    public override void OnAKey(InputAction.CallbackContext context)
-    {
-        OnL_LeftDir.Invoke(context.performed);
-    }
-    public override void OnSKey(InputAction.CallbackContext context)
-    {
-        base.OnSKey(context);
-    }
-    public override void OnDkey(InputAction.CallbackContext context)
-    {
-        OnL_RightDir.Invoke(context.performed);
-    }
-
-
-    public override void OnUArrow(InputAction.CallbackContext context)
-    {
-        OnR_Jump.Invoke();
-    }
-
-    public override void OnLArrow(InputAction.CallbackContext context)
-    {
-        OnR_LeftDir.Invoke(context.performed);
-    }
-    public override void OnDArrow(InputAction.CallbackContext context)
-    {
-        base.OnDArrow(context);
-    }
-    public override void OnRArrow(InputAction.CallbackContext context)
-    {
-        OnR_RightDir.Invoke(context.performed);
-    }
+    public override void OnUArrow(InputAction.CallbackContext context) => OnR_Jump.Invoke();
+    public override void OnLArrow(InputAction.CallbackContext context) => OnR_LeftDir.Invoke(context.performed);
+    public override void OnDArrow(InputAction.CallbackContext context) => base.OnDArrow(context);
+    public override void OnRArrow(InputAction.CallbackContext context) => OnR_RightDir.Invoke(context.performed);
 }
