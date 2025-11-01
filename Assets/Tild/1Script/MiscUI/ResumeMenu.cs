@@ -18,7 +18,7 @@ namespace Tild.MiscUI
                 {
                     isOpen = !isOpen;
                     canOpen = false; 
-                    canvasGroup.DOFade(1f, 0.5f).OnComplete((() =>
+                    canvasGroup.DOFade(1f, 0.5f).SetUpdate(true).OnComplete((() =>
                     {
                         canvasGroup.blocksRaycasts = true;
                         canOpen = true;
@@ -29,7 +29,7 @@ namespace Tild.MiscUI
                 {
                     isOpen = !isOpen;
                     canOpen = false; 
-                    canvasGroup.DOFade(0f, 0.5f).OnComplete((() =>
+                    canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
                     {
                         canvasGroup.blocksRaycasts = true;
                         canOpen = true;
@@ -43,7 +43,7 @@ namespace Tild.MiscUI
         public void Resume()
         {
             print("Resume");
-            canvasGroup.DOFade(0f, 0.5f).OnComplete((() =>
+            canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
             {
                 canvasGroup.blocksRaycasts = false;
                 Time.timeScale = 1f;
@@ -54,14 +54,14 @@ namespace Tild.MiscUI
             print("Reminigame");
             if (MinigameManager.instance.gameType == null) return;
             
-            canvasGroup.DOFade(0f, 0.5f).OnComplete((() =>
+            canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
             {
                 canvasGroup.blocksRaycasts = false;
                 Time.timeScale = 1f;
             }));
             
             
-            canvasGroup.DOFade(0f, 0.5f).OnComplete((() =>
+            canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
             {
                 Time.timeScale = 1f;
                 TransitionManager.Go("Choice_Scene");
@@ -71,7 +71,7 @@ namespace Tild.MiscUI
         public void GoHome()
         {
             print("GoHome");
-            canvasGroup.DOFade(0f, 0.5f).OnComplete((() =>
+            canvasGroup.DOFade(0f, 0.5f).SetUpdate(true).OnComplete((() =>
             {
                 Time.timeScale = 1f;
                 TransitionManager.Go("Start_Scene");
