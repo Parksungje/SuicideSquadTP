@@ -6,24 +6,20 @@ public class TagPlayer : MonoBehaviour
     
 
     [SerializeField] private bool _is1P;
-    private GameManager_Tag manager;
+    [SerializeField] private GameManager_Tag manager;
 
-    private void Start()
-    {
-        manager = FindFirstObjectByType<GameManager_Tag>();
-    }
-
+   
     public void SetIsHunter(bool value)
     {
         isHunter = value;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) 
     {
         if (!manager.collisionDebounce) return;
 
-        print("�浹");
-        if (isHunter)
+
+        if (isHunter && other.CompareTag("Player"))
         {
             manager.collisionDebounce = false;
             print(_is1P);

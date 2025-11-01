@@ -4,6 +4,7 @@ using Code.Player;
 using Tild.Minigames.BalanceGame;
 using UnityEngine;
 using DG.Tweening;
+using Tild.Menu;
 using Random = UnityEngine.Random;
 
 namespace Tild._1Script.Minigames.Rope
@@ -15,7 +16,19 @@ namespace Tild._1Script.Minigames.Rope
         [SerializeField] private Transform uiParent2P;
         [SerializeField] private RopePullButton ropePullButton1P;
         [SerializeField] private RopePullButton ropePullButton2P;
+        [SerializeField] private Transform player1P;
+        [SerializeField] private Transform player2P;
+        [SerializeField] private ParticleSystem pullImpact1P;
+        [SerializeField] private ParticleSystem pullImpact2P;
+        [SerializeField] private ParticleSystem specialImpact1P;
+        [SerializeField] private ParticleSystem specialImpact2P;
+        [SerializeField] private ParticleSystem celebrateImpact1P;
+        [SerializeField] private ParticleSystem celebrateImpact2P;
         [SerializeField] private Transform rope;
+        
+        [SerializeField] private GameObject _celebCamera1P;
+        [SerializeField] private GameObject _celebCamera2P;
+        [SerializeField] private GameObject _defaultCamera;
 
         private bool _isPlaying;
         private bool _is1PEnable;
@@ -41,6 +54,11 @@ namespace Tild._1Script.Minigames.Rope
         private Control _special1PControl;
         private Control _special2PControl;
 
+        private const int SPECIAL_STREAK = 5;
+        private const int SPECIAL_PULL_BONUS = 15;
+        private int _streak1P;
+        private int _streak2P;
+
         private void OnEnable()
         {
             _1PControls.AddRange(new Control[] { Control.W, Control.A, Control.S, Control.D });
@@ -61,12 +79,41 @@ namespace Tild._1Script.Minigames.Rope
         {
             float minPercentage = -100f;
             float maxPercentage = 100f;
-            float minX = -6.44f;
-            float maxX = 3.3f;
-            float t = (percentage - minPercentage) / (maxPercentage - minPercentage);
+            float minX = -11f;
+            float maxX = 8f;
+            float t = (percentage - minPercentage) / (maxPercentage - maxPercentage + 200f);
             Vector3 pos = rope.localPosition;
-            pos.x = Mathf.Lerp(minX, maxX, t);
+            if (pos.x == minX || pos.x == maxX)
+            {
+                StartCoroutine(FinishGame());
+            }
+            pos.x = Mathf.Lerp(minX, maxX, (percentage - minPercentage) / (maxPercentage - minPercentage));
             rope.localPosition = pos;
+        }
+
+        IEnumerator FinishGame()
+        {
+            _defaultCamera.gameObject.SetActive(false);
+            uiParent1P.gameObject.SetActive(false);
+            uiParent2P.gameObject.SetActive(false);
+            if (percentage < 0)
+            {
+                player2P.DOMoveY(-100, 4).SetEase(Ease.OutBounce);
+                yield return new WaitForSeconds(2);
+                _celebCamera1P.gameObject.SetActive(true);
+                celebrateImpact1P.Play();
+                yield return new WaitForSeconds(3);
+                MinigameManager.instance.Finish(true);
+            }
+            else
+            {
+                player1P.DOMoveY(-100, 4).SetEase(Ease.OutBounce);
+                yield return new WaitForSeconds(2);
+                _celebCamera2P.gameObject.SetActive(true);
+                celebrateImpact1P.Play();
+                yield return new WaitForSeconds(3);
+                MinigameManager.instance.Finish(false);
+            }
         }
 
         private void Control1P(Control control)
@@ -74,12 +121,23 @@ namespace Tild._1Script.Minigames.Rope
             if (control == _current1PControl)
             {
                 _is1PCorrect = true;
+                _streak1P++;
                 percentage -= 5;
                 percentage = Mathf.Clamp(percentage, -100, 100);
+                if (_streak1P >= SPECIAL_STREAK)
+                {
+                    _streak1P = 0;
+                    percentage -= SPECIAL_PULL_BONUS;
+                    percentage = Mathf.Clamp(percentage, -100, 100);
+                    specialImpact1P.Play();
+                }
+                player1P.DOPunchPosition(Vector3.zero, 0.5f, 10, 1);
+                pullImpact1P.Play();
                 UpdateRopePosition();
             }
             else
             {
+                _streak1P = 0;
                 StartCoroutine(FailDelay(true));
             }
         }
@@ -89,13 +147,23 @@ namespace Tild._1Script.Minigames.Rope
             if (control == _current2PControl)
             {
                 _is2PCorrect = true;
-                
+                _streak2P++;
+                player2P.DOPunchPosition(Vector3.zero, 0.5f, 10, 1);
+                pullImpact2P.Play();
                 percentage += 5;
                 percentage = Mathf.Clamp(percentage, -100, 100);
+                if (_streak2P >= SPECIAL_STREAK)
+                {
+                    _streak2P = 0;
+                    percentage += SPECIAL_PULL_BONUS;
+                    percentage = Mathf.Clamp(percentage, -100, 100);
+                    specialImpact2P.Play();
+                }
                 UpdateRopePosition();
             }
             else
             {
+                _streak2P = 0;
                 StartCoroutine(FailDelay(false));
             }
         }
@@ -135,6 +203,8 @@ namespace Tild._1Script.Minigames.Rope
             {
                 _current1PButton = _buttonQueue1P[0];
                 _current1PControl = _current1PButton.currentControl;
+                _current1PButton.gameObject.SetActive(true);
+                _current1PButton.transform.SetAsLastSibling();
                 _current1PButton.Scaling();
 
                 yield return new WaitUntil(() => _is1PCorrect);
@@ -142,8 +212,7 @@ namespace Tild._1Script.Minigames.Rope
                 _current1PButton.Disappear();
                 _buttonQueue1P.RemoveAt(0);
 
-              
-                    CreateNew1PButton();
+                CreateNew1PButton();
 
                 _is1PEnable = false;
                 yield return new WaitUntil(() => !baseInputSO.IsAnyKeyPressed());
@@ -161,6 +230,8 @@ namespace Tild._1Script.Minigames.Rope
             {
                 _current2PButton = _buttonQueue2P[0];
                 _current2PControl = _current2PButton.currentControl;
+                _current2PButton.gameObject.SetActive(true);
+                _current2PButton.transform.SetAsLastSibling();
                 _current2PButton.Scaling();
 
                 yield return new WaitUntil(() => _is2PCorrect);
@@ -168,8 +239,7 @@ namespace Tild._1Script.Minigames.Rope
                 _current2PButton.Disappear();
                 _buttonQueue2P.RemoveAt(0);
 
-                
-                    CreateNew2PButton();
+                CreateNew2PButton();
 
                 _is2PEnable = false;
                 yield return new WaitUntil(() => !baseInputSO.IsAnyKeyPressed());
@@ -180,6 +250,8 @@ namespace Tild._1Script.Minigames.Rope
         private void CreateNew1PButton()
         {
             RopePullButton btn = Instantiate(ropePullButton1P, uiParent1P);
+            btn.gameObject.SetActive(true);
+            btn.transform.SetAsLastSibling();
             btn.Initialize(_1PControls[Random.Range(0, _1PControls.Count)]);
             _buttonQueue1P.Add(btn);
         }
@@ -187,54 +259,10 @@ namespace Tild._1Script.Minigames.Rope
         private void CreateNew2PButton()
         {
             RopePullButton btn = Instantiate(ropePullButton2P, uiParent2P);
+            btn.gameObject.SetActive(true);
+            btn.transform.SetAsLastSibling();
             btn.Initialize(_2PControls[Random.Range(0, _2PControls.Count)]);
             _buttonQueue2P.Add(btn);
-        }
-
-        private void CreateSpecialButtons(bool is1P)
-        {
-            if (is1P)
-            {
-                _special1PControl = _1PControls[Random.Range(0, _1PControls.Count)];
-
-                for (int i = _buttonQueue1P.Count - 1; i >= 0; i--)
-                {
-                    if (_buttonQueue1P[i] != _current1PButton)
-                    {
-                        _buttonQueue1P[i]?.DOKill();
-                        Destroy(_buttonQueue1P[i].gameObject);
-                        _buttonQueue1P.RemoveAt(i);
-                    }
-                }
-
-                for (int i = 0; i < 20; i++)
-                {
-                    RopePullButton btn = Instantiate(ropePullButton1P, uiParent1P);
-                    btn.Initialize(_special1PControl);
-                    _buttonQueue1P.Add(btn);
-                }
-            }
-            else
-            {
-                _special2PControl = _2PControls[Random.Range(0, _2PControls.Count)];
-
-                for (int i = _buttonQueue2P.Count - 1; i >= 0; i--)
-                {
-                    if (_buttonQueue2P[i] != _current2PButton)
-                    {
-                        _buttonQueue2P[i]?.DOKill();
-                        Destroy(_buttonQueue2P[i].gameObject);
-                        _buttonQueue2P.RemoveAt(i);
-                    }
-                }
-
-                for (int i = 0; i < 20; i++)
-                {
-                    RopePullButton btn = Instantiate(ropePullButton2P, uiParent2P);
-                    btn.Initialize(_special2PControl);
-                    _buttonQueue2P.Add(btn);
-                }
-            }
         }
     }
 

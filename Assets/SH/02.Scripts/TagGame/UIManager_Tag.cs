@@ -5,6 +5,7 @@ public class UIManager_Tag : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI resultText;
+    [SerializeField] private TextMeshProUGUI alertText;
 
     public void UpdateTimer(float time)
     {
@@ -15,7 +16,12 @@ public class UIManager_Tag : MonoBehaviour
 
     public void ResultText(int playerNumber)
     {
-        resultText.text = $"{playerNumber}P �¸�!";
+        resultText.text = $"{playerNumber}P 승리!";
         resultText.gameObject.SetActive(true);
+    }
+    
+    public void AlertText(int playerNumber)
+    {
+        alertText.text = $"{playerNumber}P님이 폭탄을 소지 중입니다!";
     }
 }
