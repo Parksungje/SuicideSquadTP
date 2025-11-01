@@ -16,7 +16,7 @@ public class GreenLightRedLight : MonoBehaviour
     [SerializeField] private Transform player2;
     [SerializeField] private float moveThreshold;
     [SerializeField] private float tolerance;
-    [SerializeField] private AvoidMovementManager movementManager;
+    [SerializeField] private GRLightMovement movementManager;
     [SerializeField] private Light lightRenderer;
     [SerializeField] private Color greenColor = Color.green;
     [SerializeField] private Color redColor = Color.red;
@@ -108,6 +108,7 @@ public class GreenLightRedLight : MonoBehaviour
 
         if (Time.frameCount % Mathf.RoundToInt(checkInterval / Time.deltaTime) == 0)
         {
+            DetectMovementSound();
             if (isGreenLight || redCheckTimer > 0f)
             {
                 lastPosP1 = player1.position;
@@ -120,6 +121,18 @@ public class GreenLightRedLight : MonoBehaviour
     {
         ApplyForwardClamp(ref clampP1);
         ApplyForwardClamp(ref clampP2);
+    }
+
+    private void DetectMovementSound()
+    {
+        float move1 = Vector3.Distance(player1.position, lastPosP1);
+        float move2 = Vector3.Distance(player2.position, lastPosP2);
+
+        if (isGreenLight)
+        {
+            if (move1 > moveThreshold) SoundManager.Instance.Play("GreenRed_Walk");
+            if (move2 > moveThreshold) SoundManager.Instance.Play("GreenRed_Walk");
+        }
     }
 
     private void ApplyForwardClamp(ref ForwardClamp c)
@@ -151,6 +164,7 @@ public class GreenLightRedLight : MonoBehaviour
             float p1Move = Vector3.Distance(player1.position, lastPosP1);
             if (p1Move > moveThreshold + tolerance)
             {
+                SoundManager.Instance.Play("GreenRed_Gun");
                 StartCoroutine(PushBackRoutine(player1, 0.3f, 1));
             }
         }
@@ -160,6 +174,7 @@ public class GreenLightRedLight : MonoBehaviour
             float p2Move = Vector3.Distance(player2.position, lastPosP2);
             if (p2Move > moveThreshold + tolerance)
             {
+                SoundManager.Instance.Play("GreenRed_Gun");
                 StartCoroutine(PushBackRoutine(player2, 0.3f, 2));
             }
         }
@@ -250,6 +265,7 @@ public class GreenLightRedLight : MonoBehaviour
         movementManager.EnablePlayer(2);
         lockedP1 = false;
         lockedP2 = false;
+        SoundManager.Instance.Play("GreenRed_BGM");
         PlayFlashFX();
     }
 
