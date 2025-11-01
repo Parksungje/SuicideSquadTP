@@ -121,6 +121,8 @@ namespace Tild.Minigames.PoleGame
 
         private void Rotate1P(bool obj)
         {
+            if (obj == false) return;
+            
             if (_canRotate1P)
             {
                 _canRotate1P = false;
@@ -147,7 +149,9 @@ namespace Tild.Minigames.PoleGame
         }
        
         private void Climb1P(bool obj)
-        {
+        {  
+            if (obj == false) return;
+            
             if (_canClimb1P)
             {
                 _canClimb1P = false;
@@ -161,6 +165,8 @@ namespace Tild.Minigames.PoleGame
         
         private void Rotate2P(bool obj)
         {
+            if (obj == false) return;
+            
             if (_canRotate2P)
             {
                 _canRotate2P = false;
@@ -188,6 +194,8 @@ namespace Tild.Minigames.PoleGame
        
         private void Climb2P(bool obj)
         {
+            if (obj == false) return;
+            
             if (_canClimb2P)
             {
                 _canClimb2P = false;

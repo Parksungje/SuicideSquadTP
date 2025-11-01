@@ -73,7 +73,7 @@ namespace Tild.Minigames.Falling
      
         private void ApplyMovement()
         {
-            if (_isBeingPushed) return;
+        
             _moveDir = _moveDir.normalized;
             _rigid.linearVelocity = new Vector3(
                 _moveDir.x * moveSpeed,
