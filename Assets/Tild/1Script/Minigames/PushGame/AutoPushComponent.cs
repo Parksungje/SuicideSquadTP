@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AutoPushComponent : MonoBehaviour
 {
@@ -59,10 +60,14 @@ public class AutoPushComponent : MonoBehaviour
             .SetDelay(0.1f));
         seq.OnComplete(() =>
         {
-           
-            _canPush = true;
+           Invoke(nameof(TurnCanpush), 2f);
         });
         seq.Play();
+    }
+
+    private void TurnCanpush()
+    {
+        _canPush = true;
     }
 
     private void Update()
@@ -75,7 +80,7 @@ public class AutoPushComponent : MonoBehaviour
             if (targetRb == null) return;
 
             hitParticles.Play();
-            targetRb.AddForce((transform.forward + Vector3.up * 0.5f) * pushForce, ForceMode.Impulse);
+            targetRb.AddForce((transform.forward + new Vector3(Random.value,Random.value,Random.value ) * 10f) * pushForce, ForceMode.Impulse);
             targetRb.AddTorque(Vector3.up * pushForce, ForceMode.Impulse);
         }
     }

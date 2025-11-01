@@ -39,6 +39,10 @@ namespace Tild.Minigames.BalanceGame
         [SerializeField] private ParticleSystem celebParticle2P;
         [SerializeField] private GameObject celebCamera1P;
         [SerializeField] private GameObject celebCamera2P;
+        
+        [SerializeField] private CanvasGroup keyGuide;
+        [SerializeField] private Image guideBackground;
+        [SerializeField] private TMP_Text infoText;
 
         private List<Question> questions;
 
@@ -121,6 +125,15 @@ namespace Tild.Minigames.BalanceGame
         private int questionIndex = 0;
         private IEnumerator Start()
         {
+            keyGuide.DOFade(1, 0.5f);
+            yield return new WaitForSeconds(4f);
+            keyGuide.DOFade(0, 0.5f);
+            yield return new WaitForSeconds(1f);
+            infoText.DOFade(1, 0.5f);
+            yield return new WaitForSeconds(3.5f);
+            infoText.DOFade(0, 0.5f);
+            guideBackground.DOFade(0, 0.5f);
+            
             var oneSec = new WaitForSeconds(1f);
 
             for (int i = 0; i < roundCount; i++)
@@ -130,7 +143,7 @@ namespace Tild.Minigames.BalanceGame
                 
                 var q = questions[questionIndex];
                 questionIndex++;
-                
+                yield return new WaitForSeconds(1f);
                 notificationText.SetText("문제 등장!");
                 notificationGroup.DOFade(1f, fadeDur);
                 yield return new WaitForSeconds(0.8f);
