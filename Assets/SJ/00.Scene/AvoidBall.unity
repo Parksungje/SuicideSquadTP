@@ -712,6 +712,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _avoidInput: {fileID: 11400000, guid: b78ff20728c74274581901a98f7ea86b, type: 2}
   _moveSpeed: 10
+  _sprintMultiplier: 1.6
+  _p1SprintKey: 304
+  _p2SprintKey: 303
   _p1Rb: {fileID: 1029625797}
   _p2Rb: {fileID: 224060125}
   _p1Animator: {fileID: 1029625799}
