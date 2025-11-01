@@ -5,7 +5,6 @@ public class AvoidBall : MonoBehaviour
     private Rigidbody _rb;
 
     [SerializeField] private float moveSpeed = 150f;
-
     private float knockbackForce = 100f;
 
     private void Awake()
@@ -26,6 +25,16 @@ public class AvoidBall : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Hit");
+
+            if (TransitionManager.Instance != null)
+            {
+                Debug.Log("씬 전환 실행");
+                TransitionManager.Go("Shooting");
+            }
+            else
+            {
+                Debug.LogError("TransitionManager.Instance가 null임!");
+            }
 
             Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
             if (playerRb != null)

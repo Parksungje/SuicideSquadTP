@@ -12,7 +12,6 @@ namespace SJ.Minigames.Hurdle
 
         [SerializeField] private float jumpPower = 8.5f;
         [SerializeField] private float jumpCooldown = 0.18f;
-        [SerializeField] private float airControlMultiplier = 0.2f;
 
         [SerializeField] private float stumbleDuration = 0.5f;
         [SerializeField] private float stumbleSlowMul = 0.35f;
@@ -22,7 +21,6 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private float groundCheckRadius = 0.15f;
         [SerializeField] private float groundCheckOffset = 0.05f;
 
-        [SerializeField] private float animMaxRunSpeed = 10f;
         [SerializeField] private float perfectMin = 0.55f;
         [SerializeField] private float perfectMax = 0.85f;
         [SerializeField] private float timingLeniency = 0.3f;
@@ -45,11 +43,9 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private float burstDurationEarly = 0.2f;
         [SerializeField] private float burstDurationLate = 0.25f;
 
-        [SerializeField] private bool debugTiming = true;
         [SerializeField] private float baseSpeedMul = 1.35f;
         [SerializeField] private float fallMultiplier = 2.5f;
-        [SerializeField] private float idleSlowMul = 0.3f;
-
+            
         Rigidbody _rb;
         CapsuleCollider _col;
         bool _canControl = false;
