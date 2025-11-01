@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Tild/0Scene/Start_Scene.unity
+    guid: d56fd5965f47c1d4da1605c919d739f4
+  - enabled: 1
+    path: Assets/Tild/0Scene/Choice_Scene.unity
+    guid: 36c45066974215b42b7955abc626a957
+  - enabled: 1
+    path: Assets/SH/01.Scenes/ResultScene.unity
+    guid: aa96a459e830fe843bf092c1f1924b75
+  - enabled: 1
     path: Assets/SJ/00.Scene/AvoidBall.unity
     guid: 3b24293bd2c18724fb69ede2bb299380
   - enabled: 1
@@ -20,15 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SJ/00.Scene/Shooting.unity
     guid: 52da81a9a85812548b105b541fe4bf8f
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/Tild/0Scene/Start_Scene.unity
-    guid: d56fd5965f47c1d4da1605c919d739f4
-  - enabled: 1
-    path: Assets/Tild/0Scene/Choice_Scene.unity
-    guid: 36c45066974215b42b7955abc626a957
   - enabled: 1
     path: Assets/SJ/00.Scene/PenaltyKick.unity
     guid: 6a5a52811e942d24388ecc95df47cec0
@@ -47,6 +47,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Tild/0Scene/Minigames/Push.unity
     guid: c2f560a04f70a0343a406c042ef02bfa
+  - enabled: 1
+    path: Assets/SH/01.Scenes/Games/ReactionMatch.unity
+    guid: a36b326b0d109284c85e9b2679ce478e
   - enabled: 1
     path: Assets/Tild/0Scene/Minigames/Rope.unity
     guid: a17b4d099b6b2ad43970600e070dedb0

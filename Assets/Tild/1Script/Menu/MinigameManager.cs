@@ -54,19 +54,20 @@ namespace Tild.Menu
         public void Finish(bool is1Pwin)
         {
             Time.timeScale = 0;
-            
             resultUI.ViewResult(_1PScore, _2PScore, is1Pwin, (() =>
             {
                 if (is1Pwin) _1PScore++;
                 else _2PScore++;
-                
+
                 Time.timeScale = 1;
+
                 if (gameType == GameType.Round)
                 {
                     round++;
-                    if (round == amount) ;
+                    if (round == amount)
                     {
                         TransitionManager.Go("ResultScene");
+                        return;
                     }
                 }
                 else if (gameType == GameType.Score)
@@ -74,14 +75,14 @@ namespace Tild.Menu
                     if (_1PScore == amount || _2PScore == amount)
                     {
                         TransitionManager.Go("ResultScene");
-                    };
+                        return;
+                    }
                 }
-                
+
                 TransitionManager.Go("Choice_Scene");
-              
             }));
-          
         }
+
 
         public bool GetWinner()
         {
