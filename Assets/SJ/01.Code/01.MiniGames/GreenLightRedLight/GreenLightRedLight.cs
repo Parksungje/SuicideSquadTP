@@ -26,7 +26,6 @@ public class GreenLightRedLight : MonoBehaviour
     [SerializeField] private float pushBackDuration;
     [SerializeField] private Ease pushBackEase = Ease.OutBack;
     [SerializeField] private float pushBackOvershoot;
-    [SerializeField] private TMP_Text timerText;
     [SerializeField] private CanvasGroup finishPanel;
     [SerializeField] private TMP_Text finishText;
     [SerializeField] private Collider finishTrigger;
@@ -72,7 +71,6 @@ public class GreenLightRedLight : MonoBehaviour
         startRotP2 = player2.rotation;
         remainTime = totalRoundTime;
         baseIntensity = lightRenderer ? lightRenderer.intensity : 1f;
-        UpdateTimerUI();
         if (finishPanel) { finishPanel.alpha = 0; finishPanel.interactable = false; finishPanel.blocksRaycasts = false; }
         InitRound();
     }
@@ -83,7 +81,6 @@ public class GreenLightRedLight : MonoBehaviour
 
         remainTime -= Time.deltaTime;
         if (remainTime < 0f) remainTime = 0f;
-        UpdateTimerUI();
         if (remainTime <= 0f && !gameEnded)
         {
             DecideWinnerByDistance();
@@ -267,13 +264,6 @@ public class GreenLightRedLight : MonoBehaviour
     private void SetLightColor(Color color)
     {
         if (lightRenderer != null) lightRenderer.color = color;
-    }
-
-    private void UpdateTimerUI()
-    {
-        if (!timerText) return;
-        int sec = Mathf.CeilToInt(remainTime);
-        timerText.text = string.Format("{0:00}:{1:00}", sec / 60, sec % 60);
     }
 
     public void OnFinishTriggerEnter(Transform t)

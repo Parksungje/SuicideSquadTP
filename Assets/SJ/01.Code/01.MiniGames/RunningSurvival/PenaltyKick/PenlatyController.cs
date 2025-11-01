@@ -13,8 +13,7 @@ namespace Code.PK
         [SerializeField] private GameObject _keeperPrefab;
         [SerializeField] private GameObject _startBall;
         [SerializeField] private Transform _shootPoint;
-        [SerializeField] private TextMeshProUGUI _shooterText;
-        [SerializeField] private TextMeshProUGUI _keeperText;
+        [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private Transform _orignPos;
         [SerializeField] private GameObject _shooterObj;
         [SerializeField] private Animator _keeperAnimator;
@@ -186,8 +185,7 @@ namespace Code.PK
 
         private void UpdateScoreDisplay(int shooterScore, int keeperScore)
         {
-            _shooterText.text = shooterScore.ToString();
-            _keeperText.text = keeperScore.ToString();
+            _scoreText.text = $"{shooterScore}:{keeperScore}";
         }
 
         private IEnumerator ResetRoundAfterDelay()
