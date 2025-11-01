@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01911da44c974e3c80a9fbd861aff395, type: 3}
+  m_Name: REACTION
+  m_EditorClassIdentifier: 
+  gameName: "\uBC18\uC751\uC18D\uB3C4 \uBC30\uD2C0"
+  description: "\uD654\uBA74\uC758 \uC0C9\uAE54\uC774 \uBC14\uB00C\uBA74 \uC7AC\uBE68\uB9AC
+    \uD074\uB9AD\uD574\uC11C \uC2B9\uB9AC\uD558\uC138\uC694!"
+  playScreen: {fileID: 0}
+  scene: ReactionMatch
+  backgroundColor: {r: 0.1762193, g: 0.2264151, b: 0.18492673, a: 1}
