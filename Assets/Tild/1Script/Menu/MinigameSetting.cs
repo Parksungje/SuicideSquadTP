@@ -70,7 +70,7 @@ namespace Tild.Menu
                     break;  
             }
             MinigameManager.instance.Initialize(gameType, isRandomMode, amount);
-            SceneManager.LoadScene("Choice_Scene");
+            TransitionManager.Go("Choice_Scene");
            
         
         }

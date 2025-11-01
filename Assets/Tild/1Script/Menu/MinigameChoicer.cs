@@ -75,9 +75,7 @@ namespace Tild._1Script.Menu
         private void Start()
         {
             TMP_Text aaa;
-            
-            ScreenManager.instance.FadeOut(0.3f, 0, (() =>
-            {
+          
                 if (MinigameManager.instance.isRandomMode)
                 {
                     ranndomMinigameWindow.SetActive(true);
@@ -93,7 +91,7 @@ namespace Tild._1Script.Menu
                     }
                 }
 
-            }));
+        
         }
 
         private void PlayRandomMinigame()
