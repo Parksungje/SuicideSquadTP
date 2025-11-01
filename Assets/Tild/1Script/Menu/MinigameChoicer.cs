@@ -29,6 +29,7 @@ namespace Tild._1Script.Menu
         public bool IsPopuped;
       
         #region Random Minigame Resources
+        [SerializeField] private GameObject ranndomMinigameWindow;
         [SerializeField] private RectTransform scroller;
         [SerializeField] private TMP_Text namePrefab;
         [SerializeField] private CanvasGroup finalMinigame;
@@ -79,6 +80,7 @@ namespace Tild._1Script.Menu
             {
                 if (MinigameManager.instance.isRandomMode)
                 {
+                    ranndomMinigameWindow.SetActive(true);
                     PlayRandomMinigame();
                 }
                 else

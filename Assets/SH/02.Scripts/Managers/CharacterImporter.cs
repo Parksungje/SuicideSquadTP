@@ -9,6 +9,8 @@ public class CharacterImporter : MonoBehaviour
     private void Start()
     {
         P1_Appearance.sharedMaterial = CharacterManager.Instance.P1_Material;
+        P1_Appearance.sharedMesh = CharacterManager.Instance.P1_Mesh;
+        P2_Appearance.sharedMesh = CharacterManager.Instance.P2_Mesh;
         P2_Appearance.sharedMaterial = CharacterManager.Instance.P2_Material;
     }
 }

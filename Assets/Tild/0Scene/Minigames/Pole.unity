@@ -906,6 +906,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d34dfbba55ffb74ab4c47f07db92ce4, type: 3}
+--- !u!137 &299393285 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -985542389825260074, guid: 9d34dfbba55ffb74ab4c47f07db92ce4, type: 3}
+  m_PrefabInstance: {fileID: 299393284}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &310942629
 GameObject:
   m_ObjectHideFlags: 0
@@ -998,6 +1003,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d34dfbba55ffb74ab4c47f07db92ce4, type: 3}
+--- !u!137 &316655565 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -985542389825260074, guid: 9d34dfbba55ffb74ab4c47f07db92ce4, type: 3}
+  m_PrefabInstance: {fileID: 316655564}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &401100094
 GameObject:
   m_ObjectHideFlags: 0
@@ -3569,6 +3579,52 @@ MonoBehaviour:
   FovRange: {x: 1, y: 56.805397}
   DollyRange: {x: 10.1, y: 275}
   OrthoSizeRange: {x: 1, y: 1000}
+--- !u!1 &1390009608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1390009610}
+  - component: {fileID: 1390009609}
+  m_Layer: 0
+  m_Name: CharacterImporter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1390009609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390009608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bce68e15dde586749a40312301aa2de5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  P1_Appearance: {fileID: 316655565}
+  P2_Appearance: {fileID: 299393285}
+--- !u!4 &1390009610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390009608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1393356720 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 9d34dfbba55ffb74ab4c47f07db92ce4, type: 3}
@@ -5600,3 +5656,4 @@ SceneRoots:
   - {fileID: 456047207}
   - {fileID: 988652109}
   - {fileID: 199468828}
+  - {fileID: 1390009610}

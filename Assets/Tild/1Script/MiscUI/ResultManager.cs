@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -41,24 +42,35 @@ namespace Tild.MiscUI
             Sequence sequence = DOTween.Sequence().SetUpdate(true);
     
             sequence.Append(resultGroup.DOFade(1, 0.5f));
-            sequence.Join(finishText.DOFade(1, 0.5f).SetDelay(0.5f).SetEase(Ease.InQuart));
-            sequence.Join(finishText.transform.DOScale(Vector3.one, 0.8f).SetDelay(0.5f).SetEase(Ease.InQuart));
-            sequence.Append(barGroup.DOFade(1, 0.2f).SetDelay(3));
-            sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 0f), 0.2f).SetEase(Ease.InExpo));
-            sequence.Join(finishText.DOFade(0, 0.2f).SetEase(Ease.OutQuart));
-            sequence.Join(finishText.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.OutQuart));
-            sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 600f), 0.2f).SetDelay(0.3f).SetEase(Ease.OutExpo));
-            sequence.Join(scoreText.transform.DOScale(new Vector3(1.3f,1,1), 0.2f).SetEase(Ease.InQuart));
-            sequence.Join(titleText.transform.DOScale(new Vector3(1.3f,1,1), 0.2f).SetEase(Ease.InQuart));
+            sequence.Join(finishText.DOFade(1, 0.5f).SetDelay(0.3f).SetEase(Ease.InQuart));
+            sequence.Join(finishText.transform.DOScale(Vector3.one, 0.8f).SetDelay(0.3f).SetEase(Ease.InQuart));
+            sequence.Append(barGroup.DOFade(1, 0.5f).SetDelay(3));
+            sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 0f), 0.5f).SetEase(Ease.InExpo));
+            sequence.Join(finishText.DOFade(0, 0.5f).SetEase(Ease.OutQuart));
+            sequence.Join(finishText.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutQuart));
+            sequence.Append(barOffset.DOSizeDelta(new Vector2(barOffset.sizeDelta.x, 600f), 0.5f).SetDelay(0.3f).SetEase(Ease.OutExpo));
+            sequence.Join(scoreText.transform.DOScale(new Vector3(1.3f,1,1), 0.5f).SetEase(Ease.InQuart));
+            sequence.Join(titleText.transform.DOScale(new Vector3(1.3f,1,1), 0.5f).SetEase(Ease.InQuart));
             sequence.Join(scoreText.DOFade(1, 0.3f).SetEase(Ease.InQuart));
             sequence.Join(titleText.DOFade(1, 0.3f).SetEase(Ease.InQuart));
 
             sequence.OnComplete(() =>
             {
-                Invoke(nameof(DelayScoring), 2);
-                Invoke(nameof(DelayInvoke), 4.5f);
-                Invoke(nameof(ResetValues), 5.5f);
+                StartCoroutine(UnscaledInvokeRoutine());
             });
+
+         
+        }
+        private IEnumerator UnscaledInvokeRoutine()
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            DelayScoring();
+
+            yield return new WaitForSecondsRealtime(4.5f);
+            DelayInvoke();
+
+            yield return new WaitForSecondsRealtime(5.5f);
+            ResetValues();
         }
 
         public void DelayScoring()
