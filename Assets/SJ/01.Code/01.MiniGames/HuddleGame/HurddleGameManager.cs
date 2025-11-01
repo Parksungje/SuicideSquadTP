@@ -29,19 +29,21 @@ namespace SJ.Minigames.Hurdle
         private int _p1RoundWins;
         private int _p2RoundWins;
 
-        private void Start()
-        {
-            player1.InitStartPosition();
-            player2.InitStartPosition();
-            StartCoroutine(Co_StartRound());
-        }
-
         private void Awake()
         {
             _startPosFinish = finishLine.position;
             winnerText?.SetText("");
             countdownText?.SetText("");
             roundText?.SetText("");
+            if (roundText) roundText.enabled = false;
+        }
+
+        private void Start()
+        {
+            player1.InitStartPosition();
+            player2.InitStartPosition();
+            StartCoroutine(Co_StartRound());
+            SoundManager.Instance.Play("Hurdle_BGM");
         }
 
         private void OnEnable()
@@ -73,8 +75,18 @@ namespace SJ.Minigames.Hurdle
 
         private IEnumerator Co_StartRound()
         {
-            ResetRace();
+            State = HurdleGameState.Ready;
+            CurrentSpeed = 0f;
+            winnerText?.SetText("");
+
+            finishLine.position = _startPosFinish;
+            player1.ResetToStart();
+            player2.ResetToStart();
+
+            if (roundText) roundText.enabled = true;
             roundText?.SetText($"Round {currentRound}/{totalRounds}");
+
+            yield return new WaitForEndOfFrame();
             yield return Co_CountdownThenStart();
         }
 
@@ -104,6 +116,7 @@ namespace SJ.Minigames.Hurdle
         private void FinishRace(int winner)
         {
             if (State == HurdleGameState.Finished) return;
+
             State = HurdleGameState.Finished;
 
             player1.EnableControl(false);
@@ -112,6 +125,8 @@ namespace SJ.Minigames.Hurdle
             if (winner == 1) _p1RoundWins++;
             else _p2RoundWins++;
 
+            if (roundText) roundText.enabled = false;
+
             winnerText?.SetText($"Player {winner} WIN!");
 
             StartCoroutine(Co_NextRound());
@@ -119,6 +134,8 @@ namespace SJ.Minigames.Hurdle
 
         private IEnumerator Co_NextRound()
         {
+            State = HurdleGameState.Ready;
+
             yield return new WaitForSeconds(2f);
 
             if (currentRound < totalRounds)
@@ -138,11 +155,6 @@ namespace SJ.Minigames.Hurdle
             State = HurdleGameState.Ready;
             CurrentSpeed = 0f;
             winnerText?.SetText("");
-
-            player1.ResetToStart();
-            player2.ResetToStart();
-
-            finishLine.position = _startPosFinish;
         }
 
         private void OnP1Jump(bool isDown)

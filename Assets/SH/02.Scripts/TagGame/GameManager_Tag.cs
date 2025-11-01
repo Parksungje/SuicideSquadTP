@@ -30,7 +30,8 @@ public class GameManager_Tag : MonoBehaviour
     {
         player1Tag = players[0].GetComponent<TagPlayer>();
         player2Tag = players[1].GetComponent<TagPlayer>();
-
+        SoundManager.Instance.Play("Tag_BGM");
+        SoundManager.Instance.Play("Tag_Fuse");
         //Physics.IgnoreCollision(players[0], players[1]);
         InitializeGame();
     }
@@ -57,7 +58,9 @@ public class GameManager_Tag : MonoBehaviour
         uiManager.UpdateTimer(remainingTime);
         explodeFuseEffect1P.SetActive(!_is1PHunter);
         explodeFuseEffect2P.SetActive(_is1PHunter);
-        
+       
+        SoundManager.Instance.Stop("Tag_Fuse");
+        SoundManager.Instance.Play("Tag_Boom"); 
         yield return new WaitForSeconds(1.5f);
         Destroy(!_is1PHunter ? players[0].transform.parent.gameObject : players[1].transform.parent.gameObject);
         yield return new WaitForSeconds(2);
@@ -67,6 +70,7 @@ public class GameManager_Tag : MonoBehaviour
         celebCamera2P.SetActive(_is1PHunter);
         
         celebEffect1P.SetActive(!_is1PHunter);
+        SoundManager.Instance.Play("Confetti");
         celebEffect2P.SetActive(_is1PHunter);
         
         yield return new WaitForSeconds(3);

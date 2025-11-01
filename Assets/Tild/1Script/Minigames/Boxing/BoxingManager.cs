@@ -101,6 +101,8 @@ namespace Tild.Minigames.Boxing
             backDefend1P = true;
             rigid1P.linearVelocity = Vector3.right * backForce;
             animator1P.SetTrigger("BackDash");
+            SoundManager.Instance.Play("Boxing_BackDash");
+       
             Invoke(nameof(Stop1PMove), 0.25f);
             Invoke(nameof(Reset1PDebounce), 0.3f);
         }
@@ -110,6 +112,8 @@ namespace Tild.Minigames.Boxing
             if (debounce1P || Time.time < stunUntil1P || isDefending1P) return;
             debounce1P = true;
             animator1P.SetTrigger("Punch");
+            SoundManager.Instance.Play("Boxing_NoHit");
+
             rigid1P.linearVelocity = Vector3.left * dashForce;
             if (Vector3.Distance(rigid1P.position, rigid2P.position) < attackRange)
             {
@@ -117,6 +121,7 @@ namespace Tild.Minigames.Boxing
                 bool parry = isDefending2P && Time.time - guardStartTime2P <= parryWindow;
                 TakeDamage(ref health2P, hitImpact2P, rigid2P, animator2P, Vector3.right, guardActive, parry,
                     ref guardHits2P, ref stunUntil2P, rigid1P, animator1P, ref stunUntil1P, false);
+                SoundManager.Instance.Play("Boxing_Hit");
             }
 
             Invoke(nameof(Stop1PMove), 0.25f);
@@ -138,6 +143,8 @@ namespace Tild.Minigames.Boxing
             backDefend2P = true;
             rigid2P.linearVelocity = Vector3.left * backForce;
             animator2P.SetTrigger("BackDash");
+            SoundManager.Instance.Play("Boxing_BackDash");
+
             Invoke(nameof(Stop2PMove), 0.25f);
             Invoke(nameof(Reset2PDebounce), 0.3f);
         }
@@ -147,6 +154,8 @@ namespace Tild.Minigames.Boxing
             if (debounce2P || Time.time < stunUntil2P || isDefending2P) return;
             debounce2P = true;
             animator2P.SetTrigger("Punch");
+            SoundManager.Instance.Play("Boxing_NoHit");
+
             rigid2P.linearVelocity = Vector3.right * dashForce;
             if (Vector3.Distance(rigid2P.position, rigid1P.position) < attackRange)
             {
@@ -154,6 +163,8 @@ namespace Tild.Minigames.Boxing
                 bool parry = isDefending1P && Time.time - guardStartTime1P <= parryWindow;
                 TakeDamage(ref health1P, hitImpact1P, rigid1P, animator1P, Vector3.left, guardActive, parry,
                     ref guardHits1P, ref stunUntil1P, rigid2P, animator2P, ref stunUntil2P, true);
+                SoundManager.Instance.Play("Boxing_Hit");
+
             }
 
             Invoke(nameof(Stop2PMove), 0.25f);
@@ -190,6 +201,8 @@ namespace Tild.Minigames.Boxing
                 targetRigid.linearVelocity = Vector3.zero;
                 ResetHitCombo(isTarget1P);
                 SetText(isTarget1P, "PARRY 피해! 몇 초동안 경직 상태.");
+                SoundManager.Instance.Play("Boxing_Parrying");
+
                 if (isTarget1P) stunImpact1P.Play();
                 else stunImpact2P.Play();
                 return;
@@ -208,6 +221,8 @@ namespace Tild.Minigames.Boxing
                     else guardBreakImpact2P.Play();
                     ResetHitCombo(isTarget1P);
                     SetText(isTarget1P, "가드 브레이크! 몇 초동안 움직이지 못합니다.");
+                    SoundManager.Instance.Play("Boxing_BreakGuard");
+
                 }
                 return;
             }
@@ -226,6 +241,8 @@ namespace Tild.Minigames.Boxing
                 targetRigid.linearVelocity = -knockDir * heavyKnockbackForce;
                 ResetHitCombo(isTarget1P);
                 SetText(isTarget1P, "3연타! 강한 넉백 발생, 반격 기회!");
+                SoundManager.Instance.Play("Boxing_StrongHit");
+
             }
             else
             {

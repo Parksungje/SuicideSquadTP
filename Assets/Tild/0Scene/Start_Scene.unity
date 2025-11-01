@@ -4641,6 +4641,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f5984595758e12b41a78cf93810bb69a, type: 2}
   - {fileID: 11400000, guid: da07267ac1d393f4bab9cfa3c685c00b, type: 2}
   - {fileID: 11400000, guid: a3c41d36e0f7e87428a4996105aea9b6, type: 2}
+  - {fileID: 11400000, guid: c88bc91fd8af10645833a255def77db5, type: 2}
+  - {fileID: 11400000, guid: 25ec65698a81a5e429bc074b010de425, type: 2}
+  - {fileID: 11400000, guid: ef51a422bd13f9344bc4d0bd0dce3c9e, type: 2}
+  - {fileID: 11400000, guid: 7020a060e1eadff4fac3a7aa5067d3d9, type: 2}
+  - {fileID: 11400000, guid: ed3ddbaa55abe0949b9a343581fe3366, type: 2}
+  - {fileID: 11400000, guid: 23666847f32a04347938b01a1a174025, type: 2}
+  - {fileID: 11400000, guid: aad3ae316de425147977e1527306814e, type: 2}
+  - {fileID: 11400000, guid: f335cafdf981854429567d8877a5cc8b, type: 2}
+  - {fileID: 11400000, guid: 2e51fc2678ec81845ac793a9e8cd4bd6, type: 2}
 --- !u!4 &615528584
 Transform:
   m_ObjectHideFlags: 0
@@ -8734,7 +8743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlayImage: {fileID: 0}
   materialTemplate: {fileID: 2100000, guid: e8af5f67de1796343b6e76bfedce594f, type: 2}
-  fadeDuration: 0.7
+  fadeDuration: 2
   fadeEase: 7
 --- !u!1 &1180914684
 GameObject:

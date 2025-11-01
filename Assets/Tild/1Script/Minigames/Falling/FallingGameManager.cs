@@ -39,6 +39,7 @@ public class FallingGameManager : MonoBehaviour
     IEnumerator Start()
     {
         DisableRigidbodies();
+   
 
         keyGuideGroup.DOFade(1, 2);
         yield return new WaitForSeconds(5);
@@ -55,16 +56,13 @@ public class FallingGameManager : MonoBehaviour
             timeCountText.text = i.ToString();
             yield return new WaitForSeconds(1);
         }
-
+        SoundManager.Instance.Play("Fall_BGM");
+        SoundManager.Instance.Play("Fall_Lava");
         timeCountText.text = "";
         background.DOFade(0, 0.2f);
         EnableRigidbodies();
     }
-
-    public void Falled(Rigidbody rigidbody)
-    {
-       
-    }
+    
     private void OnCollisionEnter(Collision other)
     {
         if (other.rigidbody != null && other.gameObject.CompareTag("Player"))
@@ -84,12 +82,21 @@ public class FallingGameManager : MonoBehaviour
         celebCamera.Follow = is1Pwin ? rigid1P.transform : rigid2P.transform;
         
         if (is1Pwin)
+        {
             celebParticle1P.Play();
+            SoundManager.Instance.Play("Confetti");
+        }
+
         else
+        {
             celebParticle2P.Play();
+            SoundManager.Instance.Play("Confetti");
+
+        }
 
         yield return new WaitForSeconds(3);
-        
+        SoundManager.Instance.Stop("Fall_BGM");
+        SoundManager.Instance.Stop("Fall_Lava");
         MinigameManager.instance.Finish(is1Pwin);
         
        

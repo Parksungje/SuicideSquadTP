@@ -24,6 +24,7 @@ namespace Tild.Minigames.Falling
         private void Awake()
         {
             _rigid = GetComponent<Rigidbody>();
+           
         }
 
         private void OnEnable()
