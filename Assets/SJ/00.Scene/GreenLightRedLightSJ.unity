@@ -273,10 +273,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _avoidInput: {fileID: 11400000, guid: b78ff20728c74274581901a98f7ea86b, type: 2}
   _moveSpeed: 8
+  _sprintMultiplier: 1.6
+  _p1SprintKey: 304
+  _p2SprintKey: 303
   _p1Rb: {fileID: 1373476923}
   _p2Rb: {fileID: 2026409689}
   _p1Animator: {fileID: 1373476921}
   _p2Animator: {fileID: 2026409687}
+  _yLoseThreshold: -20
+  _zLoseThreshold: -80
+  _totalRounds: 5
+  _betweenRoundDelay: 1.2
+  _roundWinPanel: {fileID: 0}
+  _roundWinText: {fileID: 0}
+  _finalWinPanel: {fileID: 0}
+  _finalWinText: {fileID: 0}
 --- !u!1 &64988652
 GameObject:
   m_ObjectHideFlags: 0
@@ -3214,6 +3225,10 @@ PrefabInstance:
     - target: {fileID: 2381165996383040989, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2786121604613331779, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
+      propertyPath: m_ScaleFactor
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5267515077333105646, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_Name
