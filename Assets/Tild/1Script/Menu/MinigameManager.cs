@@ -63,6 +63,11 @@ namespace Tild.Menu
             }));
           
         }
+
+        public bool GetWinner()
+        {
+            return _1PScore > _2PScore;
+        }
     }
 
     public enum GameType
