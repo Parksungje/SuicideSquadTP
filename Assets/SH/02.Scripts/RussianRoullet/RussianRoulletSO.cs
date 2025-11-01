@@ -11,11 +11,13 @@ public class RussianRoulletSO : BaseInputSO
 
     public override void OnWKey(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;
         OnL_Click.Invoke();
     }
 
     public override void OnUArrow(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;
         OnR_Click.Invoke();
     }
 }
