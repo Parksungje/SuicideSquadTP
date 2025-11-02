@@ -70,11 +70,13 @@ public class GameManager_Russian : MonoBehaviour
         roundIndex = 0;
         Debug.Log($"[Russian] New Match started. Target Score = {targetScore}");
         ScoreChanged?.Invoke(scoreP1, scoreP2);
+
         StartRound();
     }
 
     private void StartRound()
     {
+        SoundManager.Instance.Play("RussianRoulette");
         polishing.SetAnimationToIdle();
 
         roundIndex++;
@@ -96,6 +98,9 @@ public class GameManager_Russian : MonoBehaviour
         isP1Turn = UnityEngine.Random.value < 0.5f;
         roundActive = true;
         inputBusy = false;
+
+        SoundManager.Instance.Play("Spin");
+        SoundManager.Instance.Play("Bell");
 
         polishing.SetCamera(isP1Turn ? 1 : 2);
         polishing.SetAnimatorHolding(isP1Turn ? 1 : 2);
@@ -133,6 +138,9 @@ public class GameManager_Russian : MonoBehaviour
         if (fire)
         {
             //발사
+            SoundManager.Instance.Stop("RussianRoulette");
+            SoundManager.Instance.Play("Shot");
+
             polishing.SetAnimatorFire(isP1Turn ? 1 : 2);
             polishing.SetAnimatorDeath(isP1Turn ? 2 : 1);
             polishing.GunLight();
@@ -160,9 +168,13 @@ public class GameManager_Russian : MonoBehaviour
             isP1Turn = !isP1Turn;
 
             //안발사
+            SoundManager.Instance.Play("DryFire");
             yield return new WaitForSeconds(3f);
 
             TurnChanged?.Invoke(isP1Turn);
+
+            SoundManager.Instance.Play("Spin");
+            SoundManager.Instance.Play("Bell");
 
             polishing.SetCamera(isP1Turn ? 1 : 2);
             polishing.SetAnimatorHolding(isP1Turn ? 1 : 2);

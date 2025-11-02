@@ -326,14 +326,23 @@ public class GreenLightRedLight : MonoBehaviour
         }
         if (finishPanel)
         {
-            finishPanel.alpha = 1;
+            finishPanel.alpha = 0;
             finishPanel.interactable = true;
             finishPanel.blocksRaycasts = true;
+            finishPanel.DOFade(1, .5f);
         }
         if (finishText)
         {
-            string name = winner == player1 ? "Player 1" : "Player 2";
-            finishText.text = name + " WIN!";
+            //string name = winner == player1 ? "Player 1" : "Player 2";
+            //finishText.text = name + " WIN!";
+            finishText.text = "게임 종료!";
+
+            finishText.transform.localScale = Vector3.one * 20f;
+
+            Sequence seq = DOTween.Sequence();
+            seq.Join(finishText.transform.DOScale(1f, .25f).SetEase(Ease.OutExpo));
+            seq.Join(finishText.transform.DORotate(new Vector3(0f, 0f, 1080f), 1f, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutCubic));
         }
         is1Pwin = winner == player1;
         is2Pwin = winner == player2;

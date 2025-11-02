@@ -193,7 +193,7 @@ public class ShootingManager : MonoBehaviour
         if (winnerPlayer == 1) _p1RoundWins++; else _p2RoundWins++;
         if (_roundWinPanel)
         {
-            _roundWinText.text = winnerPlayer == 1 ? "P1 ¶ó¿îµå ½Â!" : "P2 ¶ó¿îµå ½Â!";
+            _roundWinText.text = winnerPlayer == 1 ? "P1 ½Â¸®!" : "P2 ½Â¸®!";
             _roundWinPanel.alpha = 0;
             _roundWinPanel.gameObject.SetActive(true);
             _roundWinPanel.DOFade(1f, 0.35f).OnComplete(() =>
@@ -237,7 +237,7 @@ public class ShootingManager : MonoBehaviour
             bool is1Pwin = _p1RoundWins > _p2RoundWins;
             if (_finalWinPanel)
             {
-                _finalWinText.text = is1Pwin ? "P1 ÃÖÁ¾ ½Â¸®!" : "P2 ÃÖÁ¾ ½Â¸®!";
+                _finalWinText.text = "°ÔÀÓ Á¾·á!"; //is1Pwin ? "P1 ÃÖÁ¾ ½Â¸®!" : "P2 ÃÖÁ¾ ½Â¸®!";
                 _finalWinPanel.alpha = 0;
                 _finalWinPanel.gameObject.SetActive(true);
                 _finalWinPanel.DOFade(1f, 0.5f).OnComplete(() =>
