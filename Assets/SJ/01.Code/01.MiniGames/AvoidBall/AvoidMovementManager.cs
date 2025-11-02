@@ -47,7 +47,7 @@ public class AvoidMovementManager : MonoBehaviour
 
     private void Start()
     {
-        SoundManager.Instance.Play("AvoidBall_BGM");
+        SafePlay("AvoidBall_BGM");
         _p1StartPos = _p1Rb.position;
         _p2StartPos = _p2Rb.position;
         _p1StartRot = _p1Rb.rotation;
@@ -162,15 +162,14 @@ public class AvoidMovementManager : MonoBehaviour
     private void HandleRunningSound()
     {
         bool anyRunning = (_p1Active && _p1moveDir != Vector3.zero) || (_p2Active && _p2moveDir != Vector3.zero);
-
         if (anyRunning && !_isRunningSoundPlaying)
         {
-            SoundManager.Instance.Play("AvoidBall_Run");
+            SafePlay("AvoidBall_Run");
             _isRunningSoundPlaying = true;
         }
         else if (!anyRunning && _isRunningSoundPlaying)
         {
-            SoundManager.Instance.Stop("AvoidBall_Run");
+            SafeStop("AvoidBall_Run");
             _isRunningSoundPlaying = false;
         }
     }
@@ -201,16 +200,18 @@ public class AvoidMovementManager : MonoBehaviour
         if (_roundWinPanel)
         {
             _roundWinText.text = winnerPlayer == 0 ? "公铰何" : (winnerPlayer == 1 ? "P1 铰府" : "P2 铰府");
+            _roundWinPanel.gameObject.SetActive(true);
             _roundWinPanel.alpha = 0f;
-            _roundWinPanel.DOFade(1f, 0.3f).OnComplete(() =>
+            _roundWinPanel.DOFade(1f, 0.3f).SetUpdate(true).OnComplete(() =>
             {
                 DOVirtual.DelayedCall(_betweenRoundDelay, () =>
                 {
-                    _roundWinPanel.DOFade(0f, 0.25f).OnComplete(() =>
+                    _roundWinPanel.DOFade(0f, 0.25f).SetUpdate(true).OnComplete(() =>
                     {
+                        _roundWinPanel.gameObject.SetActive(false);
                         StartCoroutine(NextRoundOrFinish());
                     });
-                });
+                }).SetUpdate(true);
             });
         }
         else
@@ -230,8 +231,9 @@ public class AvoidMovementManager : MonoBehaviour
             if (_finalWinPanel)
             {
                 _finalWinText.text = is1Pwin ? "P1 快铰!" : "P2 快铰!";
+                _finalWinPanel.gameObject.SetActive(true);
                 _finalWinPanel.alpha = 0f;
-                _finalWinPanel.DOFade(1f, 0.45f).OnComplete(() =>
+                _finalWinPanel.DOFade(1f, 0.45f).SetUpdate(true).OnComplete(() =>
                 {
                     MinigameManager.instance?.Finish(is1Pwin);
                 });
@@ -268,6 +270,18 @@ public class AvoidMovementManager : MonoBehaviour
         _p1Sprint = false;
         _p2Sprint = false;
         _isRunningSoundPlaying = false;
-        SoundManager.Instance.Stop("AvoidBall_Run");
+        SafeStop("AvoidBall_Run");
+    }
+
+    private void SafePlay(string key)
+    {
+        var sm = SoundManager.Instance;
+        if (sm != null) sm.Play(key);
+    }
+
+    private void SafeStop(string key)
+    {
+        var sm = SoundManager.Instance;
+        if (sm != null) sm.Stop(key);
     }
 }
