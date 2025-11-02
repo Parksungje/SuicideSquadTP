@@ -31,6 +31,7 @@ public class RunningGameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        SoundManager.Instance.Play("Run_BGM");
         if (_runningInput == null) return;
         _runningInput.OnAKeyDown += SetP1A;
         _runningInput.OnDKeyDown += SetP1D;

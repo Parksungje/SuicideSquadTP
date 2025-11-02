@@ -46,6 +46,7 @@ public class ShootingManager : MonoBehaviour
 
     private void Awake()
     {
+        SoundManager.Instance.Play("Shooting_BGM");
         _p1HairDir = Vector3.zero;
         _p2HairDir = Vector3.zero;
         _p1LastShootTime = -_shootCooldown;
