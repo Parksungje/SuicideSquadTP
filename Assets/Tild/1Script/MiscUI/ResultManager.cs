@@ -69,7 +69,7 @@ namespace Tild.MiscUI
             yield return new WaitForSecondsRealtime(4.5f);
             DelayInvoke();
 
-            yield return new WaitForSecondsRealtime(4.6f);
+            yield return new WaitForSecondsRealtime(1.6f);
             ResetValues();
         }
 

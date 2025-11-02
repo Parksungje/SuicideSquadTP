@@ -13,11 +13,12 @@ public class MainMenuHandler : MonoBehaviour
     private void Start()
     {
         baseCanvas = GetComponent<CanvasGroup>();
-       
+        SoundManager.Instance.Play("StartScene");
     }
 
     public void Play()
     {
+        SoundManager.Instance.Stop("StartScene");
         SoundManager.Instance.Play("CharacterSelect");
         mainMenuCanvas.interactable = false;
         mainMenuCanvas.blocksRaycasts = false;

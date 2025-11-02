@@ -49,10 +49,16 @@ namespace Tild.Menu
         public void NextMinigame(string scene)
         {
             TransitionManager.Go(scene);
+            
         }
 
         public void Finish(bool is1Pwin)
         {
+            if (_1PScore + _2PScore > amount)
+            {
+                minigamePlayed = new List<MinigameSO>();
+            }
+            
             Time.timeScale = 0;
             resultUI.ViewResult(_1PScore, _2PScore, is1Pwin, (() =>
             {
@@ -69,6 +75,10 @@ namespace Tild.Menu
                         TransitionManager.Go("ResultScene");
                         return;
                     }
+                    else
+                    {
+                        TransitionManager.Go("Choice_Scene");
+                    }
                 }
                 else if (gameType == GameType.Score)
                 {
@@ -77,9 +87,13 @@ namespace Tild.Menu
                         TransitionManager.Go("ResultScene");
                         return;
                     }
+                    else
+                    {
+                        TransitionManager.Go("Choice_Scene");
+                    }
                 }
-
-                TransitionManager.Go("Choice_Scene");
+                
+              
             }));
         }
 

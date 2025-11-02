@@ -61,6 +61,15 @@ namespace Tild.Minigames.PoleGame
             inputSO.OnUpArrowPressed += Climb2P;
         }
 
+        private void OnDisable()
+        {
+            inputSO.OnAKeyPressed -= Rotate1P;
+            inputSO.OnDKeyPressed -= Rotate1P;
+            inputSO.OnWKeyPressed -= Climb1P;
+            inputSO.OnLeftArrowPressed -= Rotate2P;
+            inputSO.OnRightArrowPressed -= Rotate2P;
+            inputSO.OnUpArrowPressed -= Climb2P;
+        }
         private void FixedUpdate()
         {
             _1PScore = (float)Math.Round(rigid1P.transform.position.y);

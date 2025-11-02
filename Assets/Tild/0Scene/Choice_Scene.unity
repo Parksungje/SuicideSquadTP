@@ -1561,7 +1561,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -81.44}
+  m_AnchoredPosition: {x: 0, y: 8}
   m_SizeDelta: {x: -1920, y: -1239.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &636754442
@@ -1584,8 +1584,8 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 251.1, y: 192.7}
-  m_Spacing: {x: 57.82, y: 42}
+  m_CellSize: {x: 272.4, y: 192.4}
+  m_Spacing: {x: 35.6, y: 24.3}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &636754443
@@ -3154,6 +3154,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5f7b11f14d8e46545bb3aa29807b8b5f, type: 2}
   - {fileID: 11400000, guid: 475a44b455a7cd84890cd6c8e921e00f, type: 2}
   - {fileID: 11400000, guid: 4d093c9614ed0904ab035a9c9150ca86, type: 2}
+  - {fileID: 11400000, guid: 54d957e3e1992894ca6fe68d5c0d9aa0, type: 2}
   inputSO: {fileID: 11400000, guid: 1363783125641f34c87855465353b640, type: 2}
   canvasGroup: {fileID: 0}
   minigameName: {fileID: 1621361045}
@@ -4393,8 +4394,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 71.92
+  m_fontSizeBase: 71.92
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4431,7 +4432,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -77.853546, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

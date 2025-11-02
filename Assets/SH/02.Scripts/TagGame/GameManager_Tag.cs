@@ -77,8 +77,6 @@ public class GameManager_Tag : MonoBehaviour
         MinigameManager.instance.Finish(!_is1PHunter);
         gameActive = false;
         
-        Time.timeScale = 0f;
-        
     }
 
    

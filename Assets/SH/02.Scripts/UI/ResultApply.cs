@@ -29,6 +29,6 @@ public class ResultApply : MonoBehaviour
 
     public void BackToMainMenu()
     {
-        SceneManager.LoadScene("Start_Scene");
+        TransitionManager.Go("Start_Scene");
     }
 }
