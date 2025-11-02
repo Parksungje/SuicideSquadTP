@@ -32,60 +32,56 @@ namespace SJ.Minigames.Hurdle
         private void Awake()
         {
             _startPosFinish = finishLine.position;
-            winnerText?.SetText("");
-            countdownText?.SetText("");
-            roundText?.SetText("");
-            if (roundText) roundText.enabled = false;
+            if (winnerText) winnerText.SetText("");
+            if (countdownText) countdownText.SetText("");
+            if (roundText) { roundText.SetText(""); roundText.enabled = false; }
         }
 
         private void Start()
         {
-            player1.InitStartPosition();
-            player2.InitStartPosition();
+            if (player1) player1.InitStartPosition();
+            if (player2) player2.InitStartPosition();
             StartCoroutine(Co_StartRound());
-            SoundManager.Instance.Play("Hurdle_BGM");
+            SafePlay("Hurdle_BGM");
         }
 
         private void OnEnable()
         {
-            inputSO.OnWKeyDown += OnP1Jump;
-            inputSO.OnUpArrowDown += OnP2Jump;
+            if (inputSO != null)
+            {
+                inputSO.OnWKeyDown += OnP1Jump;
+                inputSO.OnUpArrowDown += OnP2Jump;
+            }
         }
 
         private void OnDisable()
         {
-            inputSO.OnWKeyDown -= OnP1Jump;
-            inputSO.OnUpArrowDown -= OnP2Jump;
+            if (inputSO != null)
+            {
+                inputSO.OnWKeyDown -= OnP1Jump;
+                inputSO.OnUpArrowDown -= OnP2Jump;
+            }
         }
 
         private void Update()
         {
             if (State != HurdleGameState.Playing) return;
-
             CurrentSpeed = Mathf.Min(maxSpeed, CurrentSpeed + acceleration * Time.deltaTime);
-
-            player1.DashForward(CurrentSpeed);
-            player2.DashForward(CurrentSpeed);
-
-            if (player1.transform.position.z >= finishLine.position.z)
-                FinishRace(1);
-            else if (player2.transform.position.z >= finishLine.position.z)
-                FinishRace(2);
+            if (player1) player1.DashForward(CurrentSpeed);
+            if (player2) player2.DashForward(CurrentSpeed);
+            if (player1 && player1.transform.position.z >= finishLine.position.z) FinishRace(1);
+            else if (player2 && player2.transform.position.z >= finishLine.position.z) FinishRace(2);
         }
 
         private IEnumerator Co_StartRound()
         {
             State = HurdleGameState.Ready;
             CurrentSpeed = 0f;
-            winnerText?.SetText("");
-
+            if (winnerText) winnerText.SetText("");
             finishLine.position = _startPosFinish;
-            player1.ResetToStart();
-            player2.ResetToStart();
-
-            if (roundText) roundText.enabled = true;
-            roundText?.SetText($"Round {currentRound}/{totalRounds}");
-
+            if (player1) { player1.ResetToStart(); player1.EnableControl(false); }
+            if (player2) { player2.ResetToStart(); player2.EnableControl(false); }
+            if (roundText) { roundText.enabled = true; roundText.SetText($"Round {currentRound}/{totalRounds}"); }
             yield return new WaitForEndOfFrame();
             yield return Co_CountdownThenStart();
         }
@@ -94,50 +90,37 @@ namespace SJ.Minigames.Hurdle
         {
             State = HurdleGameState.Countdown;
             CurrentSpeed = 0f;
-
             float t = countdownSeconds;
             while (t > 0f)
             {
-                countdownText?.SetText(Mathf.CeilToInt(t).ToString());
+                if (countdownText) countdownText.SetText(Mathf.CeilToInt(t).ToString());
                 yield return null;
-                t -= Time.deltaTime;
+                t -= Time.unscaledDeltaTime;
             }
-
-            countdownText?.SetText("GO!");
-            yield return new WaitForSeconds(0.5f);
-            countdownText?.SetText("");
-
+            if (countdownText) countdownText.SetText("GO!");
+            yield return new WaitForSecondsRealtime(0.5f);
+            if (countdownText) countdownText.SetText("");
             State = HurdleGameState.Playing;
             CurrentSpeed = baseSpeed;
-            player1.EnableControl(true);
-            player2.EnableControl(true);
+            if (player1) player1.EnableControl(true);
+            if (player2) player2.EnableControl(true);
         }
 
         private void FinishRace(int winner)
         {
             if (State == HurdleGameState.Finished) return;
-
             State = HurdleGameState.Finished;
-
-            player1.EnableControl(false);
-            player2.EnableControl(false);
-
-            if (winner == 1) _p1RoundWins++;
-            else _p2RoundWins++;
-
+            if (player1) player1.EnableControl(false);
+            if (player2) player2.EnableControl(false);
+            if (winner == 1) _p1RoundWins++; else _p2RoundWins++;
             if (roundText) roundText.enabled = false;
-
-            winnerText?.SetText($"Player {winner} WIN!");
-
+            if (winnerText) winnerText.SetText($"Player {winner} WIN!");
             StartCoroutine(Co_NextRound());
         }
 
         private IEnumerator Co_NextRound()
         {
-            State = HurdleGameState.Ready;
-
-            yield return new WaitForSeconds(2f);
-
+            yield return new WaitForSecondsRealtime(2f);
             if (currentRound < totalRounds)
             {
                 currentRound++;
@@ -154,19 +137,25 @@ namespace SJ.Minigames.Hurdle
         {
             State = HurdleGameState.Ready;
             CurrentSpeed = 0f;
-            winnerText?.SetText("");
+            if (winnerText) winnerText.SetText("");
         }
 
         private void OnP1Jump(bool isDown)
         {
             if (State != HurdleGameState.Playing) return;
-            if (isDown) player1.TryJump();
+            if (isDown && player1) player1.TryJump();
         }
 
         private void OnP2Jump(bool isDown)
         {
             if (State != HurdleGameState.Playing) return;
-            if (isDown) player2.TryJump();
+            if (isDown && player2) player2.TryJump();
+        }
+
+        private void SafePlay(string key)
+        {
+            var sm = SoundManager.Instance;
+            if (sm != null) sm.Play(key);
         }
     }
 }

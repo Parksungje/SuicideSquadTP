@@ -32,6 +32,7 @@ public class GreenLightRedLight : MonoBehaviour
     [SerializeField] private float totalRoundTime;
     [SerializeField] private float flashDuration;
     [SerializeField] private float flashIntensityMul;
+    [SerializeField] private bool isFinalMatch;
 
     public bool isGreenLight { get; private set; }
 
@@ -44,14 +45,15 @@ public class GreenLightRedLight : MonoBehaviour
     private bool gameEnded;
     private Quaternion startRotP1;
     private Quaternion startRotP2;
-    private float remainTime;
-    private bool someoneFinished;
     private Transform winner;
     private float baseIntensity;
     private bool lockedP1;
     private bool lockedP2;
     private bool is1Pwin;
     private bool is2Pwin;
+    private Collider colP1;
+    private Collider colP2;
+    private float checkTimer;
 
     private struct ForwardClamp
     {
@@ -65,28 +67,22 @@ public class GreenLightRedLight : MonoBehaviour
 
     void Start()
     {
-        startPosP1 = player1.position;
-        startPosP2 = player2.position;
-        startRotP1 = player1.rotation;
-        startRotP2 = player2.rotation;
-        remainTime = totalRoundTime;
+        if (player1 != null) { startPosP1 = player1.position; startRotP1 = player1.rotation; colP1 = player1.GetComponentInChildren<Collider>(); }
+        if (player2 != null) { startPosP2 = player2.position; startRotP2 = player2.rotation; colP2 = player2.GetComponentInChildren<Collider>(); }
         baseIntensity = lightRenderer ? lightRenderer.intensity : 1f;
-        if (finishPanel) { finishPanel.alpha = 0; finishPanel.interactable = false; finishPanel.blocksRaycasts = false; }
+        if (finishPanel)
+        {
+            finishPanel.alpha = 0;
+            finishPanel.interactable = false;
+            finishPanel.blocksRaycasts = false;
+        }
+        checkTimer = Mathf.Max(0.01f, checkInterval);
         InitRound();
     }
 
     void Update()
     {
         if (gameEnded) return;
-
-        remainTime -= Time.deltaTime;
-        if (remainTime < 0f) remainTime = 0f;
-        if (remainTime <= 0f && !gameEnded)
-        {
-            DecideWinnerByDistance();
-            ShowFinishUI();
-            return;
-        }
 
         timer -= Time.deltaTime;
         if (timer <= 0f)
@@ -101,18 +97,22 @@ public class GreenLightRedLight : MonoBehaviour
             if (redCheckTimer > 0f)
             {
                 redCheckTimer -= Time.deltaTime;
-                return;
             }
-            CheckRedLightMovement();
+            else
+            {
+                CheckRedLightMovement();
+            }
         }
 
-        if (Time.frameCount % Mathf.RoundToInt(checkInterval / Time.deltaTime) == 0)
+        checkTimer -= Time.deltaTime;
+        if (checkTimer <= 0f)
         {
+            checkTimer = Mathf.Max(0.01f, checkInterval);
             DetectMovementSound();
             if (isGreenLight || redCheckTimer > 0f)
             {
-                lastPosP1 = player1.position;
-                lastPosP2 = player2.position;
+                if (player1 != null) lastPosP1 = player1.position;
+                if (player2 != null) lastPosP2 = player2.position;
             }
         }
     }
@@ -125,13 +125,13 @@ public class GreenLightRedLight : MonoBehaviour
 
     private void DetectMovementSound()
     {
+        if (player1 == null || player2 == null) return;
         float move1 = Vector3.Distance(player1.position, lastPosP1);
         float move2 = Vector3.Distance(player2.position, lastPosP2);
-
         if (isGreenLight)
         {
-            if (move1 > moveThreshold) SoundManager.Instance.Play("GreenRed_Walk");
-            if (move2 > moveThreshold) SoundManager.Instance.Play("GreenRed_Walk");
+            if (move1 > moveThreshold) SafePlay("GreenRed_Walk");
+            if (move2 > moveThreshold) SafePlay("GreenRed_Walk");
         }
     }
 
@@ -149,6 +149,7 @@ public class GreenLightRedLight : MonoBehaviour
 
     private bool IsInZone(Transform player)
     {
+        if (player == null) return false;
         Vector3 pos = player.position;
         float xMin = Mathf.Min(zoneMin.x, zoneMax.x);
         float xMax = Mathf.Max(zoneMin.x, zoneMax.x);
@@ -159,22 +160,22 @@ public class GreenLightRedLight : MonoBehaviour
 
     private void CheckRedLightMovement()
     {
-        if (IsInZone(player1) && !lockedP1)
+        if (player1 != null && !lockedP1 && IsInZone(player1))
         {
             float p1Move = Vector3.Distance(player1.position, lastPosP1);
             if (p1Move > moveThreshold + tolerance)
             {
-                SoundManager.Instance.Play("GreenRed_Gun");
+                SafePlay("GreenRed_Gun");
                 StartCoroutine(PushBackRoutine(player1, 0.3f, 1));
             }
         }
 
-        if (IsInZone(player2) && !lockedP2)
+        if (player2 != null && !lockedP2 && IsInZone(player2))
         {
             float p2Move = Vector3.Distance(player2.position, lastPosP2);
             if (p2Move > moveThreshold + tolerance)
             {
-                SoundManager.Instance.Play("GreenRed_Gun");
+                SafePlay("GreenRed_Gun");
                 StartCoroutine(PushBackRoutine(player2, 0.3f, 2));
             }
         }
@@ -185,10 +186,9 @@ public class GreenLightRedLight : MonoBehaviour
         if (id == 1 && lockedP1) yield break;
         if (id == 2 && lockedP2) yield break;
 
-        movementManager.DisablePlayer(id);
+        if (movementManager != null) movementManager.DisablePlayer(id);
 
-        if (id == 1) lockedP1 = true;
-        else lockedP2 = true;
+        if (id == 1) lockedP1 = true; else lockedP2 = true;
 
         Vector3 forward0 = player.forward.normalized;
         Vector3 startPos = player.position;
@@ -225,8 +225,7 @@ public class GreenLightRedLight : MonoBehaviour
             yield return new WaitForSeconds(pushBackDuration);
         }
 
-        if (id == 1) clampP1.active = false;
-        else clampP2.active = false;
+        if (id == 1) clampP1.active = false; else clampP2.active = false;
     }
 
     private void InitRound()
@@ -236,19 +235,22 @@ public class GreenLightRedLight : MonoBehaviour
         lockedP2 = false;
         ResetPlayerState(player1);
         ResetPlayerState(player2);
-        movementManager.EnablePlayer(1);
-        movementManager.EnablePlayer(2);
-        lastPosP1 = player1.position;
-        lastPosP2 = player2.position;
+        if (movementManager != null)
+        {
+            movementManager.EnablePlayer(1);
+            movementManager.EnablePlayer(2);
+        }
+        if (player1 != null) lastPosP1 = player1.position;
+        if (player2 != null) lastPosP2 = player2.position;
         SetGreenLight();
     }
 
     private void ResetPlayerState(Transform player)
     {
+        if (player == null) return;
         player.DOKill();
-        player.position = player == player1 ? startPosP1 : startPosP2;
-        player.rotation = player == player1 ? startRotP1 : startRotP2;
-
+        if (player == player1) { player.position = startPosP1; player.rotation = startRotP1; }
+        else if (player == player2) { player.position = startPosP2; player.rotation = startRotP2; }
         Rigidbody rb = player.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -261,11 +263,14 @@ public class GreenLightRedLight : MonoBehaviour
     {
         timer = Random.Range(minGreenTime, maxGreenTime);
         SetLightColor(greenColor);
-        movementManager.EnablePlayer(1);
-        movementManager.EnablePlayer(2);
+        if (movementManager != null)
+        {
+            movementManager.EnablePlayer(1);
+            movementManager.EnablePlayer(2);
+        }
         lockedP1 = false;
         lockedP2 = false;
-        SoundManager.Instance.Play("GreenRed_BGM");
+        SafePlay("GreenRed_BGM");
         PlayFlashFX();
     }
 
@@ -284,31 +289,41 @@ public class GreenLightRedLight : MonoBehaviour
 
     public void OnFinishTriggerEnter(Transform t)
     {
-        if (gameEnded || someoneFinished) return;
-        if (t != player1 && t != player2) return;
-        someoneFinished = true;
-        winner = t;
+        if (gameEnded) return;
+        if (t == null) return;
+        Transform root = null;
+        if (player1 != null && (t == player1 || t.IsChildOf(player1))) root = player1;
+        else if (player2 != null && (t == player2 || t.IsChildOf(player2))) root = player2;
+        else return;
+        if (!IsPlayerInsideFinish(root)) return;
+        winner = root;
         ShowFinishUI();
     }
 
-    private void DecideWinnerByDistance()
+    private bool IsPlayerInsideFinish(Transform p)
     {
-        if (!finishTrigger)
+        if (finishTrigger == null) return false;
+        Collider pc = p == player1 ? colP1 : colP2;
+        if (pc == null) return false;
+        Bounds b = finishTrigger.bounds;
+        var hits = Physics.OverlapBox(b.center, b.extents, finishTrigger.transform.rotation, ~0, QueryTriggerInteraction.Collide);
+        bool found = false;
+        for (int i = 0; i < hits.Length; i++)
         {
-            winner = Vector3.Distance(player1.position, zoneMax) <= Vector3.Distance(player2.position, zoneMax) ? player1 : player2;
-            return;
+            if (hits[i] == pc) { found = true; break; }
         }
-        Vector3 p = finishTrigger.bounds.ClosestPoint(finishTrigger.transform.position);
-        float d1 = Vector3.Distance(player1.position, p);
-        float d2 = Vector3.Distance(player2.position, p);
-        winner = d1 <= d2 ? player1 : player2;
+        if (!found) return false;
+        return b.Intersects(pc.bounds);
     }
 
     private void ShowFinishUI()
     {
         gameEnded = true;
-        movementManager.DisablePlayer(1);
-        movementManager.DisablePlayer(2);
+        if (movementManager != null)
+        {
+            movementManager.DisablePlayer(1);
+            movementManager.DisablePlayer(2);
+        }
         if (finishPanel)
         {
             finishPanel.alpha = 1;
@@ -322,7 +337,8 @@ public class GreenLightRedLight : MonoBehaviour
         }
         is1Pwin = winner == player1;
         is2Pwin = winner == player2;
-        MinigameManager.instance?.Finish(is1Pwin);
+        if (isFinalMatch) MinigameManager.instance.Finish(is1Pwin);
+        else MinigameManager.instance?.Finish(is1Pwin);
     }
 
     private void PlayFlashFX()
@@ -346,5 +362,11 @@ public class GreenLightRedLight : MonoBehaviour
         Gizmos.DrawCube(center, size);
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(center, size);
+    }
+
+    private void SafePlay(string key)
+    {
+        var sm = SoundManager.Instance;
+        if (sm != null) sm.Play(key);
     }
 }
