@@ -200,8 +200,7 @@ public class AvoidMovementManager : MonoBehaviour
 
         if (_roundWinPanel)
         {
-            _roundWinText.text = winnerPlayer == 0 ? "公铰何" : (winnerPlayer == 1 ? "P1 扼款靛 铰!" : "P2 扼款靛 铰!");
-            _roundWinPanel.gameObject.SetActive(true);
+            _roundWinText.text = winnerPlayer == 0 ? "公铰何" : (winnerPlayer == 1 ? "P1 铰府" : "P2 铰府");
             _roundWinPanel.alpha = 0f;
             _roundWinPanel.DOFade(1f, 0.3f).OnComplete(() =>
             {
@@ -209,7 +208,6 @@ public class AvoidMovementManager : MonoBehaviour
                 {
                     _roundWinPanel.DOFade(0f, 0.25f).OnComplete(() =>
                     {
-                        _roundWinPanel.gameObject.SetActive(false);
                         StartCoroutine(NextRoundOrFinish());
                     });
                 });
@@ -231,8 +229,7 @@ public class AvoidMovementManager : MonoBehaviour
             bool is1Pwin = _p1RoundWins > _p2RoundWins;
             if (_finalWinPanel)
             {
-                _finalWinText.text = is1Pwin ? "P1 弥辆 铰府!" : "P2 弥辆 铰府!";
-                _finalWinPanel.gameObject.SetActive(true);
+                _finalWinText.text = is1Pwin ? "P1 快铰!" : "P2 快铰!";
                 _finalWinPanel.alpha = 0f;
                 _finalWinPanel.DOFade(1f, 0.45f).OnComplete(() =>
                 {

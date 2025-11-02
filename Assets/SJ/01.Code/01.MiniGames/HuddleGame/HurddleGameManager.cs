@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using Tild.Menu;
+using DG.Tweening;
+using UnityEngine.UI;
 
 namespace SJ.Minigames.Hurdle
 {
@@ -17,8 +19,8 @@ namespace SJ.Minigames.Hurdle
         [SerializeField] private float maxSpeed = 12f;
         [SerializeField] private int totalRounds = 3;
         private int currentRound = 1;
-        [SerializeField] private float countdownSeconds = 3f;
         [SerializeField] private TMPro.TextMeshProUGUI countdownText;
+        [SerializeField] private Image winnerPanel;
         [SerializeField] private TMPro.TextMeshProUGUI winnerText;
         [SerializeField] private TMPro.TextMeshProUGUI roundText;
 
@@ -95,17 +97,15 @@ namespace SJ.Minigames.Hurdle
             State = HurdleGameState.Countdown;
             CurrentSpeed = 0f;
 
-            float t = countdownSeconds;
-            while (t > 0f)
-            {
-                countdownText?.SetText(Mathf.CeilToInt(t).ToString());
-                yield return null;
-                t -= Time.deltaTime;
-            }
-
             countdownText?.SetText("GO!");
+            countdownText.transform.localScale = Vector3.one * 5;
+
+            Sequence seq = DOTween.Sequence();
+            seq.Join(countdownText.transform.DOScale(1f, .25f).SetEase(Ease.OutExpo));
+            seq.Join(countdownText.transform.DORotate(new Vector3(0f, 0f, 1080f), 1f, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutCubic));
             yield return new WaitForSeconds(0.5f);
-            countdownText?.SetText("");
+            countdownText.DOFade(0, 1).OnComplete(()=> countdownText?.SetText(""));
 
             State = HurdleGameState.Playing;
             CurrentSpeed = baseSpeed;
@@ -127,7 +127,10 @@ namespace SJ.Minigames.Hurdle
 
             if (roundText) roundText.enabled = false;
 
-            winnerText?.SetText($"Player {winner} WIN!");
+            winnerText.DOFade(0, 0);
+            winnerText?.SetText($"P{winner} WIN!");
+            winnerPanel.DOFillAmount(1, .5f);
+            winnerText.DOFade(1, .25f).SetEase(Ease.OutExpo);
 
             StartCoroutine(Co_NextRound());
         }
@@ -135,11 +138,13 @@ namespace SJ.Minigames.Hurdle
         private IEnumerator Co_NextRound()
         {
             State = HurdleGameState.Ready;
-
             yield return new WaitForSeconds(2f);
+            winnerPanel.DOFillAmount(0, .5f);
+            winnerText.DOFade(0, .25f).OnComplete(() => winnerText?.SetText(""));
 
             if (currentRound < totalRounds)
             {
+
                 currentRound++;
                 yield return StartCoroutine(Co_StartRound());
             }
@@ -154,7 +159,8 @@ namespace SJ.Minigames.Hurdle
         {
             State = HurdleGameState.Ready;
             CurrentSpeed = 0f;
-            winnerText?.SetText("");
+            winnerPanel.DOFillAmount(0, .5f);
+            winnerText.DOFade(0, .25f).OnComplete(() => winnerText?.SetText(""));
         }
 
         private void OnP1Jump(bool isDown)

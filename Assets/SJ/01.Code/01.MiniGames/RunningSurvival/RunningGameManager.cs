@@ -132,9 +132,10 @@ public class RunningGameManager : MonoBehaviour
     {
         _gameEnded = true;
         string resultMsg;
-        if (p1Score > p2Score) resultMsg = "P1 铰府!";
-        else if (p1Score < p2Score) resultMsg = "P2 铰府!";
-        else resultMsg = "公铰何!";
+        //if (p1Score > p2Score) resultMsg = "P1 铰府!";
+        //else if (p1Score < p2Score) resultMsg = "P2 铰府!";
+        //else resultMsg = "公铰何!";
+        resultMsg = "霸烙 辆丰!";
         resultText.text = resultMsg;
         resultPanel.gameObject.SetActive(true);
         resultPanel.alpha = 0;
