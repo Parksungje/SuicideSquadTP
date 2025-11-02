@@ -106,6 +106,9 @@ public class SelectInputHandler : MonoBehaviour
             fade.raycastTarget = true;
             fade.DOFade(1, 1).OnComplete(() =>
             {
+                SoundManager.Instance.Stop("CharacterSelect"); 
+                SoundManager.Instance.Play("GameSetting");
+
                 gameSetting.SetActive(true);
                 characterSelect.SetActive(false);
                 fade.DOFade(0, 1).SetDelay(3).OnComplete(() =>

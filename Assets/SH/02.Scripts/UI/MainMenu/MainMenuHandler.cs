@@ -13,10 +13,12 @@ public class MainMenuHandler : MonoBehaviour
     private void Start()
     {
         baseCanvas = GetComponent<CanvasGroup>();
+       
     }
 
     public void Play()
     {
+        SoundManager.Instance.Play("CharacterSelect");
         mainMenuCanvas.interactable = false;
         mainMenuCanvas.blocksRaycasts = false;
         mainMenuCanvas.DOFade(0, 1);
@@ -25,6 +27,7 @@ public class MainMenuHandler : MonoBehaviour
             WaringTextCanvas.DOFade(1, 1).SetDelay(.5f);
             WaringCanvas.interactable = true;
             WaringCanvas.blocksRaycasts = true;
+  
         });
     }
 

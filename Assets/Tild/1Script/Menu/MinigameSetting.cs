@@ -69,7 +69,9 @@ namespace Tild.Menu
                     amount = 9;
                     break;  
             }
+            SoundManager.Instance.Stop("GameSetting");
             MinigameManager.instance.Initialize(gameType, isRandomMode, amount);
+            SoundManager.Instance.Play("StartScene");
             TransitionManager.Go("Choice_Scene");
            
         

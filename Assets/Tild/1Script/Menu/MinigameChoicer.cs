@@ -87,6 +87,7 @@ namespace Tild._1Script.Menu
 
         private void PlayRandomMinigame()
         {
+            SoundManager.Instance.Play("Roullete");
             _available = minigame.Where(m => !MinigameManager.instance.minigamePlayed.Contains(m)).ToList();
             foreach (Transform c in scroller.transform) Destroy(c.gameObject);
             if (_available.Count == 0) return;
@@ -112,6 +113,10 @@ namespace Tild._1Script.Menu
                     .SetEase(rouletteCurve)
                     .OnComplete(() =>
                     {
+                        SoundManager.Instance.Stop("Roullete");
+
+                        SoundManager.Instance.Play("RoulleteConfirm");
+                            
                         finalMinigame.DOFade(1f, 0.3f).SetDelay(1f);
                         finalMinigame.transform
                             .DOScale(Vector3.one, 0.5f)
@@ -155,6 +160,7 @@ namespace Tild._1Script.Menu
         {
             if (IsPopuped)
             {
+                SoundManager.Instance.Stop("StartScene");
                 MinigameManager.instance.NextMinigame(currentMinigame.scene);
                 inputSO.OnSpacePressed -= OnConfirmPressed;
             }

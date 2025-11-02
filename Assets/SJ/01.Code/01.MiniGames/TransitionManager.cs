@@ -1,4 +1,4 @@
-using System.Collections;
+                                                                                                                        using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -63,6 +63,7 @@ public class TransitionManager : MonoBehaviour
     public static void Go(string sceneName)
     {
         Instance.TransitionToScene(sceneName);
+        SoundManager.Instance.Play("Transition");
     }
 
     public void TransitionToScene(string sceneName)

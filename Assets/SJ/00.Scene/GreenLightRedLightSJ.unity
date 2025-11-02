@@ -3653,13 +3653,17 @@ PrefabInstance:
       propertyPath: m_ScaleFactor
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2786121604613331779, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5267515077333105646, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_Name
       value: Starter
       objectReference: {fileID: 0}
     - target: {fileID: 5267515077333105646, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8566345586741217218, guid: dc3206842d3b6904cab7fe7479c053da, type: 3}
       propertyPath: m_text
@@ -6841,6 +6845,7 @@ MonoBehaviour:
   totalRoundTime: 60
   flashDuration: 0.18
   flashIntensityMul: 2.2
+  isFinalMatch: 0
 --- !u!4 &1735522131
 Transform:
   m_ObjectHideFlags: 0
